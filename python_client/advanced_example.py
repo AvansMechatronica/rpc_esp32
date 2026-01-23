@@ -110,7 +110,7 @@ class ESP32Monitor:
             print(f"Free Memory - Min: {min(mem_values)}, Max: {max(mem_values)}, "
                   f"Avg: {sum(mem_values)/len(mem_values):.0f} bytes")
     
-    def test_led_blink(self, pin=13, iterations=3):
+    def test_led_blink(self, pin=2, iterations=3):
         """
         Test LED blink on pin
         
@@ -186,16 +186,20 @@ def main():
     # Setup logging based on arguments
     setup_logging(debug_level=args.debug, log_to_file=args.log_file)
     
-    logger.info(\"Starting ESP32 RPC Advanced Example\")\n    logger.debug(f\"Arguments: debug={args.debug}, log_file={args.log_file}, iterations={args.iterations}, interval={args.interval}\")\n    \n    monitor = ESP32Monitor()
+    logger.info("Starting ESP32 RPC Advanced Example")
+    logger.debug(f"Arguments: debug={args.debug}, log_file={args.log_file}, iterations={args.iterations}, interval={args.interval}")
+    
+    monitor = ESP32Monitor()
     
     # Connect to ESP32
     if not monitor.connect():
-        logger.error(\"Failed to connect to ESP32\")\n        print(\"Failed to connect to ESP32\")
+        logger.error("Failed to connect to ESP32")
+        print("Failed to connect to ESP32")
         return
     
     try:
         # Test LED blink
-        monitor.test_led_blink(pin=13, iterations=2)
+        monitor.test_led_blink(pin=2, iterations=2)
         
         # Test PWM brightness
         monitor.test_pwm_brightness(channel=0)
@@ -206,15 +210,18 @@ def main():
         # Print statistics
         monitor.print_statistics()
         
-        logger.info(\"All tests completed successfully\")\n        print(\"\n✓ All tests completed successfully!\")
+        logger.info("All tests completed successfully")
+        print("\n✓ All tests completed successfully!")
         
     except KeyboardInterrupt:
-        logger.warning(\"Interrupted by user\")\n        print(\"\n\nInterrupted by user\")
+        logger.warning("Interrupted by user")
+        print("\n\nInterrupted by user")
     except Exception as e:
-        logger.exception(f\"Error during execution: {e}\")\n        print(f\"\n✗ Error: {e}\")
+        logger.exception(f"Error during execution: {e}")
+        print(f"\n✗ Error: {e}")
     finally:
         monitor.disconnect()
-        logger.info(\"Advanced example script completed\")
+        logger.info("Advanced example script completed")
 
 
 if __name__ == "__main__":

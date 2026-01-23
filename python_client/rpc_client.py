@@ -140,7 +140,7 @@ class RPCClient:
             (result_code, message, value) tuple
         """
         result, msg, data = self._send_command("digitalRead", {"pin": pin})
-        value = data.get('value') if result == RPC_OK else None
+        value = data.get('value') if (result == RPC_OK and data) else None
         return result, msg, value
     
     def analogWrite(self, pin: int, value: int) -> Tuple[int, str]:
@@ -161,7 +161,7 @@ class RPCClient:
             (result_code, message, value) tuple
         """
         result, msg, data = self._send_command("analogRead", {"pin": pin})
-        value = data.get('value') if result == RPC_OK else None
+        value = data.get('value') if (result == RPC_OK and data) else None
         return result, msg, value
     
     # System Functions
@@ -183,7 +183,7 @@ class RPCClient:
             (result_code, message, millis) tuple
         """
         result, msg, data = self._send_command("millis", {})
-        value = data.get('millis') if result == RPC_OK else None
+        value = data.get('millis') if (result == RPC_OK and data) else None
         return result, msg, value
     
     def getFreeMem(self) -> Tuple[int, str, Optional[int]]:
@@ -194,7 +194,7 @@ class RPCClient:
             (result_code, message, free_mem) tuple
         """
         result, msg, data = self._send_command("freeMem", {})
-        value = data.get('free_heap') if result == RPC_OK else None
+        value = data.get('free_heap') if (result == RPC_OK and data) else None
         return result, msg, value
     
     def getChipID(self) -> Tuple[int, str, Optional[int]]:
@@ -205,7 +205,7 @@ class RPCClient:
             (result_code, message, chip_id) tuple
         """
         result, msg, data = self._send_command("chipID", {})
-        value = data.get('chip_id') if result == RPC_OK else None
+        value = data.get('chip_id') if (result == RPC_OK and data) else None
         return result, msg, value
     
     # PWM Functions
