@@ -47,7 +47,7 @@ class RPCTestGUI:
         
         # WiFi Host
         ttk.Label(conn_frame, text="WiFi Host:").grid(row=1, column=0, sticky=W)
-        self.wifi_host_var = StringVar(value="192.168.1.100")
+        self.wifi_host_var = StringVar(value="192.168.2.17")
         ttk.Entry(conn_frame, textvariable=self.wifi_host_var, width=15).grid(row=1, column=1, padx=5)
         
         # WiFi Port
@@ -106,7 +106,7 @@ class RPCTestGUI:
         gpio_frame.pack(fill=X, padx=10, pady=5)
         
         ttk.Label(gpio_frame, text="Pin:").pack(side=LEFT, padx=5)
-        self.pin_var = StringVar(value="13")
+        self.pin_var = StringVar(value="2")
         ttk.Entry(gpio_frame, textvariable=self.pin_var, width=5).pack(side=LEFT, padx=5)
         
         ttk.Label(gpio_frame, text="Mode (0=IN, 1=OUT, 2=PULLUP):").pack(side=LEFT, padx=5)
@@ -122,7 +122,7 @@ class RPCTestGUI:
         dig_frame.pack(fill=X, padx=10, pady=5)
         
         ttk.Label(dig_frame, text="Pin:").pack(side=LEFT, padx=5)
-        self.dpin_var = StringVar(value="13")
+        self.dpin_var = StringVar(value="2")
         ttk.Entry(dig_frame, textvariable=self.dpin_var, width=5).pack(side=LEFT, padx=5)
         
         ttk.Label(dig_frame, text="Value (0 or 1):").pack(side=LEFT, padx=5)
@@ -138,11 +138,13 @@ class RPCTestGUI:
         read_frame.pack(fill=X, padx=10, pady=5)
         
         ttk.Label(read_frame, text="Pin:").pack(side=LEFT, padx=5)
-        self.read_pin_var = StringVar(value="13")
+        self.read_pin_var = StringVar(value="2")
         ttk.Entry(read_frame, textvariable=self.read_pin_var, width=5).pack(side=LEFT, padx=5)
         
         ttk.Button(read_frame, text="digitalRead", 
                    command=lambda: self.execute_digitalRead()).pack(side=LEFT, padx=5)
+        self.digital_read_value_label = ttk.Label(read_frame, text="Value: -")
+        self.digital_read_value_label.pack(side=LEFT, padx=5)
         
         # analogRead
         ttk.Label(frame, text="analogRead").pack(anchor=W, padx=10, pady=5)
@@ -155,6 +157,8 @@ class RPCTestGUI:
         
         ttk.Button(aread_frame, text="analogRead", 
                    command=lambda: self.execute_analogRead()).pack(side=LEFT, padx=5)
+        self.analog_read_value_label = ttk.Label(aread_frame, text="Value: -")
+        self.analog_read_value_label.pack(side=LEFT, padx=5)
     
     def setup_system_tab(self, notebook):
         """Setup System functions tab"""
@@ -334,15 +338,27 @@ class RPCTestGUI:
         control_frame = ttk.Frame(frame)
         control_frame.pack(fill=X, padx=10, pady=5)
         
-        ttk.Label(control_frame, text="Channel:").pack(side=LEFT, padx=5)
+        row1 = ttk.Frame(control_frame)
+        row1.pack(fill=X, padx=5, pady=5)
+        ttk.Label(row1, text="Channel:").pack(side=LEFT, padx=5)
         self.pulse_control_channel_var = StringVar(value="0")
-        ttk.Entry(control_frame, textvariable=self.pulse_control_channel_var, width=5).pack(side=LEFT, padx=5)
+        ttk.Entry(row1, textvariable=self.pulse_control_channel_var, width=5).pack(side=LEFT, padx=5)
+        ttk.Button(row1, text="Check Status", 
+               command=lambda: self.execute_isPulsing()).pack(side=LEFT, padx=5)
+        self.pulse_status_label = ttk.Label(row1, text="Status: -")
+        self.pulse_status_label.pack(side=LEFT, padx=5)
         
-        ttk.Button(control_frame, text="Check Status", 
-                   command=lambda: self.execute_isPulsing()).pack(side=LEFT, padx=5)
+        row2 = ttk.Frame(control_frame)
+        row2.pack(fill=X, padx=5, pady=5)
+        ttk.Button(row2, text="Remaining Pulses", 
+                    command=lambda: self.execute_getRemainingPulses()).pack(side=LEFT, padx=5)
+        self.remaining_label = ttk.Label(row2, text="Remaining: -")
+        self.remaining_label.pack(side=LEFT, padx=5)
         
-        ttk.Button(control_frame, text="Stop Pulse", 
-                   command=lambda: self.execute_stopPulse()).pack(side=LEFT, padx=5)
+        row3 = ttk.Frame(control_frame)
+        row3.pack(fill=X, padx=5, pady=5)
+        ttk.Button(row3, text="Stop Pulse", 
+                    command=lambda: self.execute_stopPulse()).pack(side=LEFT, padx=5)
     
     def setup_raw_tab(self, notebook):
         """Setup Raw command tab"""
@@ -459,6 +475,12 @@ class RPCTestGUI:
             pin = int(self.read_pin_var.get())
             result, msg, value = self.client.digitalRead(pin)
             self.output_message(f"digitalRead({pin}) -> Code: {result}, Value: {value}, {msg}")
+            if hasattr(self, 'digital_read_value_label'):
+                if result == RPC_OK and value is not None:
+                    self.digital_read_value_label.config(text=f"Value: {value}")
+                else:
+                    self.digital_read_value_label.config(text="Value: -")
+                self.digital_read_value_label.update()
         except ValueError:
             messagebox.showerror("Error", "Invalid input values")
     
@@ -471,6 +493,12 @@ class RPCTestGUI:
             pin = int(self.aread_pin_var.get())
             result, msg, value = self.client.analogRead(pin)
             self.output_message(f"analogRead({pin}) -> Code: {result}, Value: {value}, {msg}")
+            if hasattr(self, 'analog_read_value_label'):
+                if result == RPC_OK and value is not None:
+                    self.analog_read_value_label.config(text=f"Value: {value}")
+                else:
+                    self.analog_read_value_label.config(text="Value: -")
+                self.analog_read_value_label.update()
         except ValueError:
             messagebox.showerror("Error", "Invalid input values")
     
@@ -626,6 +654,30 @@ class RPCTestGUI:
             result, msg, pulsing = self.client.isPulsing(channel)
             status = "ACTIVE" if pulsing else "IDLE"
             self.output_message(f"isPulsing({channel}) -> Code: {result}, Status: {status}, {msg}")
+            if hasattr(self, 'pulse_status_label'):
+                if result == RPC_OK and pulsing is not None:
+                    self.pulse_status_label.config(text=f"Status: {status}")
+                else:
+                    self.pulse_status_label.config(text="Status: -")
+                self.pulse_status_label.update()
+        except ValueError:
+            messagebox.showerror("Error", "Invalid input values")
+
+    def execute_getRemainingPulses(self):
+        """Execute getRemainingPulses"""
+        if not self.check_connection():
+            return
+        
+        try:
+            channel = int(self.pulse_control_channel_var.get())
+            result, msg, remaining = self.client.getRemainingPulses(channel)
+            self.output_message(f"getRemainingPulses({channel}) -> Code: {result}, Remaining: {remaining}, {msg}")
+            if hasattr(self, 'remaining_label'):
+                if result == RPC_OK and remaining is not None:
+                    self.remaining_label.config(text=f"Remaining: {remaining}")
+                else:
+                    self.remaining_label.config(text="Remaining: -")
+                self.remaining_label.update()
         except ValueError:
             messagebox.showerror("Error", "Invalid input values")
     

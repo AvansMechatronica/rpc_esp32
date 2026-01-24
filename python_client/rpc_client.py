@@ -312,6 +312,24 @@ class RPCClient:
         pulsing = data.get('pulsing') if (result == RPC_OK and data) else None
         return result, msg, pulsing
     
+    def getRemainingPulses(self, channel: int) -> Tuple[int, str, Optional[int]]:
+        """
+        Get remaining pulses for an async pulse sequence
+        
+        Args:
+            channel: Pulse channel (0-3)
+        
+        Returns:
+            (result_code, message, remaining) tuple
+        """
+        result, msg, data = self._send_command("getRemainingPulses", {"channel": channel})
+        remaining = data.get('remaining') if (result == RPC_OK and data) else None
+        return result, msg, remaining
+
+    # Backward-compatible alias for legacy name
+    def getRemainPulses(self, channel: int) -> Tuple[int, str, Optional[int]]:
+        return self.getRemainingPulses(channel)
+    
     def stopPulse(self, channel: int) -> Tuple[int, str]:
         """
         Stop pulsing on channel

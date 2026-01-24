@@ -163,6 +163,10 @@ def main():
         result, msg = client.generatePulsesAsync(0, 100, 100, 3)
         print_result("generatePulsesAsync(0, 100ms, 100ms, 3 pulses)", result, msg)
         
+        # Query remaining pulses during async run
+            result, msg, remaining = client.getRemainingPulses(0)
+        print_result("getRemainingPulses(0)", result, msg, remaining)
+        
         # Check if still pulsing
         result, msg, pulsing = client.isPulsing(0)
         print_result("isPulsing(0)", result, msg, pulsing)
