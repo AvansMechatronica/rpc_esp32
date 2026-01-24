@@ -168,6 +168,77 @@ class ESP32Monitor:
             time.sleep(0.3)
         
         print("✓ PWM test completed")
+    
+    def test_pulse_generation(self, channel=0, pin=25):
+        """
+        Test pulse generation functions
+        
+        Args:
+            channel: Pulse channel (0-3)
+            pin: GPIO pin for pulse output
+        """
+        print(f"\nTesting Pulse Generation (channel {channel}, pin {pin})")
+        print("-" * 50)
+        
+        # Initialize pulse channel
+        result, msg = self.client.pulseBegin(channel, pin)
+        if result != RPC_OK:
+            print(f"✗ Failed to initialize pulse channel: {msg}")
+            return
+        print(f"✓ Pulse channel {channel} initialized on pin {pin}")
+        
+        # Single pulse test
+        print(f"Generating single 200ms pulse...")
+        result, msg = self.client.pulse(channel, 200)
+        if result == RPC_OK:
+            print(f"✓ Single pulse completed")
+        else:
+            print(f"✗ Single pulse failed: {msg}")
+        
+        time.sleep(0.3)
+        
+        # Single async pulse test
+        print(f"Generating async 250ms pulse...")
+        result, msg = self.client.pulseAsync(channel, 250)
+        if result == RPC_OK:
+            print(f"✓ Async pulse started")
+            time.sleep(0.1)
+            result, msg, pulsing = self.client.isPulsing(channel)
+            if result == RPC_OK:
+                status = "ACTIVE" if pulsing else "IDLE"
+                print(f"  Pulse status: {status}")
+        else:
+            print(f"✗ Async pulse failed: {msg}")
+        
+        time.sleep(0.3)
+        
+        # Multiple pulses (blocking)
+        print(f"Generating 5 pulses (100ms on, 100ms off)...")
+        result, msg = self.client.generatePulses(channel, 100, 100, 5)
+        if result == RPC_OK:
+            print(f"✓ Pulse sequence completed")
+        else:
+            print(f"✗ Pulse sequence failed: {msg}")
+        
+        time.sleep(0.3)
+        
+        # Asynchronous pulses
+        print(f"Starting async pulse generation (3 pulses, 150ms on, 150ms off)...")
+        result, msg = self.client.generatePulsesAsync(channel, 150, 150, 3)
+        if result == RPC_OK:
+            print(f"✓ Async pulse generation started")
+            
+            # Check pulse status
+            for i in range(5):
+                time.sleep(0.2)
+                result, msg, pulsing = self.client.isPulsing(channel)
+                if result == RPC_OK:
+                    status = "ACTIVE" if pulsing else "IDLE"
+                    print(f"  Pulse status check {i+1}: {status}")
+        else:
+            print(f"✗ Async pulse generation failed: {msg}")
+        
+        print("✓ Pulse test completed")
 
 
 def main():
@@ -203,6 +274,9 @@ def main():
         
         # Test PWM brightness
         monitor.test_pwm_brightness(channel=0)
+        
+        # Test pulse generation
+        monitor.test_pulse_generation(channel=0, pin=25)
         
         # Read sensors
         monitor.read_sensors(iterations=args.iterations, interval=args.interval)

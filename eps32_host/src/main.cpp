@@ -2,6 +2,7 @@
 #include <WiFi.h>
 #include "rpc_server.h"
 #include "config.h"
+#include "wifi_network_config.h"
 
 RpcServer rpc_server;
 
@@ -17,7 +18,19 @@ void setup() {
   // Initialize WiFi if enabled
   if (CONFIG_COMM_MODE == COMM_WIFI) {
     Serial.println("Connecting to WiFi...");
-    WiFi.begin(CONFIG_WIFI_SSID, CONFIG_WIFI_PASSWORD);
+
+    WiFi.setHostname("ESP32_RPC_Server");
+#if defined WIFI_CONFIGURE_SERVER
+    NETWORK_CONFIG network_config;
+
+    if (!configureNetwork(false, &network_config)) {
+      Serial.println("Failed to configure network");
+    }
+    WiFi.begin(network_config.ssid.c_str(), network_config.password.c_str());
+#else
+    
+      WiFi.begin(CONFIG_WIFI_SSID, CONFIG_WIFI_PASSWORD);
+#endif
     
     int attempts = 0;
     while (WiFi.status() != WL_CONNECTED && attempts < 20) {
@@ -43,6 +56,9 @@ void loop() {
   if (CONFIG_COMM_MODE == COMM_USB) {
     rpc_server.handle_serial();
   }
+  
+  // Handle pulse ticks for async pulse generation
+  rpc_server.handlePulseTicks();
   
   delay(10);
 }

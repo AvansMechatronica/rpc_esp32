@@ -134,6 +134,45 @@ def main():
         
         print()
         
+        # ===== Pulse Library Tests =====
+        print("=" * 50)
+        print("Pulse Library Operations")
+        print("=" * 50)
+        
+        # Initialize pulse channel 0 on pin 25
+        result, msg = client.pulseBegin(0, 25)
+        print_result("pulseBegin(0, 25)", result, msg)
+        
+        # Single pulse test
+        result, msg = client.pulse(0, 100)
+        print_result("pulse(0, 100ms)", result, msg)
+        
+        # Single async pulse test
+        result, msg = client.pulseAsync(0, 150)
+        print_result("pulseAsync(0, 150ms)", result, msg)
+        
+        # Check if pulsing
+        result, msg, pulsing = client.isPulsing(0)
+        print_result("isPulsing(0)", result, msg, pulsing)
+        
+        # Generate multiple pulses (blocking)
+        result, msg = client.generatePulses(0, 50, 50, 5)
+        print_result("generatePulses(0, 50ms, 50ms, 5 pulses)", result, msg)
+        
+        # Generate pulses asynchronously (non-blocking)
+        result, msg = client.generatePulsesAsync(0, 100, 100, 3)
+        print_result("generatePulsesAsync(0, 100ms, 100ms, 3 pulses)", result, msg)
+        
+        # Check if still pulsing
+        result, msg, pulsing = client.isPulsing(0)
+        print_result("isPulsing(0)", result, msg, pulsing)
+        
+        # Stop pulse
+        result, msg = client.stopPulse(0)
+        print_result("stopPulse(0)", result, msg)
+        
+        print()
+        
         # ===== Raw Command Test =====
         print("=" * 50)
         print("Raw RPC Command")

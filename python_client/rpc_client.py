@@ -245,6 +245,143 @@ class RPCClient:
         })
         return result, msg
     
+    # Pulse Library Functions
+    def pulseBegin(self, channel: int, pin: int) -> Tuple[int, str]:
+        """
+        Initialize pulse channel with pin
+        
+        Args:
+            channel: Pulse channel (0-3)
+            pin: GPIO pin number
+        
+        Returns:
+            (result_code, message) tuple
+        """
+        result, msg, _ = self._send_command("pulseBegin", {
+            "channel": channel,
+            "pin": pin
+        })
+        return result, msg
+    
+    def pulse(self, channel: int, duration_ms: int) -> Tuple[int, str]:
+        """
+        Generate a single pulse (blocking)
+        
+        Args:
+            channel: Pulse channel (0-3)
+            duration_ms: Duration of pulse in milliseconds
+        
+        Returns:
+            (result_code, message) tuple
+        """
+        result, msg, _ = self._send_command("pulse", {
+            "channel": channel,
+            "duration_ms": duration_ms
+        })
+        return result, msg
+    
+    def pulseAsync(self, channel: int, duration_ms: int) -> Tuple[int, str]:
+        """
+        Generate a single pulse asynchronously (non-blocking)
+        Returns immediately, pulse executes in background
+        
+        Args:
+            channel: Pulse channel (0-3)
+            duration_ms: Duration of pulse in milliseconds
+        
+        Returns:
+            (result_code, message) tuple
+        """
+        result, msg, _ = self._send_command("pulseAsync", {
+            "channel": channel,
+            "duration_ms": duration_ms
+        })
+        return result, msg
+    
+    def isPulsing(self, channel: int) -> Tuple[int, str, Optional[bool]]:
+        """
+        Check if channel is currently pulsing
+        
+        Args:
+            channel: Pulse channel (0-3)
+        
+        Returns:
+            (result_code, message, pulsing) tuple
+        """
+        result, msg, data = self._send_command("isPulsing", {"channel": channel})
+        pulsing = data.get('pulsing') if (result == RPC_OK and data) else None
+        return result, msg, pulsing
+    
+    def stopPulse(self, channel: int) -> Tuple[int, str]:
+        """
+        Stop pulsing on channel
+        
+        Args:
+            channel: Pulse channel (0-3)
+        
+        Returns:
+            (result_code, message) tuple
+        """
+        result, msg, _ = self._send_command("stopPulse", {"channel": channel})
+        return result, msg
+    
+    def generatePulses(self, channel: int, pulse_width_ms: int, pause_width_ms: int, pulse_count: int) -> Tuple[int, str]:
+        """
+        Generate multiple pulses (blocking)
+        
+        Args:
+            channel: Pulse channel (0-3)
+            pulse_width_ms: Width of each pulse in milliseconds
+            pause_width_ms: Pause between pulses in milliseconds
+            pulse_count: Number of pulses to generate
+        
+        Returns:
+            (result_code, message) tuple
+        """
+        result, msg, _ = self._send_command("generatePulses", {
+            "channel": channel,
+            "pulse_width_ms": pulse_width_ms,
+            "pause_width_ms": pause_width_ms,
+            "pulse_count": pulse_count
+        })
+        return result, msg
+    
+    def generatePulsesAsync(self, channel: int, pulse_width_ms: int, pause_width_ms: int, pulse_count: int) -> Tuple[int, str]:
+        """
+        Generate multiple pulses asynchronously (non-blocking)
+        Must call pulseTick() periodically to update pulse state
+        
+        Args:
+            channel: Pulse channel (0-3)
+            pulse_width_ms: Width of each pulse in milliseconds
+            pause_width_ms: Pause between pulses in milliseconds
+            pulse_count: Number of pulses to generate
+        
+        Returns:
+            (result_code, message) tuple
+        """
+        result, msg, _ = self._send_command("generatePulsesAsync", {
+            "channel": channel,
+            "pulse_width_ms": pulse_width_ms,
+            "pause_width_ms": pause_width_ms,
+            "pulse_count": pulse_count
+        })
+        return result, msg
+    
+    def pulseTick(self, channel: int) -> Tuple[int, str]:
+        """
+        Update pulse state for async pulse generation
+        Must be called periodically when using generatePulsesAsync
+        
+        Args:
+            channel: Pulse channel (0-3)
+        
+        Returns:
+            (result_code, message) tuple
+        """
+        result, msg, _ = self._send_command("pulseTick", {"channel": channel})
+        return result, msg
+    
     # Utility
     def call_raw(self, method: str, params: Dict[str, Any] = None) -> Tuple[int, str, Dict[str, Any]]:
         """

@@ -79,6 +79,9 @@ class RPCTestGUI:
         # PWM Tab
         self.setup_pwm_tab(notebook)
         
+        # Pulse Library Tab
+        self.setup_pulse_tab(notebook)
+        
         # Raw Command Tab
         self.setup_raw_tab(notebook)
         
@@ -224,6 +227,122 @@ class RPCTestGUI:
         
         ttk.Button(write_frame, text="Write", 
                    command=lambda: self.execute_ledcWrite()).pack(side=LEFT, padx=5)
+    
+    def setup_pulse_tab(self, notebook):
+        """Setup Pulse Library functions tab"""
+        frame = ttk.Frame(notebook)
+        notebook.add(frame, text="Pulse Library")
+        
+        # pulseBegin
+        ttk.Label(frame, text="Initialize Pulse Channel").pack(anchor=W, padx=10, pady=5)
+        begin_frame = ttk.Frame(frame)
+        begin_frame.pack(fill=X, padx=10, pady=5)
+        
+        ttk.Label(begin_frame, text="Channel (0-3):").pack(side=LEFT, padx=5)
+        self.pulse_channel_var = StringVar(value="0")
+        ttk.Entry(begin_frame, textvariable=self.pulse_channel_var, width=5).pack(side=LEFT, padx=5)
+        
+        ttk.Label(begin_frame, text="Pin:").pack(side=LEFT, padx=5)
+        self.pulse_pin_var = StringVar(value="25")
+        ttk.Entry(begin_frame, textvariable=self.pulse_pin_var, width=5).pack(side=LEFT, padx=5)
+        
+        ttk.Button(begin_frame, text="Begin", 
+                   command=lambda: self.execute_pulseBegin()).pack(side=LEFT, padx=5)
+        
+        # Single pulse
+        ttk.Label(frame, text="Single Pulse (blocking)").pack(anchor=W, padx=10, pady=5)
+        pulse_frame = ttk.Frame(frame)
+        pulse_frame.pack(fill=X, padx=10, pady=5)
+        
+        ttk.Label(pulse_frame, text="Channel:").pack(side=LEFT, padx=5)
+        self.pulse_single_channel_var = StringVar(value="0")
+        ttk.Entry(pulse_frame, textvariable=self.pulse_single_channel_var, width=5).pack(side=LEFT, padx=5)
+        
+        ttk.Label(pulse_frame, text="Duration (ms):").pack(side=LEFT, padx=5)
+        self.pulse_duration_var = StringVar(value="100")
+        ttk.Entry(pulse_frame, textvariable=self.pulse_duration_var, width=10).pack(side=LEFT, padx=5)
+        
+        ttk.Button(pulse_frame, text="Pulse", 
+                   command=lambda: self.execute_pulse()).pack(side=LEFT, padx=5)
+        
+        # Single async pulse
+        ttk.Label(frame, text="Single Async Pulse (non-blocking)").pack(anchor=W, padx=10, pady=5)
+        async_pulse_frame = ttk.Frame(frame)
+        async_pulse_frame.pack(fill=X, padx=10, pady=5)
+        
+        ttk.Label(async_pulse_frame, text="Channel:").pack(side=LEFT, padx=5)
+        self.pulse_async_single_channel_var = StringVar(value="0")
+        ttk.Entry(async_pulse_frame, textvariable=self.pulse_async_single_channel_var, width=5).pack(side=LEFT, padx=5)
+        
+        ttk.Label(async_pulse_frame, text="Duration (ms):").pack(side=LEFT, padx=5)
+        self.pulse_async_single_duration_var = StringVar(value="150")
+        ttk.Entry(async_pulse_frame, textvariable=self.pulse_async_single_duration_var, width=10).pack(side=LEFT, padx=5)
+        
+        ttk.Button(async_pulse_frame, text="Pulse Async", 
+                   command=lambda: self.execute_pulseAsync()).pack(side=LEFT, padx=5)
+        
+        # Multiple pulses (blocking)
+        ttk.Label(frame, text="Multiple Pulses (blocking)").pack(anchor=W, padx=10, pady=5)
+        multi_frame = ttk.Frame(frame)
+        multi_frame.pack(fill=X, padx=10, pady=5)
+        
+        ttk.Label(multi_frame, text="Channel:").pack(side=LEFT, padx=5)
+        self.pulse_multi_channel_var = StringVar(value="0")
+        ttk.Entry(multi_frame, textvariable=self.pulse_multi_channel_var, width=5).pack(side=LEFT, padx=5)
+        
+        ttk.Label(multi_frame, text="Pulse (ms):").pack(side=LEFT, padx=5)
+        self.pulse_width_var = StringVar(value="50")
+        ttk.Entry(multi_frame, textvariable=self.pulse_width_var, width=5).pack(side=LEFT, padx=5)
+        
+        ttk.Label(multi_frame, text="Pause (ms):").pack(side=LEFT, padx=5)
+        self.pause_width_var = StringVar(value="50")
+        ttk.Entry(multi_frame, textvariable=self.pause_width_var, width=5).pack(side=LEFT, padx=5)
+        
+        ttk.Label(multi_frame, text="Count:").pack(side=LEFT, padx=5)
+        self.pulse_count_var = StringVar(value="5")
+        ttk.Entry(multi_frame, textvariable=self.pulse_count_var, width=5).pack(side=LEFT, padx=5)
+        
+        ttk.Button(multi_frame, text="Generate", 
+                   command=lambda: self.execute_generatePulses()).pack(side=LEFT, padx=5)
+        
+        # Async pulses
+        ttk.Label(frame, text="Async Pulses (non-blocking)").pack(anchor=W, padx=10, pady=5)
+        async_frame = ttk.Frame(frame)
+        async_frame.pack(fill=X, padx=10, pady=5)
+        
+        ttk.Label(async_frame, text="Channel:").pack(side=LEFT, padx=5)
+        self.pulse_async_channel_var = StringVar(value="0")
+        ttk.Entry(async_frame, textvariable=self.pulse_async_channel_var, width=5).pack(side=LEFT, padx=5)
+        
+        ttk.Label(async_frame, text="Pulse (ms):").pack(side=LEFT, padx=5)
+        self.async_pulse_width_var = StringVar(value="100")
+        ttk.Entry(async_frame, textvariable=self.async_pulse_width_var, width=5).pack(side=LEFT, padx=5)
+        
+        ttk.Label(async_frame, text="Pause (ms):").pack(side=LEFT, padx=5)
+        self.async_pause_width_var = StringVar(value="100")
+        ttk.Entry(async_frame, textvariable=self.async_pause_width_var, width=5).pack(side=LEFT, padx=5)
+        
+        ttk.Label(async_frame, text="Count:").pack(side=LEFT, padx=5)
+        self.async_pulse_count_var = StringVar(value="3")
+        ttk.Entry(async_frame, textvariable=self.async_pulse_count_var, width=5).pack(side=LEFT, padx=5)
+        
+        ttk.Button(async_frame, text="Start Async", 
+                   command=lambda: self.execute_generatePulsesAsync()).pack(side=LEFT, padx=5)
+        
+        # Pulse control
+        ttk.Label(frame, text="Pulse Control").pack(anchor=W, padx=10, pady=5)
+        control_frame = ttk.Frame(frame)
+        control_frame.pack(fill=X, padx=10, pady=5)
+        
+        ttk.Label(control_frame, text="Channel:").pack(side=LEFT, padx=5)
+        self.pulse_control_channel_var = StringVar(value="0")
+        ttk.Entry(control_frame, textvariable=self.pulse_control_channel_var, width=5).pack(side=LEFT, padx=5)
+        
+        ttk.Button(control_frame, text="Check Status", 
+                   command=lambda: self.execute_isPulsing()).pack(side=LEFT, padx=5)
+        
+        ttk.Button(control_frame, text="Stop Pulse", 
+                   command=lambda: self.execute_stopPulse()).pack(side=LEFT, padx=5)
     
     def setup_raw_tab(self, notebook):
         """Setup Raw command tab"""
@@ -409,6 +528,106 @@ class RPCTestGUI:
             
             result, msg = self.client.ledcWrite(channel, duty)
             self.output_message(f"ledcWrite({channel}, {duty}) -> Code: {result}, {msg}")
+        except ValueError:
+            messagebox.showerror("Error", "Invalid input values")
+    
+    # Pulse Library Commands
+    def execute_pulseBegin(self):
+        """Execute pulseBegin"""
+        if not self.check_connection():
+            return
+        
+        try:
+            channel = int(self.pulse_channel_var.get())
+            pin = int(self.pulse_pin_var.get())
+            
+            result, msg = self.client.pulseBegin(channel, pin)
+            self.output_message(f"pulseBegin({channel}, {pin}) -> Code: {result}, {msg}")
+        except ValueError:
+            messagebox.showerror("Error", "Invalid input values")
+    
+    def execute_pulse(self):
+        """Execute pulse"""
+        if not self.check_connection():
+            return
+        
+        try:
+            channel = int(self.pulse_single_channel_var.get())
+            duration = int(self.pulse_duration_var.get())
+            
+            result, msg = self.client.pulse(channel, duration)
+            self.output_message(f"pulse({channel}, {duration}ms) -> Code: {result}, {msg}")
+        except ValueError:
+            messagebox.showerror("Error", "Invalid input values")
+    
+    def execute_pulseAsync(self):
+        """Execute pulseAsync"""
+        if not self.check_connection():
+            return
+        
+        try:
+            channel = int(self.pulse_async_single_channel_var.get())
+            duration = int(self.pulse_async_single_duration_var.get())
+            
+            result, msg = self.client.pulseAsync(channel, duration)
+            self.output_message(f"pulseAsync({channel}, {duration}ms) -> Code: {result}, {msg}")
+        except ValueError:
+            messagebox.showerror("Error", "Invalid input values")
+    
+    def execute_generatePulses(self):
+        """Execute generatePulses"""
+        if not self.check_connection():
+            return
+        
+        try:
+            channel = int(self.pulse_multi_channel_var.get())
+            pulse_width = int(self.pulse_width_var.get())
+            pause_width = int(self.pause_width_var.get())
+            count = int(self.pulse_count_var.get())
+            
+            result, msg = self.client.generatePulses(channel, pulse_width, pause_width, count)
+            self.output_message(f"generatePulses({channel}, {pulse_width}, {pause_width}, {count}) -> Code: {result}, {msg}")
+        except ValueError:
+            messagebox.showerror("Error", "Invalid input values")
+    
+    def execute_generatePulsesAsync(self):
+        """Execute generatePulsesAsync"""
+        if not self.check_connection():
+            return
+        
+        try:
+            channel = int(self.pulse_async_channel_var.get())
+            pulse_width = int(self.async_pulse_width_var.get())
+            pause_width = int(self.async_pause_width_var.get())
+            count = int(self.async_pulse_count_var.get())
+            
+            result, msg = self.client.generatePulsesAsync(channel, pulse_width, pause_width, count)
+            self.output_message(f"generatePulsesAsync({channel}, {pulse_width}, {pause_width}, {count}) -> Code: {result}, {msg}")
+        except ValueError:
+            messagebox.showerror("Error", "Invalid input values")
+    
+    def execute_isPulsing(self):
+        """Execute isPulsing"""
+        if not self.check_connection():
+            return
+        
+        try:
+            channel = int(self.pulse_control_channel_var.get())
+            result, msg, pulsing = self.client.isPulsing(channel)
+            status = "ACTIVE" if pulsing else "IDLE"
+            self.output_message(f"isPulsing({channel}) -> Code: {result}, Status: {status}, {msg}")
+        except ValueError:
+            messagebox.showerror("Error", "Invalid input values")
+    
+    def execute_stopPulse(self):
+        """Execute stopPulse"""
+        if not self.check_connection():
+            return
+        
+        try:
+            channel = int(self.pulse_control_channel_var.get())
+            result, msg = self.client.stopPulse(channel)
+            self.output_message(f"stopPulse({channel}) -> Code: {result}, {msg}")
         except ValueError:
             messagebox.showerror("Error", "Invalid input values")
     
