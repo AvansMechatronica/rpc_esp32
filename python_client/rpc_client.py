@@ -26,7 +26,7 @@ class RPCClient:
             **kwargs: Additional arguments for transport (e.g., port, host)
         """
         logger.info(f"Initializing RPCClient with comm_mode={comm_mode}, kwargs={kwargs}")
-        self.transport = TransportFactory.create(comm_mode)
+        self.transport = TransportFactory.create(comm_mode, **kwargs)
         self._connected = False
         self._request_id = 0
         logger.debug(f"RPCClient initialized with transport: {type(self.transport).__name__}")

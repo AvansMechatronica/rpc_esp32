@@ -367,7 +367,17 @@ class RPCTestGUI:
     def connect(self):
         """Connect to ESP32"""
         try:
-            self.client = RPCClient(comm_mode=self.comm_mode)
+            kwargs = {}
+            if self.comm_mode == COMM_USB:
+                kwargs['port'] = self.usb_port_var.get()
+            else:
+                kwargs['host'] = self.wifi_host_var.get()
+                try:
+                    kwargs['port'] = int(self.wifi_port_var.get())
+                except ValueError:
+                    kwargs['port'] = CONFIG['wifi_port']
+            
+            self.client = RPCClient(comm_mode=self.comm_mode, **kwargs)
             success, message = self.client.connect()
             
             if success:

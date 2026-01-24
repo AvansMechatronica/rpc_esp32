@@ -136,6 +136,7 @@ class WiFiTransport(Transport):
         self.port = port or CONFIG['wifi_port']
         self.socket = None
         self._connected = False
+        self._recv_buffer = ""
         logger.info(f"WiFiTransport initialized: host={self.host}, port={self.port}")
         
     def connect(self) -> bool:
@@ -195,14 +196,31 @@ class WiFiTransport(Transport):
         logger.debug(f"Waiting for response (timeout={timeout}s)...")
         try:
             self.socket.settimeout(timeout)
-            response = self.socket.recv(1024).decode().strip()
-            if response:
-                logger.debug(f"Received data ({len(response)} bytes): {response[:100]}..." if len(response) > 100 else f"Received data: {response}")
-            else:
-                logger.warning("Received empty response")
-            if CONFIG['debug']:
-                print(f"[DEBUG] Received: {response}")
-            return response if response else None
+            end_time = time.time() + timeout
+            # Use a small read loop to handle TCP framing (newline terminated)
+            while time.time() < end_time:
+                # If buffer already has a full line, return it
+                if "\n" in self._recv_buffer:
+                    line, self._recv_buffer = self._recv_buffer.split("\n", 1)
+                    line = line.strip()
+                    logger.debug(f"Received data ({len(line)} bytes): {line[:100]}..." if len(line) > 100 else f"Received data: {line}")
+                    if CONFIG['debug']:
+                        print(f"[DEBUG] Received: {line}")
+                    return line if line else None
+                try:
+                    chunk = self.socket.recv(1024)
+                except Exception as e:
+                    logger.error(f"Recv failed during read: {e}")
+                    if CONFIG['debug']:
+                        print(f"[ERROR] Recv failed: {e}")
+                    return None
+                if not chunk:
+                    # No data read; wait briefly
+                    time.sleep(0.01)
+                    continue
+                self._recv_buffer += chunk.decode()
+            logger.warning(f"Receive timeout after {timeout}s")
+            return None
         except Exception as e:
             logger.error(f"Recv failed: {e}")
             if CONFIG['debug']:
@@ -218,15 +236,15 @@ class TransportFactory:
     """Factory for creating transport instances"""
     
     @staticmethod
-    def create(comm_mode: int = None) -> Transport:
-        """Create transport based on communication mode"""
+    def create(comm_mode: int = None, **kwargs) -> Transport:
+        """Create transport for the requested mode, allowing overrides (port/host)."""
         mode = comm_mode or CONFIG['comm_mode']
-        logger.info(f"Creating transport for mode: {mode} ({'USB' if mode == COMM_USB else 'WiFi' if mode == COMM_WIFI else 'Unknown'})")
+        logger.info(f"Creating transport for mode: {mode} ({'USB' if mode == COMM_USB else 'WiFi' if mode == COMM_WIFI else 'Unknown'}), overrides={kwargs}")
         
         if mode == COMM_USB:
-            return SerialTransport()
+            return SerialTransport(port=kwargs.get('port'), baudrate=kwargs.get('baudrate'))
         elif mode == COMM_WIFI:
-            return WiFiTransport()
+            return WiFiTransport(host=kwargs.get('host'), port=kwargs.get('port'))
         else:
             logger.error(f"Unknown communication mode: {mode}")
             raise ValueError(f"Unknown communication mode: {mode}")

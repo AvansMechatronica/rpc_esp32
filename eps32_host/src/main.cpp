@@ -43,18 +43,24 @@ void setup() {
       Serial.println("\nWiFi connected!");
       Serial.print("IP address: ");
       Serial.println(WiFi.localIP());
+      Serial.printf("Listening on port %d\n", CONFIG_WIFI_PORT);
     } else {
       Serial.println("\nWiFi connection failed!");
     }
+    Serial.println("RPC Server ready. Waiting for commands...");
   }
   
-  Serial.println("RPC Server ready. Waiting for commands...");
 }
 
 void loop() {
   // USB/Serial communication handled by RPC server
+
+
   if (CONFIG_COMM_MODE == COMM_USB) {
     rpc_server.handle_serial();
+  } else if (CONFIG_COMM_MODE == COMM_WIFI) {
+    // For WiFi, also handle serial commands
+    rpc_server.handle_wifi();
   }
   
   // Handle pulse ticks for async pulse generation
