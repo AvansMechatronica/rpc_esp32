@@ -1,0 +1,40 @@
+# Portal robot GUI configuration
+transport:
+  mode: usb  # usb or wifi
+  usb_port: /dev/ttyUSB0
+  usb_baudrate: 115200
+  wifi_host: 192.168.1.100
+  wifi_port: 5000
+  timeout: 2.0
+motion:
+  pulse_width_ms: 2          # pulse high time per step
+  pause_width_ms: 2          # pulse low time per step
+  poll_interval_ms: 120      # GUI poll interval for progress updates
+motors:
+  x:
+    channel: 0
+    step_pin: 25
+    dir_pin: 26
+    pulses_per_unit: 200     # steps per mm
+    unit_name: mm
+    soft_min: 0
+    soft_max: 300
+    start_position: 0
+  y:
+    channel: 1
+    step_pin: 27
+    dir_pin: 14
+    pulses_per_unit: 200
+    unit_name: mm
+    soft_min: 0
+    soft_max: 200
+    start_position: 0
+  z:
+    channel: 2
+    step_pin: 32
+    dir_pin: 33
+    pulses_per_unit: 400     # finer steps for Z
+    unit_name: mm
+    soft_min: 0
+    soft_max: 150
+    start_position: 0

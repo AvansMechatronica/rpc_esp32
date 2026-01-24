@@ -118,6 +118,12 @@ client.connect()
 | RPC Client  | Commands, parameters, responses, parsing       |
 | Examples    | Script flow, test results, exceptions          |
 
+
+## [2026-01-24] Nieuw: USB verbonden, maar pinMode(2, 1) geeft geen response
+
+- Symptoom: USB verbinding is OK, maar pinMode(2, 1) geeft "Code: 3, No response from device".
+- Zie ESP32_BUG_FIX.md voor uitgebreide stappen en firmware/client checks.
+
 ## Tips
 
 - Start with `--debug 3` for normal troubleshooting

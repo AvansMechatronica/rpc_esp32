@@ -1,5 +1,31 @@
 # ESP32 RPC Server Bug Fix
 
+## [2026-01-24] USB Connected, pinMode(2, 1) No Response
+
+### Issue
+
+After a successful USB connection, sending `pinMode(2, 1)` results in:
+
+  Code: 3, No response from device
+
+#### Troubleshooting Steps
+
+1. Verified USB connection is established.
+2. Confirmed command is sent from the Python client.
+3. No response received from ESP32 for pinMode command.
+4. Possible causes:
+   - Firmware not handling pinMode correctly
+   - Communication protocol mismatch
+   - ESP32 not running expected firmware or is busy
+
+#### Next Steps
+
+- Check ESP32 firmware for correct pinMode handling
+- Ensure Python client and firmware protocol match
+- Confirm ESP32 is running the latest firmware
+
+See other sections below for architecture and bug fix history.
+
 ## Problem Identified
 
 The ESP32 RPC server was sending **two responses** for commands that return data (digitalRead, analogRead, millis, freeMem, chipID).

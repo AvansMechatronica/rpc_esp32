@@ -371,5 +371,11 @@ All files present! ✅
 
 ---
 
+
+## [2026-01-24] Update: USB Connection and pinMode Issue
+
+- Added troubleshooting reference for the case where USB connects but pinMode(2, 1) returns "Code: 3, No response from device".
+- See ESP32_BUG_FIX.md for detailed steps and firmware/client checks.
+
 Generated: January 23, 2026
-Last Updated: Implementation Complete ✅
+Last Updated: January 24, 2026 — Troubleshooting and file reference update ✅
