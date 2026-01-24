@@ -21,6 +21,7 @@ class RPCTestGUI:
         
         self.client = None
         self.comm_mode = COMM_USB
+        self.output_window_visible = False
         
         self.setup_output_window()
         self.setup_ui()
@@ -63,9 +64,13 @@ class RPCTestGUI:
         self.disconnect_btn = ttk.Button(conn_frame, text="Disconnect", command=self.disconnect, state=DISABLED)
         self.disconnect_btn.grid(row=2, column=1, padx=5, sticky=EW)
         
+        # Toggle Output Button
+        self.toggle_output_btn = ttk.Button(conn_frame, text="Show Output", command=self.toggle_output_window)
+        self.toggle_output_btn.grid(row=2, column=2, padx=5, sticky=EW)
+        
         # Connection Status
         self.status_label = ttk.Label(conn_frame, text="Disconnected", foreground="red")
-        self.status_label.grid(row=2, column=2, columnspan=2, sticky=W, padx=5)
+        self.status_label.grid(row=2, column=3, sticky=W, padx=5)
         
         # Notebook for different function categories
         notebook = ttk.Notebook(self.root)
@@ -91,6 +96,8 @@ class RPCTestGUI:
         self.output_window = Toplevel(self.root)
         self.output_window.title("Output Log")
         self.output_window.geometry("800x600")
+        self.output_window.withdraw()  # Hide by default
+        self.output_window.protocol("WM_DELETE_WINDOW", self.hide_output_window)
         
         # Output Frame
         output_frame = ttk.LabelFrame(self.output_window, text="Output", padding=5)
@@ -101,6 +108,26 @@ class RPCTestGUI:
         
         # Clear Output Button
         ttk.Button(output_frame, text="Clear Output", command=self.clear_output).pack(pady=5)
+    
+    def toggle_output_window(self):
+        """Toggle output window visibility"""
+        if self.output_window_visible:
+            self.hide_output_window()
+        else:
+            self.show_output_window()
+    
+    def show_output_window(self):
+        """Show output window"""
+        self.output_window.deiconify()
+        self.output_window.lift()
+        self.output_window_visible = True
+        self.toggle_output_btn.config(text="Hide Output")
+    
+    def hide_output_window(self):
+        """Hide output window"""
+        self.output_window.withdraw()
+        self.output_window_visible = False
+        self.toggle_output_btn.config(text="Show Output")
     
     def setup_gpio_tab(self, notebook):
         """Setup GPIO functions tab"""
@@ -197,6 +224,19 @@ class RPCTestGUI:
         
         ttk.Button(info_frame, text="Get Chip ID", 
                    command=lambda: self.execute_getChipID()).pack(side=LEFT, padx=5)
+
+        # System info result labels
+        result_frame = ttk.Frame(frame)
+        result_frame.pack(fill=X, padx=10, pady=5)
+
+        self.millis_label_var = StringVar(value="Millis: -")
+        ttk.Label(result_frame, textvariable=self.millis_label_var).pack(anchor=W, pady=2)
+
+        self.free_mem_label_var = StringVar(value="Free Memory: -")
+        ttk.Label(result_frame, textvariable=self.free_mem_label_var).pack(anchor=W, pady=2)
+
+        self.chip_id_label_var = StringVar(value="Chip ID: -")
+        ttk.Label(result_frame, textvariable=self.chip_id_label_var).pack(anchor=W, pady=2)
     
     def setup_pwm_tab(self, notebook):
         """Setup PWM functions tab"""
@@ -527,24 +567,51 @@ class RPCTestGUI:
         if not self.check_connection():
             return
         
-        result, msg, value = self.client.getMillis()
-        self.output_message(f"millis() -> Code: {result}, Value: {value}ms, {msg}")
+        try:
+            result, msg, value = self.client.getMillis()
+            if result == RPC_OK and value is not None:
+                self.millis_label_var.set(f"Millis: {value} ms")
+                self.output_message(f"millis() -> Code: {result}, Value: {value}ms, {msg}")
+            else:
+                self.millis_label_var.set("Millis: -")
+                self.output_message(f"millis() -> Code: {result}, {msg} (No result)")
+        except Exception as e:
+            self.millis_label_var.set("Millis: -")
+            self.output_message(f"millis() -> Error: {str(e)}")
     
     def execute_getFreeMem(self):
         """Execute getFreeMem"""
         if not self.check_connection():
             return
         
-        result, msg, value = self.client.getFreeMem()
-        self.output_message(f"freeMem() -> Code: {result}, Value: {value} bytes, {msg}")
+        try:
+            result, msg, value = self.client.getFreeMem()
+            if result == RPC_OK and value is not None:
+                self.free_mem_label_var.set(f"Free Memory: {value} bytes")
+                self.output_message(f"freeMem() -> Code: {result}, Value: {value} bytes, {msg}")
+            else:
+                self.free_mem_label_var.set("Free Memory: -")
+                self.output_message(f"freeMem() -> Code: {result}, {msg} (No result)")
+        except Exception as e:
+            self.free_mem_label_var.set("Free Memory: -")
+            self.output_message(f"freeMem() -> Error: {str(e)}")
     
     def execute_getChipID(self):
         """Execute getChipID"""
         if not self.check_connection():
             return
         
-        result, msg, value = self.client.getChipID()
-        self.output_message(f"chipID() -> Code: {result}, Value: 0x{value:X}, {msg}")
+        try:
+            result, msg, value = self.client.getChipID()
+            if result == RPC_OK and value is not None:
+                self.chip_id_label_var.set(f"Chip ID: 0x{value:X}")
+                self.output_message(f"chipID() -> Code: {result}, Value: 0x{value:X}, {msg}")
+            else:
+                self.chip_id_label_var.set("Chip ID: -")
+                self.output_message(f"chipID() -> Code: {result}, {msg} (No result)")
+        except Exception as e:
+            self.chip_id_label_var.set("Chip ID: -")
+            self.output_message(f"chipID() -> Error: {str(e)}")
     
     # PWM Commands
     def execute_ledcSetup(self):
