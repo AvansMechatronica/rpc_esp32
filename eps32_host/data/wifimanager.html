@@ -13,17 +13,85 @@
   <div class="content">
     <div class="card-grid">
       <div class="card">
-        <form action="/" method="POST">
+        <form id="wifiForm" action="/" method="POST">
           <p>
-            <label for="ssid">WIFI_SSID</label>
-            <input type="text" id ="ssid" name="ssid"><br>
+            <label for="ssidSelect">WiFi Network</label>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <select id="ssidSelect" name="ssid" style="flex:1; min-width:220px;">
+                <option value="" disabled selected>Scanning networks...</option>
+              </select>
+              <button id="refreshBtn" type="button">Refresh</button>
+            </div>
+            <small>You can also enter a custom SSID below (optional)</small><br>
+            <input type="text" id="ssidCustom" placeholder="Custom SSID (optional)"><br>
             <label for="pass">Password</label>
-            <input type="text" id ="pass" name="pass"><br>
-            <input type ="submit" value ="Submit">
+            <div style="display:flex; gap:8px; align-items:center;">
+              <input type="password" id="pass" name="pass" style="flex:1;">
+              <button id="togglePassBtn" type="button">Show</button>
+            </div>
+            <input type="submit" value="Submit">
           </p>
         </form>
       </div>
     </div>
   </div>
+  <script>
+    async function loadNetworks() {
+      const select = document.getElementById('ssidSelect');
+      select.innerHTML = '<option disabled selected>Scanning networks...</option>';
+      try {
+        const res = await fetch('/scan');
+        if (!res.ok) throw new Error('Scan failed');
+        const data = await res.json();
+        const nets = Array.isArray(data.networks) ? data.networks : [];
+        // Sort by RSSI desc
+        nets.sort((a,b) => (b.rssi||-999) - (a.rssi||-999));
+        select.innerHTML = '';
+        if (nets.length === 0) {
+          select.innerHTML = '<option disabled selected>No networks found</option>';
+        } else {
+          select.innerHTML = '<option value="" disabled selected>Select a network</option>';
+          for (const n of nets) {
+            const opt = document.createElement('option');
+            const lock = (n.enc && Number(n.enc) !== 0) ? ' 🔒' : '';
+            opt.value = n.ssid || '';
+            opt.textContent = `${n.ssid || '(hidden)'} (${n.rssi} dBm)${lock}`;
+            select.appendChild(opt);
+          }
+        }
+      } catch (e) {
+        select.innerHTML = '<option disabled selected>Error scanning networks</option>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadNetworks();
+      document.getElementById('refreshBtn').addEventListener('click', loadNetworks);
+      
+      // Toggle password visibility
+      const passInput = document.getElementById('pass');
+      const togglePassBtn = document.getElementById('togglePassBtn');
+      togglePassBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (passInput.type === 'password') {
+          passInput.type = 'text';
+          togglePassBtn.textContent = 'Hide';
+        } else {
+          passInput.type = 'password';
+          togglePassBtn.textContent = 'Show';
+        }
+      });
+      
+      document.getElementById('wifiForm').addEventListener('submit', (e) => {
+        const custom = document.getElementById('ssidCustom');
+        const select = document.getElementById('ssidSelect');
+        if (custom.value && custom.value.trim().length > 0) {
+          // Prefer custom SSID: move name attr from select to custom input
+          select.removeAttribute('name');
+          custom.setAttribute('name', 'ssid');
+        }
+      });
+    });
+  </script>
 </body>
 </html>

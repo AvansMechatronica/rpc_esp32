@@ -22,6 +22,7 @@ class RPCTestGUI:
         self.client = None
         self.comm_mode = COMM_USB
         
+        self.setup_output_window()
         self.setup_ui()
         self.update_connection_status()
     
@@ -84,12 +85,18 @@ class RPCTestGUI:
         
         # Raw Command Tab
         self.setup_raw_tab(notebook)
+    
+    def setup_output_window(self):
+        """Setup separate output window"""
+        self.output_window = Toplevel(self.root)
+        self.output_window.title("Output Log")
+        self.output_window.geometry("800x600")
         
         # Output Frame
-        output_frame = ttk.LabelFrame(self.root, text="Output", padding=5)
+        output_frame = ttk.LabelFrame(self.output_window, text="Output", padding=5)
         output_frame.pack(fill=BOTH, expand=True, padx=10, pady=5)
         
-        self.output = scrolledtext.ScrolledText(output_frame, height=8, state=DISABLED)
+        self.output = scrolledtext.ScrolledText(output_frame, height=40, state=DISABLED)
         self.output.pack(fill=BOTH, expand=True)
         
         # Clear Output Button

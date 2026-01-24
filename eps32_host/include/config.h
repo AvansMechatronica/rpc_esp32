@@ -6,7 +6,8 @@
 #define COMM_WIFI 1
 
 // Current communication mode
-#define CONFIG_COMM_MODE COMM_USB
+//#define CONFIG_COMM_MODE COMM_USB
+#define CONFIG_COMM_MODE COMM_WIFI
 
 // WiFi configuration (used when COMM_WIFI mode is selected)
 #define CONFIG_WIFI_SSID "ESP32_RPC"
