@@ -160,8 +160,30 @@ class PortalRobotGUI:
         self.connection_label.grid(row=3, column=0, columnspan=4, sticky=tk.W, pady=(4, 0))
 
     def _build_motors_panel(self, parent: ttk.Frame) -> None:
-        self.motors_frame = ttk.LabelFrame(parent, text="Motoren", padding=10)
-        self.motors_frame.pack(fill=tk.BOTH, expand=True, pady=(0, 10))
+        # Create a frame to hold the canvas and scrollbar
+        container = ttk.Frame(parent)
+        container.pack(fill=tk.BOTH, expand=True, pady=(0, 10))
+
+        # Create a canvas and a vertical scrollbar for it
+        canvas = tk.Canvas(container, borderwidth=0, highlightthickness=0)
+        vscroll = ttk.Scrollbar(container, orient="vertical", command=canvas.yview)
+        canvas.configure(yscrollcommand=vscroll.set)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        vscroll.pack(side=tk.RIGHT, fill=tk.Y)
+
+        # Create the actual motors frame inside the canvas
+        self.motors_frame = ttk.LabelFrame(canvas, text="Motoren", padding=10)
+        motors_frame_id = canvas.create_window((0, 0), window=self.motors_frame, anchor="nw")
+
+        # Update scrollregion when the size of the frame changes
+        def _on_frame_configure(event):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+        self.motors_frame.bind("<Configure>", _on_frame_configure)
+
+        # Make sure the frame width tracks the canvas width
+        def _on_canvas_configure(event):
+            canvas.itemconfig(motors_frame_id, width=event.width)
+        canvas.bind("<Configure>", _on_canvas_configure)
 
     def _build_emergency_panel(self, parent: ttk.Frame) -> None:
         frame = ttk.Frame(parent)
@@ -525,12 +547,22 @@ class PortalRobotGUI:
             self._popup_error("Stop mislukt", msg)
             self._log(f"As {cfg.axis}: stop mislukt: {msg}")
             return
+        # Update position to current hardware value if possible
+        try:
+            res, msg, value = self.client.getPosition(cfg.channel)
+            if res == RPC_OK and value is not None:
+                state.position = value
+        except Exception:
+            pass
         state.moving = False
         state.status_var.set("Gestopt")
         state.progress_var.set(0)
         state.pending_delta = 0
         state.remaining_pulses = 0
-        self._log(f"As {cfg.axis}: gestopt")
+        state.abs_var.set(state.position)
+        state.rel_var.set(0)
+        state.position_label.configure(text=self._position_text(state))
+        self._log(f"As {cfg.axis}: gestopt, positie onthouden: {state.position:.3f} {cfg.unit_name}")
 
     def emergency_stop(self) -> None:
         if not self._ensure_client():
@@ -541,12 +573,22 @@ class PortalRobotGUI:
             if res != RPC_OK:
                 logger.warning("Noodstop fout op %s: %s", cfg.axis, msg)
                 self._log(f"As {cfg.axis}: noodstop fout: {msg}")
+            # Update position to current hardware value if possible
+            try:
+                res2, msg2, value = self.client.getPosition(cfg.channel)
+                if res2 == RPC_OK and value is not None:
+                    state.position = value
+            except Exception:
+                pass
             state.moving = False
             state.status_var.set("NOODSTOP")
             state.progress_var.set(0)
             state.pending_delta = 0
             state.remaining_pulses = 0
-        self._log("Noodstop: alle motoren gestopt")
+            state.abs_var.set(state.position)
+            state.rel_var.set(0)
+            state.position_label.configure(text=self._position_text(state))
+        self._log("Noodstop: alle motoren gestopt en posities onthouden")
         self._popup_warning("Noodstop", "Alle motoren zijn gestopt")
 
 

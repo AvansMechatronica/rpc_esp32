@@ -88,8 +88,7 @@ class RPCTestGUI:
         # Pulse Library Tab
         self.setup_pulse_tab(notebook)
         
-        # Raw Command Tab
-        self.setup_raw_tab(notebook)
+        # ...existing code...
     
     def setup_output_window(self):
         """Setup separate output window"""
@@ -407,21 +406,7 @@ class RPCTestGUI:
         ttk.Button(row3, text="Stop Pulse", 
                     command=lambda: self.execute_stopPulse()).pack(side=LEFT, padx=5)
     
-    def setup_raw_tab(self, notebook):
-        """Setup Raw command tab"""
-        frame = ttk.Frame(notebook)
-        notebook.add(frame, text="Raw Command")
-        
-        ttk.Label(frame, text="Method:").pack(anchor=W, padx=10, pady=5)
-        self.raw_method_var = StringVar()
-        ttk.Entry(frame, textvariable=self.raw_method_var, width=30).pack(fill=X, padx=10, pady=5)
-        
-        ttk.Label(frame, text="Parameters (JSON):").pack(anchor=W, padx=10, pady=5)
-        self.raw_params = scrolledtext.ScrolledText(frame, height=6)
-        self.raw_params.pack(fill=BOTH, expand=True, padx=10, pady=5)
-        self.raw_params.insert("1.0", "{}")
-        
-        ttk.Button(frame, text="Execute", command=self.execute_raw_command).pack(pady=5)
+    # ...existing code...
     
     def on_mode_changed(self, *args):
         """Handle communication mode change"""
@@ -767,26 +752,7 @@ class RPCTestGUI:
         except ValueError:
             messagebox.showerror("Error", "Invalid input values")
     
-    # Raw Command
-    def execute_raw_command(self):
-        """Execute raw command"""
-        if not self.check_connection():
-            return
-        
-        try:
-            method = self.raw_method_var.get()
-            params_str = self.raw_params.get("1.0", END)
-            params = json.loads(params_str) if params_str.strip() else {}
-            
-            result, msg, data = self.client.call_raw(method, params)
-            output = f"call_raw('{method}', {params}) -> Code: {result}, {msg}"
-            if data:
-                output += f"\nData: {json.dumps(data, indent=2)}"
-            self.output_message(output)
-        except json.JSONDecodeError:
-            messagebox.showerror("Error", "Invalid JSON in parameters")
-        except Exception as e:
-            messagebox.showerror("Error", str(e))
+    # ...existing code...
     
     def check_connection(self):
         """Check if connected"""
