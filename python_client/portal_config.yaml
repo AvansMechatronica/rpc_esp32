@@ -20,6 +20,8 @@ motors:
     soft_min: 0
     soft_max: 300
     start_position: 0
+    endstop_min_pin: 34
+    endstop_max_pin: 35
   y:
     channel: 1
     step_pin: 27
@@ -29,6 +31,8 @@ motors:
     soft_min: 0
     soft_max: 200
     start_position: 0
+    endstop_min_pin: 36
+    endstop_max_pin: 39
   z:
     channel: 2
     step_pin: 32
@@ -38,3 +42,5 @@ motors:
     soft_min: 0
     soft_max: 150
     start_position: 0
+    endstop_min_pin: 37
+    endstop_max_pin: 38
