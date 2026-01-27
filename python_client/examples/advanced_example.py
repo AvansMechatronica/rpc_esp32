@@ -8,8 +8,10 @@ Demonstrates practical use of RPC for sensor monitoring
 import time
 import argparse
 import logging
-from rpc_client import RPCClient
-from config import COMM_USB, RPC_OK, setup_logging, DEBUG_NONE, DEBUG_ERROR, DEBUG_WARNING, DEBUG_INFO, DEBUG_VERBOSE
+from library.rpc_client import RPCClient
+from library.config import COMM_USB, RPC_OK, setup_logging, DEBUG_NONE, DEBUG_ERROR, DEBUG_WARNING, DEBUG_INFO, DEBUG_VERBOSE
+
+
 
 # Setup logger
 logger = logging.getLogger(__name__)

@@ -20,8 +20,8 @@ from typing import Dict, Optional
 
 from PIL import Image, ImageTk
 
-from config import COMM_USB, COMM_WIFI, CONFIG, RPC_OK, setup_logging
-from rpc_client import RPCClient
+from library.config import COMM_USB, COMM_WIFI, CONFIG, RPC_OK, setup_logging
+from library.rpc_client import RPCClient
 
 try:
     import yaml

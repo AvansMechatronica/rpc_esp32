@@ -7,8 +7,8 @@ Provides easy-to-use interface for calling RPC functions on ESP32
 import json
 import logging
 from typing import Optional, Dict, Any, Tuple
-from transport import Transport, TransportFactory
-from config import CONFIG, RPC_OK, COMM_USB, RPC_ERROR_TIMEOUT, get_result_message
+from .transport import Transport, TransportFactory
+from .config import CONFIG, RPC_OK, COMM_USB, RPC_ERROR_TIMEOUT, get_result_message
 
 # Setup logger
 logger = logging.getLogger(__name__)

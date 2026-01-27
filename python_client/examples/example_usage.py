@@ -7,8 +7,8 @@ This script demonstrates basic usage of the RPC client library
 
 import argparse
 import logging
-from rpc_client import RPCClient
-from config import COMM_USB, RPC_OK, setup_logging, DEBUG_NONE, DEBUG_ERROR, DEBUG_WARNING, DEBUG_INFO, DEBUG_VERBOSE
+from library.rpc_client import RPCClient
+from library.config import COMM_USB, RPC_OK, setup_logging, DEBUG_NONE, DEBUG_ERROR, DEBUG_WARNING, DEBUG_INFO, DEBUG_VERBOSE
 
 # Setup logger
 logger = logging.getLogger(__name__)
@@ -164,7 +164,7 @@ def main():
         print_result("generatePulsesAsync(0, 100ms, 100ms, 3 pulses)", result, msg)
         
         # Query remaining pulses during async run
-            result, msg, remaining = client.getRemainingPulses(0)
+        result, msg, remaining = client.getRemainingPulses(0)
         print_result("getRemainingPulses(0)", result, msg, remaining)
         
         # Check if still pulsing

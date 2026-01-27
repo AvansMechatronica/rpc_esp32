@@ -7,8 +7,8 @@ import sys
 import json
 from tkinter import *
 from tkinter import ttk, messagebox, scrolledtext
-from rpc_client import RPCClient
-from config import COMM_USB, COMM_WIFI, RPC_OK, CONFIG
+from library.rpc_client import RPCClient
+from library.config import COMM_USB, COMM_WIFI, RPC_OK, CONFIG
 
 
 class RPCTestGUI:

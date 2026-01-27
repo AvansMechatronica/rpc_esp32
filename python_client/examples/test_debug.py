@@ -3,7 +3,7 @@
 Simple test to verify debug functionality without ESP32 hardware
 """
 
-from config import setup_logging, DEBUG_INFO, DEBUG_VERBOSE, DEBUG_NONE
+from library.config import setup_logging, DEBUG_INFO, DEBUG_VERBOSE, DEBUG_NONE
 import logging
 
 def test_logging_levels():

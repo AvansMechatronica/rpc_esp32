@@ -7,7 +7,7 @@ import time
 import logging
 from abc import ABC, abstractmethod
 from typing import Optional, Dict, Any
-from config import CONFIG, RPC_OK, COMM_USB, COMM_WIFI
+from .config import CONFIG, RPC_OK, COMM_USB, COMM_WIFI
 
 # Setup logger
 logger = logging.getLogger(__name__)
