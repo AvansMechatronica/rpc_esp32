@@ -3,12 +3,23 @@
 #include "rpc_server.h"
 #include "config.h"
 #include "wifi_network_config.h"
+#include "oled.h"
 
 RpcServer rpc_server;
+oled oled_Display;
 
 void setup() {
   Serial.begin(115200);
   delay(1000);
+
+
+  bool oledOK  = oled_Display.Init();
+
+  oled_Display.Clear();
+	oled_Display.WriteLine(0, "ESP32 RPC", ALIGN_CENTER);
+	oled_Display.WriteLine(1, "Server",  ALIGN_CENTER);
+	oled_Display.WriteLine(2, "V0.6",  		ALIGN_CENTER);
+	oled_Display.WriteLine(2, "Server Starting...",  		ALIGN_CENTER);
   
   Serial.println("\n\nESP32 RPC Server Starting...");
   
@@ -49,6 +60,12 @@ void setup() {
     }
     Serial.println("RPC Server ready. Waiting for commands...");
   }
+  oled_Display.Clear();
+	oled_Display.WriteLine(0, "ESP32 RPC", ALIGN_CENTER);
+	oled_Display.WriteLine(1, "Server",  ALIGN_CENTER);
+  oled_Display.WriteLine(2, "RPC Server ready",  		ALIGN_CENTER);
+  oled_Display.WriteLine(3, "USB Connection",  		ALIGN_CENTER);
+
   
 }
 
