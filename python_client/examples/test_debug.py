@@ -3,6 +3,10 @@
 Simple test to verify debug functionality without ESP32 hardware
 """
 
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from library.config import setup_logging, DEBUG_INFO, DEBUG_VERBOSE, DEBUG_NONE
 import logging
 

@@ -8,6 +8,10 @@ Portal robot GUI to drive three stepper axes (X, Y, Z) over USB or WiFi.
 - Displays the portaalrobot.jpg reference image in the UI
 """
 
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import argparse
 import json
 import logging
