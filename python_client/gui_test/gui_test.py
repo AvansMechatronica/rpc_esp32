@@ -4,9 +4,16 @@ ESP32 RPC GUI Test Application
 Provides interactive GUI for testing RPC functions
 """
 
+
 import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+# For serial port listing
+try:
+    import serial.tools.list_ports
+except ImportError:
+    serial = None
 
 import sys
 import json
@@ -51,10 +58,16 @@ class RPCTestGUI:
         mode_combo.grid(row=0, column=1, padx=5)
         mode_combo.bind("<<ComboboxSelected>>", self.on_mode_changed)
 
-        # USB Port
+        # USB Port (Dropdown with available ports)
         ttk.Label(conn_frame, text="USB Port:").grid(row=0, column=2, sticky=W)
-        self.usb_port_var = StringVar(value="/dev/ttyUSB0")
-        ttk.Entry(conn_frame, textvariable=self.usb_port_var, width=15).grid(row=0, column=3, padx=5)
+        self.usb_port_var = StringVar()
+        self.usb_ports = self.get_serial_ports()
+        default_port = self.get_default_serial_port()
+        if default_port not in self.usb_ports:
+            self.usb_ports.insert(0, default_port)
+        self.usb_port_var.set(default_port)
+        self.usb_port_combo = ttk.Combobox(conn_frame, textvariable=self.usb_port_var, values=self.usb_ports, width=15)
+        self.usb_port_combo.grid(row=0, column=3, padx=5)
 
         # WiFi Host
         ttk.Label(conn_frame, text="WiFi Host:").grid(row=1, column=0, sticky=W)
@@ -91,6 +104,25 @@ class RPCTestGUI:
         self.pulse_tab = PulseTab(notebook, self)
         self.system_tab = SystemTab(notebook, self)
         # ...existing code...
+
+    def get_serial_ports(self):
+        """Return a list of available serial ports (cross-platform)"""
+        try:
+            import serial.tools.list_ports
+            ports = [port.device for port in serial.tools.list_ports.comports()]
+            return ports if ports else [self.get_default_serial_port()]
+        except Exception:
+            return [self.get_default_serial_port()]
+
+    def get_default_serial_port(self):
+        """Return a default serial port based on OS"""
+        if sys.platform.startswith('win'):
+            return 'COM3'
+        elif sys.platform.startswith('darwin'):
+            return '/dev/tty.usbserial'
+        else:
+            # Assume Linux
+            return '/dev/ttyUSB0'
     
     def setup_output_window(self):
         """Setup separate output window"""
