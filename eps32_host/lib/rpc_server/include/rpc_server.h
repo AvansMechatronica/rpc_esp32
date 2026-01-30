@@ -8,6 +8,7 @@
 #include <WiFi.h>
 
 class RpcServer {
+
 public:
   RpcServer();
   void begin();
@@ -64,7 +65,11 @@ private:
   int rpc_generatePulses(JsonObject params);
   int rpc_generatePulsesAsync(JsonObject params);
 
-  
+#if defined INCLUDE_OLED_DISPLAY
+  // OLED library functions
+  int rpc_oledClear(JsonObject params);
+  int rpc_oledWriteLine(JsonObject params);
+#endif
   // Utility
   String getMethodName(const char* method);
   bool parseRequest(const String& request_str);

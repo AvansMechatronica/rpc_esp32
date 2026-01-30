@@ -57,6 +57,7 @@ bool oledDisplay::Init(void)
 void oledDisplay::Clear(void)
 {
 	display->clear();
+	display->display();
 }
 
 //////////////////////////////////////////////////////////////////////////////

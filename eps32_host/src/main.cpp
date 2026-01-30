@@ -110,7 +110,11 @@ void setup() {
 	oled_Display.WriteLine(0, "ESP32 RPC", ALIGN_CENTER);
 	oled_Display.WriteLine(1, "Server Ready",  ALIGN_CENTER);
 #if CONFIG_COMM_MODE == COMM_WIFI
-  oled_Display.WriteLine(3, "WiFi Connection",  		ALIGN_CENTER);
+  oled_Display.WriteLine(2, "WiFi Connection",  		ALIGN_CENTER);
+  char text_buffer[32];
+  snprintf(text_buffer, sizeof(text_buffer), "IP: %s", WiFi.localIP().toString().c_str());
+  oled_Display.WriteLine(3, text_buffer,  ALIGN_CENTER);
+
 #else   
   oled_Display.WriteLine(3, "USB Connection",  		ALIGN_CENTER);
 #endif

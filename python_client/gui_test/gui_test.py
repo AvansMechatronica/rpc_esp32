@@ -22,10 +22,12 @@ from tkinter import *
 from tkinter import ttk, messagebox, scrolledtext
 from library.rpc_client import RPCClient
 from library.config import COMM_USB, COMM_WIFI, RPC_OK, CONFIG
+
 from gpio_tab import GPIOTab
 from system_tab import SystemTab
 from pwm_tab import PWMTab
 from pulse_tab import PulseTab
+from oled_tab import OLEDRPCTab
 
 
 class RPCTestGUI:
@@ -103,6 +105,7 @@ class RPCTestGUI:
         self.pwm_tab = PWMTab(notebook, self)
         self.pulse_tab = PulseTab(notebook, self)
         self.system_tab = SystemTab(notebook, self)
+        self.oled_tab = OLEDRPCTab(notebook, self)
         # ...existing code...
 
     def get_serial_ports(self):

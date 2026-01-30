@@ -1,3 +1,8 @@
+
+#if defined INCLUDE_OLED_DISPLAY
+#include "oled.h"
+extern oledDisplay oled_Display;
+#endif
 #include "rpc_server.h"
 
 RpcServer::RpcServer() {
@@ -61,27 +66,33 @@ void RpcServer::handle_wifi() {
   }
 
   // Check for new client connections
-  if (!tcp_client.connected()) {
+  if (!tcp_client || !tcp_client.connected()) {
     tcp_client = tcp_server->available();
+    if (!tcp_client) {
+      Serial.println("[DEBUG] No client available.");
+    } else {
+      Serial.println("[DEBUG] New client connected.");
+    }
   }
-  
+
   // Handle connected client
-  if (tcp_client.connected()) {
+  if (tcp_client && tcp_client.connected()) {
     // Check if data is available from the TCP client
     if (tcp_client.available()) {
       String request_str = tcp_client.readStringUntil('\n');
       request_str.trim();
-      
+
       if (request_str.length() > 0) {
+        Serial.printf("[DEBUG] Received request: %s\n", request_str.c_str());
         if (parseRequest(request_str)) {
           const char* method = request_doc["method"];
           JsonObject params = request_doc["params"];
-          
+
           // Clear response data before executing command
           response_data.clear();
-          
+
           int result = execute_command(method, params);
-          
+
           // Send response via TCP
           if (response_data.size() > 0) {
             send_response_tcp(result, "", response_data.as<JsonObject>());
@@ -93,10 +104,16 @@ void RpcServer::handle_wifi() {
         }
       }
     }
-  } else if (!tcp_server->hasClient()) {
-    // No client connected, attempt to listen if server not started
-    if (WiFi.status() == WL_CONNECTED) {
-      tcp_server->begin();
+    // Check if client is still connected after handling
+    if (!tcp_client.connected()) {
+      Serial.println("[DEBUG] Client disconnected.");
+    }
+  } else {
+    if (!tcp_server->hasClient()) {
+      // No client connected, attempt to listen if server not started
+      if (WiFi.status() == WL_CONNECTED) {
+        tcp_server->begin();
+      }
     }
   }
 }
@@ -107,6 +124,8 @@ bool RpcServer::parseRequest(const String& request_str) {
 }
 
 int RpcServer::execute_command(const char* method, JsonObject params) {
+  // OLED commands
+
   if (strcmp(method, "pinMode") == 0) {
     return rpc_pinMode(params);
   } else if (strcmp(method, "digitalWrite") == 0) {
@@ -145,6 +164,12 @@ int RpcServer::execute_command(const char* method, JsonObject params) {
     return rpc_generatePulses(params);
   } else if (strcmp(method, "generatePulsesAsync") == 0) {
     return rpc_generatePulsesAsync(params);
+#if defined INCLUDE_OLED_DISPLAY
+  } else if (strcmp(method, "oledClear") == 0) {
+    return rpc_oledClear(params);
+  } else if (strcmp(method, "oledWriteLine") == 0) {
+    return rpc_oledWriteLine(params);
+#endif
   } else {
     return RPC_ERROR_INVALID_COMMAND;
   }
@@ -473,4 +498,22 @@ int RpcServer::rpc_getRemainingPulses(JsonObject params) {
   return RPC_OK;
 }
 
+// OLED RPC functions (must be outside of any function body)
+#if defined INCLUDE_OLED_DISPLAY
+int RpcServer::rpc_oledClear(JsonObject params) {
+  oled_Display.Clear();
+  return RPC_OK;
+}
+
+int RpcServer::rpc_oledWriteLine(JsonObject params) {
+  if (!params.containsKey("line") || !params.containsKey("text") || !params.containsKey("align")) {
+    return RPC_ERROR_INVALID_PARAMS;
+  }
+  uint8_t line = params["line"];
+  const char* text = params["text"];
+  uint8_t align = params["align"];
+  oled_Display.WriteLine(line, text, align);
+  return RPC_OK;
+}
+#endif
 
