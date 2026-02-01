@@ -5,14 +5,19 @@
 #include "wifi_network_config.h"
 #include "usb_wifi_switch.h"
 #if defined INCLUDE_OLED_DISPLAY
-#include "oled.h"
+#include "oled_lib.h"
 #endif
+#include "spi_lib.h"
+#include "dac_4922_lib.h"
 
 RpcServer rpc_server;
 
 #if defined INCLUDE_OLED_DISPLAY
 oledDisplay  oled_Display;
 #endif
+
+spi spi_bus;
+dac4922 dac;
 
 #define WIFI_CONFIGURE_BUTTON_PIN 5  // GPIO pin for forcing WiFi configuration mode
 #define COMM_MODE_BUTTON_PIN 4     // GPIO pin for toggling communication mode
@@ -35,6 +40,20 @@ void setup() {
 	oled_Display.WriteLine(3, "Server Starting...",  		ALIGN_CENTER);
   delay(2000);
 #endif  
+
+#if defined INCLUDE_DAC_4922_LIB || defined INCLUDE_ADC_3208_LIB
+  spi_bus.Init();
+#endif
+
+#if defined INCLUDE_DAC_4922_LIB
+  dac.Init(&spi_bus);
+#endif
+#if 0
+#if INCLUDE_ADC_3208_LIB
+  adc.Init(&spi_bus);
+#endif
+#endif
+
   Serial.println("\n\nESP32 RPC Server Starting...");
   wifi_mode = check_wifi_mode();
   pinMode(WIFI_CONFIGURE_BUTTON_PIN, INPUT_PULLUP);

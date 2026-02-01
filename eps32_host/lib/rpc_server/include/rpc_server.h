@@ -65,6 +65,10 @@ private:
   int rpc_generatePulses(JsonObject params);
   int rpc_generatePulsesAsync(JsonObject params);
 
+  // DAC library functions
+  int rpc_dacSetVoltage(JsonObject params);
+  int rpc_dacSetVoltageAll(JsonObject params);
+
 #if defined INCLUDE_OLED_DISPLAY
   // OLED library functions
   int rpc_oledClear(JsonObject params);

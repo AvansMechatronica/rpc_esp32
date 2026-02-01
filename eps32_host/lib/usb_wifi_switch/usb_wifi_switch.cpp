@@ -2,7 +2,7 @@
 
 
 #if defined (INCLUDE_OLED_DISPLAY)
-#include "oled.h"
+#include "oled_lib.h"
 extern oledDisplay  oled_Display;
 #endif
 

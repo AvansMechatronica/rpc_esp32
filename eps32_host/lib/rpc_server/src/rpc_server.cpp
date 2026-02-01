@@ -1,8 +1,10 @@
 
 #if defined INCLUDE_OLED_DISPLAY
-#include "oled.h"
+#include "oled_lib.h"
 extern oledDisplay oled_Display;
 #endif
+#include "dac_4922_lib.h"
+extern dac4922 dac;
 #include "rpc_server.h"
 
 RpcServer::RpcServer() {
@@ -164,6 +166,12 @@ int RpcServer::execute_command(const char* method, JsonObject params) {
     return rpc_generatePulses(params);
   } else if (strcmp(method, "generatePulsesAsync") == 0) {
     return rpc_generatePulsesAsync(params);
+#if defined INCLUDE_DAC_4922_LIB
+  } else if (strcmp(method, "dacSetVoltage") == 0) {
+    return rpc_dacSetVoltage(params);
+  } else if (strcmp(method, "dacSetVoltageAll") == 0) {
+    return rpc_dacSetVoltageAll(params);
+#endif
 #if defined INCLUDE_OLED_DISPLAY
   } else if (strcmp(method, "oledClear") == 0) {
     return rpc_oledClear(params);
@@ -513,6 +521,28 @@ int RpcServer::rpc_oledWriteLine(JsonObject params) {
   const char* text = params["text"];
   uint8_t align = params["align"];
   oled_Display.WriteLine(line, text, align);
+  return RPC_OK;
+}
+#endif
+
+#if defined INCLUDE_DAC_4922_LIB
+// DAC RPC functions
+int RpcServer::rpc_dacSetVoltage(JsonObject params) {
+  if (!params.containsKey("channel") || !params.containsKey("voltage")) {
+    return RPC_ERROR_INVALID_PARAMS;
+  }
+  uint8_t channel = params["channel"];
+  float voltage = params["voltage"];
+  dac.SetOutputVoltage(channel, voltage);
+  return RPC_OK;
+}
+
+int RpcServer::rpc_dacSetVoltageAll(JsonObject params) {
+  if (!params.containsKey("voltage")) {
+    return RPC_ERROR_INVALID_PARAMS;
+  }
+  float voltage = params["voltage"];
+  dac.SetOutputVoltageAll(voltage);
   return RPC_OK;
 }
 #endif
