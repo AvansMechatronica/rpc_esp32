@@ -30,11 +30,11 @@
 
 class oledDisplay {
 public:
-  static bool Init(void);
-  static void Clear(void);
-  static void WriteLine(uint8_t line, const char *message, uint8_t align);
+  bool Init(void);
+  void Clear(void);
+  void WriteLine(uint8_t line, const char *message, uint8_t align);
 protected:
-  static SSD1306Wire *display;
+  SSD1306Wire *display;
 };
 
 

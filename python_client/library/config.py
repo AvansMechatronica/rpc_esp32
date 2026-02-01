@@ -32,7 +32,7 @@ CONFIG = {
     'wifi_host': '192.168.1.100',
     'wifi_port': 5000,
     'timeout': 2.0,
-    'debug': False,
+    'debug': True,
     'debug_level': DEBUG_NONE,  # 0=None, 1=Error, 2=Warning, 3=Info, 4=Verbose
     'log_to_file': False,
     'log_file': 'rpc_client.log',

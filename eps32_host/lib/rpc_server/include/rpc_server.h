@@ -69,6 +69,11 @@ private:
   int rpc_dacSetVoltage(JsonObject params);
   int rpc_dacSetVoltageAll(JsonObject params);
 
+  // ADC library functions
+  int rpc_readRaw(JsonObject params);
+  int rpc_readVoltage(JsonObject params);
+  int rpc_isButtonPressed(JsonObject params);
+
 #if defined INCLUDE_OLED_DISPLAY
   // OLED library functions
   int rpc_oledClear(JsonObject params);

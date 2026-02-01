@@ -7,8 +7,22 @@
 #if defined INCLUDE_OLED_DISPLAY
 #include "oled_lib.h"
 #endif
+
+#if defined INCLUDE_DAC_4922_LIB || defined INCLUDE_ADC_3208_LIB
 #include "spi_lib.h"
+spi spi_bus;
+#endif
+
+#if defined INCLUDE_DAC_4922_LIB
 #include "dac_4922_lib.h"
+dac4922 dac;
+#endif
+
+#if INCLUDE_ADC_3208_LIB
+#include "adc_3208_lib.h"
+adc8208 adc;
+#endif
+
 
 RpcServer rpc_server;
 
@@ -16,8 +30,6 @@ RpcServer rpc_server;
 oledDisplay  oled_Display;
 #endif
 
-spi spi_bus;
-dac4922 dac;
 
 #define WIFI_CONFIGURE_BUTTON_PIN 5  // GPIO pin for forcing WiFi configuration mode
 #define COMM_MODE_BUTTON_PIN 4     // GPIO pin for toggling communication mode
@@ -48,10 +60,9 @@ void setup() {
 #if defined INCLUDE_DAC_4922_LIB
   dac.Init(&spi_bus);
 #endif
-#if 0
+
 #if INCLUDE_ADC_3208_LIB
   adc.Init(&spi_bus);
-#endif
 #endif
 
   Serial.println("\n\nESP32 RPC Server Starting...");

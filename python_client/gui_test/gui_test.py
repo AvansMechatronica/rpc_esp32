@@ -28,6 +28,8 @@ from system_tab import SystemTab
 from pwm_tab import PWMTab
 from pulse_tab import PulseTab
 from oled_tab import OLEDRPCTab
+from dac import DACTab
+from adc import ADCTab
 
 
 class RPCTestGUI:
@@ -106,6 +108,8 @@ class RPCTestGUI:
         self.pulse_tab = PulseTab(notebook, self)
         self.system_tab = SystemTab(notebook, self)
         self.oled_tab = OLEDRPCTab(notebook, self)
+        self.dac_tab = DACTab(notebook, self)
+        self.adc_tab = ADCTab(notebook, self)
         # ...existing code...
 
     def get_serial_ports(self):
@@ -139,8 +143,11 @@ class RPCTestGUI:
         output_frame = ttk.LabelFrame(self.output_window, text="Output", padding=5)
         output_frame.pack(fill=BOTH, expand=True, padx=10, pady=5)
         
-        self.output = scrolledtext.ScrolledText(output_frame, height=40, state=DISABLED)
+        self.output = scrolledtext.ScrolledText(output_frame, height=40, state=NORMAL)
         self.output.pack(fill=BOTH, expand=True)
+        
+        # Make read-only but allow copying (Ctrl+C)
+        self.output.bind("<Key>", lambda e: "break" if e.keysym not in ("c", "C") or not (e.state & 0x4) else None)
         
         # Clear Output Button
         ttk.Button(output_frame, text="Clear Output", command=self.clear_output).pack(pady=5)
@@ -217,16 +224,12 @@ class RPCTestGUI:
     
     def output_message(self, message):
         """Add message to output"""
-        self.output.config(state=NORMAL)
         self.output.insert(END, message + "\n")
         self.output.see(END)
-        self.output.config(state=DISABLED)
     
     def clear_output(self):
         """Clear output"""
-        self.output.config(state=NORMAL)
         self.output.delete("1.0", END)
-        self.output.config(state=DISABLED)
     
     
     # ...existing code...

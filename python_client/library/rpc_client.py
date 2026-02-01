@@ -400,6 +400,34 @@ class RPCClient:
         result, msg, _ = self._send_command("pulseTick", {"channel": channel})
         return result, msg
     
+    # DAC Functions
+    def dacSetVoltage(self, channel: int, voltage: float) -> Tuple[int, str]:
+        """
+        Set output voltage on DAC channel
+        
+        Args:
+            channel: DAC channel (0 for A, 1 for B)
+            voltage: Output voltage (0.0 to reference voltage)
+        
+        Returns:
+            (result_code, message) tuple
+        """
+        result, msg, _ = self._send_command("dacSetVoltage", {"channel": channel, "voltage": voltage})
+        return result, msg
+    
+    def dacSetVoltageAll(self, voltage: float) -> Tuple[int, str]:
+        """
+        Set output voltage on all DAC channels
+        
+        Args:
+            voltage: Output voltage (0.0 to reference voltage)
+        
+        Returns:
+            (result_code, message) tuple
+        """
+        result, msg, _ = self._send_command("dacSetVoltageAll", {"voltage": voltage})
+        return result, msg
+    
     # Utility
     def call_raw(self, method: str, params: Dict[str, Any] = None) -> Tuple[int, str, Dict[str, Any]]:
         """

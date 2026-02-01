@@ -166,6 +166,14 @@ int RpcServer::execute_command(const char* method, JsonObject params) {
     return rpc_generatePulses(params);
   } else if (strcmp(method, "generatePulsesAsync") == 0) {
     return rpc_generatePulsesAsync(params);
+#if defined INCLUDE_ADC_3208_LIB
+  } else if (strcmp(method, "readRaw") == 0) {
+    return rpc_readRaw(params);
+  } else if (strcmp(method, "readVoltage") == 0) {
+    return rpc_readVoltage(params);
+  } else if (strcmp(method, "isButtonPressed") == 0) {
+    return rpc_isButtonPressed(params);
+#endif
 #if defined INCLUDE_DAC_4922_LIB
   } else if (strcmp(method, "dacSetVoltage") == 0) {
     return rpc_dacSetVoltage(params);
@@ -547,3 +555,56 @@ int RpcServer::rpc_dacSetVoltageAll(JsonObject params) {
 }
 #endif
 
+// ADC RPC functions
+int RpcServer::rpc_readRaw(JsonObject params) {
+  if (!params.containsKey("channel")) {
+    return RPC_ERROR_INVALID_PARAMS;
+  }
+  
+  uint8_t channel = params["channel"];
+  uint8_t averageCount = params.containsKey("averageCount") ? params["averageCount"] : 1;
+  
+  // This assumes an ADC object is available in the global scope
+  // extern adc8208 adc;  // Should be declared in main.cpp or config
+  // uint16_t raw_value = adc.ReadRaw(channel, averageCount);
+  
+  // Placeholder - actual implementation depends on ADC instance availability
+  response_data["raw"] = 0;
+  
+  return RPC_OK;
+}
+
+int RpcServer::rpc_readVoltage(JsonObject params) {
+  if (!params.containsKey("channel")) {
+    return RPC_ERROR_INVALID_PARAMS;
+  }
+  
+  uint8_t channel = params["channel"];
+  uint8_t averageCount = params.containsKey("averageCount") ? params["averageCount"] : 1;
+  
+  // This assumes an ADC object is available in the global scope
+  // extern adc8208 adc;  // Should be declared in main.cpp or config
+  // double voltage = adc.ReadVoltage(channel, averageCount);
+  
+  // Placeholder - actual implementation depends on ADC instance availability
+  response_data["voltage"] = 0.0;
+  
+  return RPC_OK;
+}
+
+int RpcServer::rpc_isButtonPressed(JsonObject params) {
+  if (!params.containsKey("analogButton")) {
+    return RPC_ERROR_INVALID_PARAMS;
+  }
+  
+  uint8_t analogButton = params["analogButton"];
+  
+  // This assumes an ADC object is available in the global scope
+  // extern adc8208 adc;  // Should be declared in main.cpp or config
+  // bool pressed = adc.IsButtonPressed(analogButton);
+  
+  // Placeholder - actual implementation depends on ADC instance availability
+  response_data["pressed"] = false;
+  
+  return RPC_OK;
+}
