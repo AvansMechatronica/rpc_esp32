@@ -57,6 +57,17 @@ class SerialTransport(Transport):
         try:
             import serial
             self.serial = serial.Serial(self.port, self.baudrate, timeout=1)
+            #self.serial.setDTR(False)
+            #self.serial.setRTS(False)
+
+            # Wait for finishing Reset on ESP32
+            time.sleep(5.0)  # Brief wait for port to stabilize
+            # Flush input and output buffers to clear any stale data
+            self.serial.reset_input_buffer()
+            self.serial.reset_output_buffer()
+            logger.info("Serial buffers flushed")
+            if CONFIG['debug']:
+                print("[DEBUG] Serial buffers flushed")
             time.sleep(2)  # Wait for ESP32 to initialize
             self._connected = True
             logger.info(f"Successfully connected to {self.port}")

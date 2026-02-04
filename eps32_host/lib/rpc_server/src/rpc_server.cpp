@@ -5,6 +5,10 @@ extern oledDisplay oled_Display;
 #endif
 #include "dac_4922_lib.h"
 extern dac4922 dac;
+#if defined INCLUDE_ADC_3208_LIB
+#include "adc_3208_lib.h"
+extern adc8208 adc;
+#endif
 #include "rpc_server.h"
 
 RpcServer::RpcServer() {
@@ -71,9 +75,13 @@ void RpcServer::handle_wifi() {
   if (!tcp_client || !tcp_client.connected()) {
     tcp_client = tcp_server->available();
     if (!tcp_client) {
+#if RPC_SERIAL_LOGS
       Serial.println("[DEBUG] No client available.");
+#endif
     } else {
+#if RPC_SERIAL_LOGS
       Serial.println("[DEBUG] New client connected.");
+#endif
     }
   }
 
@@ -85,7 +93,9 @@ void RpcServer::handle_wifi() {
       request_str.trim();
 
       if (request_str.length() > 0) {
+#if RPC_SERIAL_LOGS
         Serial.printf("[DEBUG] Received request: %s\n", request_str.c_str());
+#endif
         if (parseRequest(request_str)) {
           const char* method = request_doc["method"];
           JsonObject params = request_doc["params"];
@@ -108,7 +118,9 @@ void RpcServer::handle_wifi() {
     }
     // Check if client is still connected after handling
     if (!tcp_client.connected()) {
+#if RPC_SERIAL_LOGS
       Serial.println("[DEBUG] Client disconnected.");
+#endif
     }
   } else {
     if (!tcp_server->hasClient()) {
@@ -564,12 +576,12 @@ int RpcServer::rpc_readRaw(JsonObject params) {
   uint8_t channel = params["channel"];
   uint8_t averageCount = params.containsKey("averageCount") ? params["averageCount"] : 1;
   
-  // This assumes an ADC object is available in the global scope
-  // extern adc8208 adc;  // Should be declared in main.cpp or config
-  // uint16_t raw_value = adc.ReadRaw(channel, averageCount);
-  
-  // Placeholder - actual implementation depends on ADC instance availability
+#if defined INCLUDE_ADC_3208_LIB
+  uint16_t raw_value = adc.ReadRaw(channel, averageCount);
+  response_data["raw"] = raw_value;
+#else
   response_data["raw"] = 0;
+#endif
   
   return RPC_OK;
 }
@@ -582,12 +594,12 @@ int RpcServer::rpc_readVoltage(JsonObject params) {
   uint8_t channel = params["channel"];
   uint8_t averageCount = params.containsKey("averageCount") ? params["averageCount"] : 1;
   
-  // This assumes an ADC object is available in the global scope
-  // extern adc8208 adc;  // Should be declared in main.cpp or config
-  // double voltage = adc.ReadVoltage(channel, averageCount);
-  
-  // Placeholder - actual implementation depends on ADC instance availability
+#if defined INCLUDE_ADC_3208_LIB
+  double voltage = adc.ReadVoltage(channel, averageCount);
+  response_data["voltage"] = voltage;
+#else
   response_data["voltage"] = 0.0;
+#endif
   
   return RPC_OK;
 }
@@ -599,12 +611,12 @@ int RpcServer::rpc_isButtonPressed(JsonObject params) {
   
   uint8_t analogButton = params["analogButton"];
   
-  // This assumes an ADC object is available in the global scope
-  // extern adc8208 adc;  // Should be declared in main.cpp or config
-  // bool pressed = adc.IsButtonPressed(analogButton);
-  
-  // Placeholder - actual implementation depends on ADC instance availability
+#if defined INCLUDE_ADC_3208_LIB
+  bool pressed = adc.IsButtonPressed(analogButton);
+  response_data["pressed"] = pressed;
+#else
   response_data["pressed"] = false;
+#endif
   
   return RPC_OK;
 }

@@ -31,7 +31,7 @@ oledDisplay  oled_Display;
 #endif
 
 
-#define WIFI_CONFIGURE_BUTTON_PIN 5  // GPIO pin for forcing WiFi configuration mode
+//#define WIFI_CONFIGURE_BUTTON_PIN 5  // GPIO pin for forcing WiFi configuration mode
 #define COMM_MODE_BUTTON_PIN 4     // GPIO pin for toggling communication mode
 
 bool wifi_mode = false;
@@ -43,7 +43,9 @@ void setup() {
 #if defined INCLUDE_OLED_DISPLAY
   bool oledOK  = oled_Display.Init();
   if(!oledOK) {
+#if RPC_SERIAL_LOGS
     Serial.println("OLED Init failed!");
+#endif
   }
   oled_Display.Clear();
 	oled_Display.WriteLine(0, "ESP32 RPC", ALIGN_CENTER);
@@ -65,14 +67,18 @@ void setup() {
   adc.Init(&spi_bus);
 #endif
 
+#if RPC_SERIAL_LOGS
   Serial.println("\n\nESP32 RPC Server Starting...");
+#endif
   wifi_mode = check_wifi_mode();
-  pinMode(WIFI_CONFIGURE_BUTTON_PIN, INPUT_PULLUP);
+  //pinMode(WIFI_CONFIGURE_BUTTON_PIN, INPUT_PULLUP);
   pinMode(COMM_MODE_BUTTON_PIN, INPUT_PULLUP);
 
   // Check if communication mode toggle button is pressed
   if (digitalRead(COMM_MODE_BUTTON_PIN) == LOW) {
+#if RPC_SERIAL_LOGS
     Serial.println("Communication mode toggle button pressed. Toggling mode.");
+#endif
     toggle_usb_wifi_mode();
     wifi_mode = check_wifi_mode();
   }
@@ -82,7 +88,9 @@ void setup() {
   
   // Initialize WiFi if enabled
   if (wifi_mode) {
+#if RPC_SERIAL_LOGS
     Serial.println("Connecting to WiFi...");
+#endif
 #if defined INCLUDE_OLED_DISPLAY
     oled_Display.Clear();
     oled_Display.WriteLine(0, "ESP32 RPC", ALIGN_CENTER);
@@ -100,7 +108,9 @@ void setup() {
     }
 #endif
     if (!configureNetwork(false, &network_config)) {
+    #if RPC_SERIAL_LOGS
       Serial.println("Failed to configure network");
+    #endif
 #if defined INCLUDE_OLED_DISPLAY
       oled_Display.Clear();
       oled_Display.WriteLine(0, "ESP32 RPC", ALIGN_CENTER);
@@ -120,15 +130,19 @@ void setup() {
     int attempts = 0;
     while (WiFi.status() != WL_CONNECTED && attempts < 20) {
       delay(500);
+    #if RPC_SERIAL_LOGS
       Serial.print(".");
+    #endif
       attempts++;
     }
     
     if (WiFi.status() == WL_CONNECTED) {
+    #if RPC_SERIAL_LOGS
       Serial.println("\nWiFi connected!");
       Serial.print("IP address: ");
       Serial.println(WiFi.localIP());
       Serial.printf("Listening on port %d\n", CONFIG_WIFI_PORT);
+    #endif
 #if defined INCLUDE_OLED_DISPLAY
       char text_buffer[32];
       oled_Display.Clear();
@@ -142,7 +156,9 @@ void setup() {
 #endif
 
     } else {
+    #if RPC_SERIAL_LOGS
       Serial.println("\nWiFi connection failed!");
+    #endif
 #if defined INCLUDE_OLED_DISPLAY
       oled_Display.Clear();
       oled_Display.WriteLine(0, "ESP32 RPC", ALIGN_CENTER);
@@ -153,7 +169,9 @@ void setup() {
       delay(3000);
       ESP.restart();
     }
+  #if RPC_SERIAL_LOGS
     Serial.println("RPC Server ready. Waiting for commands...");
+  #endif
     
   }
 #if defined INCLUDE_OLED_DISPLAY
@@ -169,7 +187,7 @@ void setup() {
   else
     oled_Display.WriteLine(3, "USB Connection",  		ALIGN_CENTER);
 #endif
-  
+  Serial.flush();
 }
 
 void loop() {

@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
-#include "config.h"
+#include "rpc_config.h"
 #include "pulse_lib.h"
 #include <WiFi.h>
 

@@ -19,6 +19,10 @@
 // USB/Serial configuration
 #define CONFIG_BAUD_RATE 115200
 
+// When 0, suppress non-JSON Serial logs so the RPC stream is clean.
+// Set to 1 to enable human-readable logs on Serial.
+#define RPC_SERIAL_LOGS 0
+
 // RPC Protocol version
 #define RPC_VERSION 1
 
