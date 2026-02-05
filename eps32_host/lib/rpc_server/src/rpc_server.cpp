@@ -9,6 +9,10 @@ extern dac4922 dac;
 #include "adc_3208_lib.h"
 extern adc8208 adc;
 #endif
+#if defined INCLUDE_DIO_LIB
+#include "dio_lib.h"
+extern dio digital_io;
+#endif
 #include "rpc_server.h"
 
 RpcServer::RpcServer() {
@@ -179,10 +183,10 @@ int RpcServer::execute_command(const char* method, JsonObject params) {
   } else if (strcmp(method, "generatePulsesAsync") == 0) {
     return rpc_generatePulsesAsync(params);
 #if defined INCLUDE_ADC_3208_LIB
-  } else if (strcmp(method, "readRaw") == 0) {
-    return rpc_readRaw(params);
-  } else if (strcmp(method, "readVoltage") == 0) {
-    return rpc_readVoltage(params);
+  } else if (strcmp(method, "adcReadRaw") == 0) {
+    return rpc_adcReadRaw(params);
+  } else if (strcmp(method, "adcReadVoltage") == 0) {
+    return rpc_adcReadVoltage(params);
   } else if (strcmp(method, "isButtonPressed") == 0) {
     return rpc_isButtonPressed(params);
 #endif
@@ -191,6 +195,20 @@ int RpcServer::execute_command(const char* method, JsonObject params) {
     return rpc_dacSetVoltage(params);
   } else if (strcmp(method, "dacSetVoltageAll") == 0) {
     return rpc_dacSetVoltageAll(params);
+#endif
+#if defined INCLUDE_DIO_LIB
+  } else if (strcmp(method, "dioGetInput") == 0) {
+    return rpc_dioGetInput(params);
+  } else if (strcmp(method, "dioIsBitSet") == 0) {
+    return rpc_dioIsBitSet(params);
+  } else if (strcmp(method, "dioSetOutput") == 0) {
+    return rpc_dioSetOutput(params);
+  } else if (strcmp(method, "dioSetBit") == 0) {
+    return rpc_dioSetBit(params);
+  } else if (strcmp(method, "dioClearBit") == 0) {
+    return rpc_dioClearBit(params);
+  } else if (strcmp(method, "dioToggleBit") == 0) {
+    return rpc_dioToggleBit(params);
 #endif
 #if defined INCLUDE_OLED_DISPLAY
   } else if (strcmp(method, "oledClear") == 0) {
@@ -568,7 +586,7 @@ int RpcServer::rpc_dacSetVoltageAll(JsonObject params) {
 #endif
 
 // ADC RPC functions
-int RpcServer::rpc_readRaw(JsonObject params) {
+int RpcServer::rpc_adcReadRaw(JsonObject params) {
   if (!params.containsKey("channel")) {
     return RPC_ERROR_INVALID_PARAMS;
   }
@@ -586,7 +604,7 @@ int RpcServer::rpc_readRaw(JsonObject params) {
   return RPC_OK;
 }
 
-int RpcServer::rpc_readVoltage(JsonObject params) {
+int RpcServer::rpc_adcReadVoltage(JsonObject params) {
   if (!params.containsKey("channel")) {
     return RPC_ERROR_INVALID_PARAMS;
   }
@@ -620,3 +638,64 @@ int RpcServer::rpc_isButtonPressed(JsonObject params) {
   
   return RPC_OK;
 }
+
+#if defined INCLUDE_DIO_LIB
+// DIO RPC functions
+int RpcServer::rpc_dioGetInput(JsonObject params) {
+  uint8_t input_value = digital_io.GetInput();
+  response_data["value"] = input_value;
+  return RPC_OK;
+}
+
+int RpcServer::rpc_dioIsBitSet(JsonObject params) {
+  if (!params.containsKey("bitNumber")) {
+    return RPC_ERROR_INVALID_PARAMS;
+  }
+  
+  uint8_t bitNumber = params["bitNumber"];
+  bool bitSet = digital_io.IsBitSet(bitNumber);
+  response_data["bitSet"] = bitSet;
+  return RPC_OK;
+}
+
+int RpcServer::rpc_dioSetOutput(JsonObject params) {
+  if (!params.containsKey("value")) {
+    return RPC_ERROR_INVALID_PARAMS;
+  }
+  
+  uint8_t value = params["value"];
+  digital_io.SetOutput(value);
+  return RPC_OK;
+}
+
+int RpcServer::rpc_dioSetBit(JsonObject params) {
+  if (!params.containsKey("bitNumber")) {
+    return RPC_ERROR_INVALID_PARAMS;
+  }
+  
+  uint8_t bitNumber = params["bitNumber"];
+  digital_io.SetBit(bitNumber);
+  return RPC_OK;
+}
+
+int RpcServer::rpc_dioClearBit(JsonObject params) {
+  if (!params.containsKey("bitNumber")) {
+    return RPC_ERROR_INVALID_PARAMS;
+  }
+  
+  uint8_t bitNumber = params["bitNumber"];
+  digital_io.ClearBit(bitNumber);
+  return RPC_OK;
+}
+
+int RpcServer::rpc_dioToggleBit(JsonObject params) {
+  if (!params.containsKey("bitNumber")) {
+    return RPC_ERROR_INVALID_PARAMS;
+  }
+  
+  uint8_t bitNumber = params["bitNumber"];
+  digital_io.ToggleBit(bitNumber);
+  return RPC_OK;
+}
+
+#endif

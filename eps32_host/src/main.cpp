@@ -23,6 +23,10 @@ dac4922 dac;
 adc8208 adc;
 #endif
 
+#if defined INCLUDE_DIO_LIB
+#include "dio_lib.h"
+dio digital_io;
+#endif
 
 RpcServer rpc_server;
 
@@ -63,8 +67,12 @@ void setup() {
   dac.Init(&spi_bus);
 #endif
 
-#if INCLUDE_ADC_3208_LIB
+#if defined INCLUDE_ADC_3208_LIB
   adc.Init(&spi_bus);
+#endif
+
+#if defined INCLUDE_DIO_LIB
+  digital_io.Init();
 #endif
 
 #if RPC_SERIAL_LOGS
@@ -101,13 +109,8 @@ void setup() {
 #if defined WIFI_CONFIGURE_SERVER
     NETWORK_CONFIG network_config;
 
-#if 0
-    if (digitalRead(WIFI_CONFIGURE_BUTTON_PIN) == LOW) {
-      Serial.println("WiFi configuration button pressed. Forcing configuration mode.");
-      wifi_mode = true;
-    }
-#endif
-    if (!configureNetwork(false, &network_config)) {
+    bool force_network_configure = adc.IsButtonPressed(1);  // Check if button 1 is pressed to force network configuration mode
+    if (!configureNetwork(force_network_configure, &network_config)) {
     #if RPC_SERIAL_LOGS
       Serial.println("Failed to configure network");
     #endif
