@@ -125,6 +125,32 @@ for brightness in [0, 64, 128, 192, 255]:
     client.ledcWrite(0, brightness)
 ```
 
+### Optionele Libraries (ADC 3208, DIO, QC, OLED)
+```python
+# ADC 3208
+result, msg, raw = client.adcReadRaw(0, averageCount=4)
+result, msg, voltage = client.adcReadVoltage(0, averageCount=4)
+result, msg, pressed = client.isButtonPressed(0)
+
+# DIO
+result, msg, value = client.dioGetInput()
+result, msg, bit_set = client.dioIsBitSet(0)
+result, msg = client.dioSetOutput(0)
+result, msg = client.dioSetBit(0)
+result, msg = client.dioClearBit(0)
+result, msg = client.dioToggleBit(0)
+
+# QC7366 counter
+result, msg = client.qcEnableCounter(0)
+result, msg, count = client.qcReadCountRegister(0)
+result, msg = client.qcClearCountRegister(0)
+result, msg = client.qcDisableCounter(0)
+
+# OLED
+result, msg = client.oledClear()
+result, msg = client.oledWriteLine(0, "Hello", 0)
+```
+
 ## Nieuwe Functies Toevoegen
 
 ### 3 Stappen om een nieuwe RPC function toe te voegen:

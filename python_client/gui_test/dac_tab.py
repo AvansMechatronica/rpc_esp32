@@ -35,6 +35,8 @@ class DACTab:
         ttk.Button(set_frame, text="Set Voltage", 
                    command=self.execute_dacSetVoltage).pack(side=LEFT, padx=5)
 
+        ttk.Separator(frame, orient=HORIZONTAL).pack(fill=X, padx=10, pady=10)
+
         # dacSetVoltageAll - Set voltage on all channels
         ttk.Label(frame, text="dacSetVoltageAll - Set All Channels", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
         set_all_frame = ttk.Frame(frame)
@@ -46,6 +48,8 @@ class DACTab:
 
         ttk.Button(set_all_frame, text="Set All", 
                    command=self.execute_dacSetVoltageAll).pack(side=LEFT, padx=5)
+
+        ttk.Separator(frame, orient=HORIZONTAL).pack(fill=X, padx=10, pady=10)
 
         # Common voltage presets
         ttk.Label(frame, text="Quick Presets", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
@@ -67,9 +71,7 @@ class DACTab:
             channel = int(self.dac_channel_var.get())
             voltage = float(self.dac_voltage_var.get())
             
-            # Use raw call to see actual response
-            result, msg, data = client.call_raw("dacSetVoltage", {"channel": channel, "voltage": voltage})
-            self.parent.output_message(f"[DEBUG] Raw response: result={result}, msg={msg}, data={data}")
+            result, msg = client.dacSetVoltage(channel, voltage)
             self.parent.output_message(f"dacSetVoltage({channel}, {voltage}V) -> Code: {result}, {msg}")
         except ValueError:
             messagebox.showerror("Error", "Invalid input values. Channel must be 0-3, Voltage must be a number")

@@ -3,7 +3,7 @@ Tab for GPIO functions in ESP32 RPC GUI
 """
 
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, messagebox
 
 
 class GPIOTab:
@@ -78,7 +78,7 @@ class GPIOTab:
     def setup_gpio_tab(self):
         frame = self.frame
         # pinMode
-        ttk.Label(frame, text="pinMode").pack(anchor=W, padx=10, pady=5)
+        ttk.Label(frame, text="pinMode", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
         gpio_frame = ttk.Frame(frame)
         gpio_frame.pack(fill=X, padx=10, pady=5)
 
@@ -93,8 +93,10 @@ class GPIOTab:
         ttk.Button(gpio_frame, text="pinMode", 
                command=self.execute_gpio_pinmode).pack(side=LEFT, padx=5)
 
+        ttk.Separator(frame, orient=HORIZONTAL).pack(fill=X, padx=10, pady=10)
+
         # digitalWrite
-        ttk.Label(frame, text="digitalWrite").pack(anchor=W, padx=10, pady=5)
+        ttk.Label(frame, text="digitalWrite", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
         dig_frame = ttk.Frame(frame)
         dig_frame.pack(fill=X, padx=10, pady=5)
 
@@ -109,8 +111,10 @@ class GPIOTab:
         ttk.Button(dig_frame, text="digitalWrite", 
                command=self.execute_digitalWrite).pack(side=LEFT, padx=5)
 
+        ttk.Separator(frame, orient=HORIZONTAL).pack(fill=X, padx=10, pady=10)
+
         # digitalRead
-        ttk.Label(frame, text="digitalRead").pack(anchor=W, padx=10, pady=5)
+        ttk.Label(frame, text="digitalRead", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
         read_frame = ttk.Frame(frame)
         read_frame.pack(fill=X, padx=10, pady=5)
 
@@ -123,8 +127,10 @@ class GPIOTab:
         self.digital_read_value_label = ttk.Label(read_frame, text="Value: -")
         self.digital_read_value_label.pack(side=LEFT, padx=5)
 
+        ttk.Separator(frame, orient=HORIZONTAL).pack(fill=X, padx=10, pady=10)
+
         # analogRead
-        ttk.Label(frame, text="analogRead").pack(anchor=W, padx=10, pady=5)
+        ttk.Label(frame, text="analogRead", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
         aread_frame = ttk.Frame(frame)
         aread_frame.pack(fill=X, padx=10, pady=5)
 

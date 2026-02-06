@@ -58,20 +58,20 @@
 class spi{
 public:
 
-    void Init(void);
-    void BeginTransaction(SPISettings settings);
-    void EndTransaction(void);
+    void init(void);
+    void beginTransaction(SPISettings settings);
+    void endTransaction(void);
 
-    void WriteByte(const uint8_t data);
-    void WriteWord(const uint16_t data);
-    void ReadByte(uint8_t *byteData);
-    void ReadWord(uint8_t *wordData);
+    void writeByte(const uint8_t data);
+    void writeWord(const uint16_t data);
+    void readByte(uint8_t *byteData);
+    void readWord(uint16_t *wordData);
 
-    uint8_t TransferByte(uint8_t byteToSend);
-    uint16_t TransferWord(uint16_t wordToSend);
+    uint8_t transferByte(uint8_t byteToSend);
+    uint16_t transferWord(uint16_t wordToSend);
 
-    void SelectDevice(uint8_t spiDeviceNumber);
-    void DeselectDevice(void);
+    void selectDevice(uint8_t spiDeviceNumber);
+    void deselectDevice(void);
 protected:
     bool g_IsSPIInitialised = false;
     SPIClass vspi = SPIClass(VSPI); 		    // Use VSPI bus

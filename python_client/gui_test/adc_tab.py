@@ -34,10 +34,9 @@ class ADCTab:
             channel = int(self.raw_channel_var.get())
             average_count = int(self.raw_average_var.get())
             
-            result, msg, data = client.call_raw("adcReadRaw", {"channel": channel, "averageCount": average_count})
-            value = self._extract_value(data, preferred_keys=["value", "raw", "adc"])
+            result, msg, value = client.adcReadRaw(channel, averageCount=average_count)
             self.raw_value_var.set(f"{value}")
-            self.parent.output_message(f"adcReadRaw({channel}, {average_count}) -> Code: {result}, Value: {data}, {msg}")
+            self.parent.output_message(f"adcReadRaw({channel}, {average_count}) -> Code: {result}, Value: {value}, {msg}")
         except Exception as e:
             self.parent.output_message(f"[ERROR] {str(e)}")
     
@@ -51,10 +50,9 @@ class ADCTab:
             channel = int(self.voltage_channel_var.get())
             average_count = int(self.voltage_average_var.get())
             
-            result, msg, data = client.call_raw("adcReadVoltage", {"channel": channel, "averageCount": average_count})
-            value = self._extract_value(data, preferred_keys=["value", "voltage", "v"])
+            result, msg, value = client.adcReadVoltage(channel, averageCount=average_count)
             self.voltage_value_var.set(f"{value} V")
-            self.parent.output_message(f"adcReadVoltage({channel}, {average_count}) -> Code: {result}, Value: {data}V, {msg}")
+            self.parent.output_message(f"adcReadVoltage({channel}, {average_count}) -> Code: {result}, Value: {value}V, {msg}")
         except Exception as e:
             self.parent.output_message(f"[ERROR] {str(e)}")
     
@@ -67,8 +65,7 @@ class ADCTab:
         try:
             button = int(self.button_channel_var.get())
             
-            result, msg, data = client.call_raw("isButtonPressed", {"analogButton": button})
-            pressed = self._extract_value(data, preferred_keys=["pressed", "value", "status"])
+            result, msg, pressed = client.isButtonPressed(button)
             status = "PRESSED" if pressed else "NOT PRESSED"
             self.button_status_var.set(status)
             self.parent.output_message(f"isButtonPressed({button}) -> Code: {result}, Status: {status}, {msg}")
@@ -78,7 +75,7 @@ class ADCTab:
     def setup_adc_tab(self):
         frame = self.frame
         # adcReadRaw
-        ttk.Label(frame, text="adcReadRaw").pack(anchor=W, padx=10, pady=5)
+        ttk.Label(frame, text="adcReadRaw", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
         raw_frame = ttk.Frame(frame)
         raw_frame.pack(fill=X, padx=10, pady=5)
 
@@ -97,8 +94,10 @@ class ADCTab:
         ttk.Label(raw_frame, text="Value:").pack(side=LEFT, padx=5)
         ttk.Label(raw_frame, textvariable=self.raw_value_var).pack(side=LEFT, padx=5)
 
+        ttk.Separator(frame, orient=HORIZONTAL).pack(fill=X, padx=10, pady=10)
+
         # adcReadVoltage
-        ttk.Label(frame, text="adcReadVoltage").pack(anchor=W, padx=10, pady=5)
+        ttk.Label(frame, text="adcReadVoltage", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
         voltage_frame = ttk.Frame(frame)
         voltage_frame.pack(fill=X, padx=10, pady=5)
 
@@ -117,8 +116,10 @@ class ADCTab:
         ttk.Label(voltage_frame, text="Value:").pack(side=LEFT, padx=5)
         ttk.Label(voltage_frame, textvariable=self.voltage_value_var).pack(side=LEFT, padx=5)
 
+        ttk.Separator(frame, orient=HORIZONTAL).pack(fill=X, padx=10, pady=10)
+
         # isButtonPressed
-        ttk.Label(frame, text="isButtonPressed").pack(anchor=W, padx=10, pady=5)
+        ttk.Label(frame, text="isButtonPressed", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
         button_frame = ttk.Frame(frame)
         button_frame.pack(fill=X, padx=10, pady=5)
 

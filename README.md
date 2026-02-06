@@ -33,6 +33,7 @@ python_client/       - Python client bibliotheek
 - **Analog**: `analogWrite()`, `analogRead()`
 - **PWM**: `ledcSetup()`, `ledcWrite()`
 - **System**: `delay()`, `millis()`, free memory, chip ID
+- **Optionele libs**: ADC 3208 (raw/voltage/button), DIO, QC7366 counter, OLED, DAC
 
 ### Python Client Library
 - **Transport abstraction**: Eenvoudig switch tussen USB en WiFi

@@ -20,7 +20,7 @@ dac4922 dac;
 
 #if defined INCLUDE_ADC_3208_LIB
 #include "adc_3208_lib.h"
-adc8208 adc;
+adc3208 adc;
 #endif
 
 #if defined INCLUDE_DIO_LIB
@@ -50,34 +50,34 @@ void setup() {
   delay(1000);
 
 #if defined INCLUDE_OLED_DISPLAY
-  bool oledOK  = oled_Display.Init();
+  bool oledOK  = oled_Display.init();
   if(!oledOK) {
 #if RPC_SERIAL_LOGS
     Serial.println("OLED Init failed!");
 #endif
   }
-  oled_Display.Clear();
-	oled_Display.WriteLine(0, "ESP32 RPC", ALIGN_CENTER);
-	oled_Display.WriteLine(1, "Server",  ALIGN_CENTER);
-	oled_Display.WriteLine(2, "V0.6",  		ALIGN_CENTER);
-	oled_Display.WriteLine(3, "Server Starting...",  		ALIGN_CENTER);
+  oled_Display.clear();
+	oled_Display.writeLine(0, "ESP32 RPC", ALIGN_CENTER);
+	oled_Display.writeLine(1, "Server",  ALIGN_CENTER);
+	oled_Display.writeLine(2, "V0.6",  		ALIGN_CENTER);
+	oled_Display.writeLine(3, "Server Starting...",  		ALIGN_CENTER);
   delay(2000);
 #endif  
 
 #if defined INCLUDE_DAC_4922_LIB || defined INCLUDE_ADC_3208_LIB
-  spi_bus.Init();
+  spi_bus.init();
 #endif
 
 #if defined INCLUDE_DAC_4922_LIB
-  dac.Init(&spi_bus);
+  dac.init(&spi_bus);
 #endif
 
 #if defined INCLUDE_ADC_3208_LIB
-  adc.Init(&spi_bus);
+  adc.init(&spi_bus);
 #endif
 
 #if defined INCLUDE_DIO_LIB
-  digital_io.Init();
+  digital_io.init();
 #endif
 
 #if defined INCLUDE_QC_7366_LIB
@@ -109,17 +109,17 @@ void setup() {
     Serial.println("Connecting to WiFi...");
 #endif
 #if defined INCLUDE_OLED_DISPLAY
-    oled_Display.Clear();
-    oled_Display.WriteLine(0, "ESP32 RPC", ALIGN_CENTER);
-    oled_Display.WriteLine(1, "Connecting to ",  ALIGN_CENTER);
-    oled_Display.WriteLine(2, "WiFi...",  		ALIGN_CENTER);
+    oled_Display.clear();
+    oled_Display.writeLine(0, "ESP32 RPC", ALIGN_CENTER);
+    oled_Display.writeLine(1, "Connecting to ",  ALIGN_CENTER);
+    oled_Display.writeLine(2, "WiFi...",  		ALIGN_CENTER);
 #endif
     WiFi.setHostname("ESP32_RPC_Server");
 #if defined WIFI_CONFIGURE_SERVER
     NETWORK_CONFIG network_config;
 
 #if defined INCLUDE_DAC_4922_LIB
-    bool force_network_configure = adc.IsButtonPressed(1);  // Check if button 1 is pressed to force network configuration mode
+    bool force_network_configure = adc.isButtonPressed(1);  // Check if button 1 is pressed to force network configuration mode
 #else
     bool force_network_configure = false;  // No ADC button available, do not force
 #endif
@@ -129,11 +129,11 @@ void setup() {
       Serial.println("Failed to configure network");
     #endif
 #if defined INCLUDE_OLED_DISPLAY
-      oled_Display.Clear();
-      oled_Display.WriteLine(0, "ESP32 RPC", ALIGN_CENTER);
-      oled_Display.WriteLine(1, "Failed to",  ALIGN_CENTER);
-      oled_Display.WriteLine(2, "configure network",  	ALIGN_CENTER);
-      oled_Display.WriteLine(3, "Restarting...",  	ALIGN_CENTER);
+      oled_Display.clear();
+      oled_Display.writeLine(0, "ESP32 RPC", ALIGN_CENTER);
+      oled_Display.writeLine(1, "Failed to",  ALIGN_CENTER);
+      oled_Display.writeLine(2, "configure network",  	ALIGN_CENTER);
+      oled_Display.writeLine(3, "Restarting...",  	ALIGN_CENTER);
 #endif
       delay(3000);
       ESP.restart();
@@ -162,13 +162,13 @@ void setup() {
     #endif
 #if defined INCLUDE_OLED_DISPLAY
       char text_buffer[32];
-      oled_Display.Clear();
-      oled_Display.WriteLine(0, "ESP32 RPC", ALIGN_CENTER);
-      oled_Display.WriteLine(1, "WiFi connected",  ALIGN_CENTER);
+      oled_Display.clear();
+      oled_Display.writeLine(0, "ESP32 RPC", ALIGN_CENTER);
+      oled_Display.writeLine(1, "WiFi connected",  ALIGN_CENTER);
       snprintf(text_buffer, sizeof(text_buffer), "IP: %s", WiFi.localIP().toString().c_str());
-      oled_Display.WriteLine(2, text_buffer,  ALIGN_CENTER);
-      sniprintf(text_buffer, sizeof(text_buffer), "Port: %d", CONFIG_WIFI_PORT);
-      oled_Display.WriteLine(3, text_buffer,  ALIGN_CENTER);
+      oled_Display.writeLine(2, text_buffer,  ALIGN_CENTER);
+      snprintf(text_buffer, sizeof(text_buffer), "Port: %d", CONFIG_WIFI_PORT);
+      oled_Display.writeLine(3, text_buffer,  ALIGN_CENTER);
       delay(3000);
 #endif
 
@@ -177,11 +177,11 @@ void setup() {
       Serial.println("\nWiFi connection failed!");
     #endif
 #if defined INCLUDE_OLED_DISPLAY
-      oled_Display.Clear();
-      oled_Display.WriteLine(0, "ESP32 RPC", ALIGN_CENTER);
-      oled_Display.WriteLine(1, "WiFi",  ALIGN_CENTER);
-      oled_Display.WriteLine(2, "connection failed",  	ALIGN_CENTER);
-      oled_Display.WriteLine(3, "Restarting...",  	ALIGN_CENTER);
+      oled_Display.clear();
+      oled_Display.writeLine(0, "ESP32 RPC", ALIGN_CENTER);
+      oled_Display.writeLine(1, "WiFi",  ALIGN_CENTER);
+      oled_Display.writeLine(2, "connection failed",  	ALIGN_CENTER);
+      oled_Display.writeLine(3, "Restarting...",  	ALIGN_CENTER);
 #endif
       delay(3000);
       ESP.restart();
@@ -192,17 +192,17 @@ void setup() {
     
   }
 #if defined INCLUDE_OLED_DISPLAY
-  oled_Display.Clear();
-	oled_Display.WriteLine(0, "ESP32 RPC", ALIGN_CENTER);
-	oled_Display.WriteLine(1, "Server Ready",  ALIGN_CENTER);
+  oled_Display.clear();
+	oled_Display.writeLine(0, "ESP32 RPC", ALIGN_CENTER);
+	oled_Display.writeLine(1, "Server Ready",  ALIGN_CENTER);
   if (wifi_mode) {
-    oled_Display.WriteLine(2, "WiFi Connection",  		ALIGN_CENTER);
+    oled_Display.writeLine(2, "WiFi Connection",  		ALIGN_CENTER);
     char text_buffer[32];
     snprintf(text_buffer, sizeof(text_buffer), "IP: %s", WiFi.localIP().toString().c_str());
-    oled_Display.WriteLine(3, text_buffer,  ALIGN_CENTER);
+    oled_Display.writeLine(3, text_buffer,  ALIGN_CENTER);
   }
   else
-    oled_Display.WriteLine(3, "USB Connection",  		ALIGN_CENTER);
+    oled_Display.writeLine(3, "USB Connection",  		ALIGN_CENTER);
 #endif
   Serial.flush();
 }

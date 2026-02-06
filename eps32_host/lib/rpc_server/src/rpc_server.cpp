@@ -7,7 +7,7 @@ extern oledDisplay oled_Display;
 extern dac4922 dac;
 #if defined INCLUDE_ADC_3208_LIB
 #include "adc_3208_lib.h"
-extern adc8208 adc;
+extern adc3208 adc;
 #endif
 #if defined INCLUDE_DIO_LIB
 #include "dio_lib.h"
@@ -624,7 +624,7 @@ int RpcServer::rpc_qcReadCountRegister(JsonObject params) {
 // OLED RPC functions (must be outside of any function body)
 #if defined INCLUDE_OLED_DISPLAY
 int RpcServer::rpc_oledClear(JsonObject params) {
-  oled_Display.Clear();
+  oled_Display.clear();
   return RPC_OK;
 }
 
@@ -635,7 +635,7 @@ int RpcServer::rpc_oledWriteLine(JsonObject params) {
   uint8_t line = params["line"];
   const char* text = params["text"];
   uint8_t align = params["align"];
-  oled_Display.WriteLine(line, text, align);
+  oled_Display.writeLine(line, text, align);
   return RPC_OK;
 }
 #endif
@@ -648,7 +648,7 @@ int RpcServer::rpc_dacSetVoltage(JsonObject params) {
   }
   uint8_t channel = params["channel"];
   float voltage = params["voltage"];
-  dac.SetOutputVoltage(channel, voltage);
+  dac.setOutputVoltage(channel, voltage);
   return RPC_OK;
 }
 
@@ -657,7 +657,7 @@ int RpcServer::rpc_dacSetVoltageAll(JsonObject params) {
     return RPC_ERROR_INVALID_PARAMS;
   }
   float voltage = params["voltage"];
-  dac.SetOutputVoltageAll(voltage);
+  dac.setOutputVoltageAll(voltage);
   return RPC_OK;
 }
 #endif
@@ -672,7 +672,7 @@ int RpcServer::rpc_adcReadRaw(JsonObject params) {
   uint8_t averageCount = params.containsKey("averageCount") ? params["averageCount"] : 1;
   
 #if defined INCLUDE_ADC_3208_LIB
-  uint16_t raw_value = adc.ReadRaw(channel, averageCount);
+  uint16_t raw_value = adc.readRaw(channel, averageCount);
   response_data["raw"] = raw_value;
 #else
   response_data["raw"] = 0;
@@ -690,7 +690,7 @@ int RpcServer::rpc_adcReadVoltage(JsonObject params) {
   uint8_t averageCount = params.containsKey("averageCount") ? params["averageCount"] : 1;
   
 #if defined INCLUDE_ADC_3208_LIB
-  double voltage = adc.ReadVoltage(channel, averageCount);
+  double voltage = adc.readVoltage(channel, averageCount);
   response_data["voltage"] = voltage;
 #else
   response_data["voltage"] = 0.0;
@@ -707,7 +707,7 @@ int RpcServer::rpc_isButtonPressed(JsonObject params) {
   uint8_t analogButton = params["analogButton"];
   
 #if defined INCLUDE_ADC_3208_LIB
-  bool pressed = adc.IsButtonPressed(analogButton);
+  bool pressed = adc.isButtonPressed(analogButton);
   response_data["pressed"] = pressed;
 #else
   response_data["pressed"] = false;
@@ -719,7 +719,7 @@ int RpcServer::rpc_isButtonPressed(JsonObject params) {
 #if defined INCLUDE_DIO_LIB
 // DIO RPC functions
 int RpcServer::rpc_dioGetInput(JsonObject params) {
-  uint8_t input_value = digital_io.GetInput();
+  uint8_t input_value = digital_io.getInput();
   response_data["value"] = input_value;
   return RPC_OK;
 }
@@ -730,7 +730,7 @@ int RpcServer::rpc_dioIsBitSet(JsonObject params) {
   }
   
   uint8_t bitNumber = params["bitNumber"];
-  bool bitSet = digital_io.IsBitSet(bitNumber);
+  bool bitSet = digital_io.isBitSet(bitNumber);
   response_data["bitSet"] = bitSet;
   return RPC_OK;
 }
@@ -741,7 +741,7 @@ int RpcServer::rpc_dioSetOutput(JsonObject params) {
   }
   
   uint8_t value = params["value"];
-  digital_io.SetOutput(value);
+  digital_io.setOutput(value);
   return RPC_OK;
 }
 
@@ -751,7 +751,7 @@ int RpcServer::rpc_dioSetBit(JsonObject params) {
   }
   
   uint8_t bitNumber = params["bitNumber"];
-  digital_io.SetBit(bitNumber);
+  digital_io.setBit(bitNumber);
   return RPC_OK;
 }
 
@@ -761,7 +761,7 @@ int RpcServer::rpc_dioClearBit(JsonObject params) {
   }
   
   uint8_t bitNumber = params["bitNumber"];
-  digital_io.ClearBit(bitNumber);
+  digital_io.clearBit(bitNumber);
   return RPC_OK;
 }
 
@@ -771,7 +771,7 @@ int RpcServer::rpc_dioToggleBit(JsonObject params) {
   }
   
   uint8_t bitNumber = params["bitNumber"];
-  digital_io.ToggleBit(bitNumber);
+  digital_io.toggleBit(bitNumber);
   return RPC_OK;
 }
 

@@ -118,8 +118,7 @@ class DIOTab:
             messagebox.showwarning("Not Connected", "Please connect to ESP32 first")
             return
         try:
-            result, msg, data = client.call_raw("dioGetInput", {})
-            value = self._extract_value(data, preferred_keys=["value", "input"])
+            result, msg, value = client.dioGetInput()
             
             # Display as decimal and binary
             self.input_value_var.set(f"{value}")
@@ -138,8 +137,7 @@ class DIOTab:
         try:
             bit_number = int(self.check_bit_var.get())
             
-            result, msg, data = client.call_raw("dioIsBitSet", {"bitNumber": bit_number})
-            bit_set = self._extract_value(data, preferred_keys=["bitSet", "value", "status"])
+            result, msg, bit_set = client.dioIsBitSet(bit_number)
             
             status = "SET (1)" if bit_set else "CLEAR (0)"
             self.bit_status_var.set(status)
@@ -161,7 +159,7 @@ class DIOTab:
                 messagebox.showerror("Error", "Value must be between 0 and 255")
                 return
             
-            result, msg, data = client.call_raw("dioSetOutput", {"value": value})
+            result, msg = client.dioSetOutput(value)
             self.parent.output_message(f"dioSetOutput({value}) -> Code: {result}, Binary: 0b{value:08b}, {msg}")
         except ValueError:
             messagebox.showerror("Error", "Invalid input. Value must be an integer (0-255)")
@@ -177,7 +175,7 @@ class DIOTab:
         try:
             bit_number = int(self.bit_manip_num_var.get())
             
-            result, msg, data = client.call_raw("dioSetBit", {"bitNumber": bit_number})
+            result, msg = client.dioSetBit(bit_number)
             self.parent.output_message(f"dioSetBit({bit_number}) -> Code: {result}, {msg}")
         except Exception as e:
             self.parent.output_message(f"[ERROR] {str(e)}")
@@ -191,7 +189,7 @@ class DIOTab:
         try:
             bit_number = int(self.bit_manip_num_var.get())
             
-            result, msg, data = client.call_raw("dioClearBit", {"bitNumber": bit_number})
+            result, msg = client.dioClearBit(bit_number)
             self.parent.output_message(f"dioClearBit({bit_number}) -> Code: {result}, {msg}")
         except Exception as e:
             self.parent.output_message(f"[ERROR] {str(e)}")
@@ -205,7 +203,7 @@ class DIOTab:
         try:
             bit_number = int(self.bit_manip_num_var.get())
             
-            result, msg, data = client.call_raw("dioToggleBit", {"bitNumber": bit_number})
+            result, msg = client.dioToggleBit(bit_number)
             self.parent.output_message(f"dioToggleBit({bit_number}) -> Code: {result}, {msg}")
         except Exception as e:
             self.parent.output_message(f"[ERROR] {str(e)}")

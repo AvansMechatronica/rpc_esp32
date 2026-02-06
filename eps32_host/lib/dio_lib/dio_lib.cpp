@@ -22,7 +22,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // void dio::Init(void)
 
-void dio::Init(void)
+void dio::init(void)
 {
 	uint8_t pin = 0;
 
@@ -40,7 +40,7 @@ void dio::Init(void)
 ///////////////////////////////////////////////////////////////////////////////
 // uint8_t dio::GetInput(void)
 
-uint8_t dio::GetInput(void)
+uint8_t dio::getInput(void)
 {
 	uint8_t value = 0;
 	uint8_t bitNr = 0;
@@ -57,9 +57,9 @@ uint8_t dio::GetInput(void)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// bool isValidBitNumber(uint8_t bitNumber)
+// bool dio::isValidBitNumber(uint8_t bitNumber)
 
-bool isValidBitNumber(uint8_t bitNumber)
+bool dio::isValidBitNumber(uint8_t bitNumber)
 {
 	bool isValid = false;
 
@@ -71,7 +71,7 @@ bool isValidBitNumber(uint8_t bitNumber)
 ///////////////////////////////////////////////////////////////////////////////
 // bool dio::IsBitSet(uint8_t bitNumber)
 
-bool dio::IsBitSet(uint8_t bitNumber)
+bool dio::isBitSet(uint8_t bitNumber)
 {
 	bool isBitSet = false;
 
@@ -86,7 +86,7 @@ bool dio::IsBitSet(uint8_t bitNumber)
 ///////////////////////////////////////////////////////////////////////////////
 // void dio::SetOutput(uint8_t value)
 
-void dio::SetOutput(uint8_t value)
+void dio::setOutput(uint8_t value)
 {
 	uint8_t bitNr = 0;
 	uint8_t bitOn = LOW;
@@ -106,9 +106,9 @@ void dio::SetOutput(uint8_t value)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// oid dio::SetBit(uint8_t bitNumber, bool bitOn)
+// void dio::setBit(uint8_t bitNumber)
 
-void dio::SetBit(uint8_t bitNumber)
+void dio::setBit(uint8_t bitNumber)
 {
 
 
@@ -119,9 +119,9 @@ void dio::SetBit(uint8_t bitNumber)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// oid dio::ClearBit(uint8_t bitNumber, bool bitOn)
+// void dio::clearBit(uint8_t bitNumber)
 
-void dio::ClearBit(uint8_t bitNumber)
+void dio::clearBit(uint8_t bitNumber)
 {
 	if (isValidBitNumber(bitNumber))
 	{
@@ -130,9 +130,9 @@ void dio::ClearBit(uint8_t bitNumber)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// oid dio::ToggleBit(uint8_t bitNumber, bool bitOn)
+// void dio::toggleBit(uint8_t bitNumber)
 
-void dio::ToggleBit(uint8_t bitNumber)
+void dio::toggleBit(uint8_t bitNumber)
 {
 	if (isValidBitNumber(bitNumber))
 	{
@@ -141,9 +141,9 @@ void dio::ToggleBit(uint8_t bitNumber)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// int16_t dio::GetGPIONumberInput(uint8_t inputBitNumber)
+// int16_t dio::getGpioNumberInput(uint8_t inputBitNumber)
 
-int16_t dio::GetGPIONumberInput(uint8_t inputBitNumber)
+int16_t dio::getGPIONumberInput(uint8_t inputBitNumber)
 {
 	int16_t gpioNumber = -1;
 

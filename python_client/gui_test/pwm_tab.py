@@ -17,7 +17,7 @@ class PWMTab:
     def setup_pwm_tab(self):
         frame = self.frame
         # ledcSetup
-        ttk.Label(frame, text="ledcSetup").pack(anchor=W, padx=10, pady=5)
+        ttk.Label(frame, text="ledcSetup", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
         setup_frame = ttk.Frame(frame)
         setup_frame.pack(fill=X, padx=10, pady=5)
 
@@ -36,8 +36,10 @@ class PWMTab:
         ttk.Button(setup_frame, text="Setup", 
                    command=self.execute_ledcSetup).pack(side=LEFT, padx=5)
 
+        ttk.Separator(frame, orient=HORIZONTAL).pack(fill=X, padx=10, pady=10)
+
         # ledcWrite
-        ttk.Label(frame, text="ledcWrite").pack(anchor=W, padx=10, pady=5)
+        ttk.Label(frame, text="ledcWrite", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
         write_frame = ttk.Frame(frame)
         write_frame.pack(fill=X, padx=10, pady=5)
 

@@ -72,11 +72,11 @@ void initFS() {
   if (!result) {
     DEBUG_PRINT("An error has occurred while mounting %s\n", FS_NAME);
 #if defined (INCLUDE_OLED_DISPLAY)
-    oled_Display.Clear();
-    oled_Display.WriteLine(0, "No filesystem", ALIGN_CENTER);
-    oled_Display.WriteLine(1, "detected",  ALIGN_CENTER);
-    oled_Display.WriteLine(2, "Install by",  		ALIGN_CENTER);
-    oled_Display.WriteLine(3, "PlatformIO",  		ALIGN_CENTER);
+    oled_Display.clear();
+    oled_Display.writeLine(0, "No filesystem", ALIGN_CENTER);
+    oled_Display.writeLine(1, "detected",  ALIGN_CENTER);
+    oled_Display.writeLine(2, "Install by",  		ALIGN_CENTER);
+    oled_Display.writeLine(3, "PlatformIO",  		ALIGN_CENTER);
 #endif
     while(true){};
   }
@@ -131,9 +131,9 @@ bool testWifi() {
   WiFi.begin(ssid.c_str(), pass.c_str());
   DEBUG_PRINT("Connecting to WiFi...\n");
 #if defined (INCLUDE_OLED_DISPLAY)
-  oled_Display.Clear();
-  oled_Display.WriteLine(0, "Connecting", ALIGN_CENTER);
-  oled_Display.WriteLine(1, "to WiFi...",  ALIGN_CENTER);
+  oled_Display.clear();
+  oled_Display.writeLine(0, "Connecting", ALIGN_CENTER);
+  oled_Display.writeLine(1, "to WiFi...",  ALIGN_CENTER);
 #endif
 
   unsigned long currentMillis = millis();
@@ -144,10 +144,10 @@ bool testWifi() {
     if (currentMillis - previousMillis >= interval) {
       DEBUG_PRINT("Failed to connect\n");
 #if defined (INCLUDE_OLED_DISPLAY)
-    oled_Display.Clear();
-    oled_Display.WriteLine(0, "Failed to", ALIGN_CENTER);
-    oled_Display.WriteLine(1, "connect to",  ALIGN_CENTER);
-    oled_Display.WriteLine(2, "WiFi",  		ALIGN_CENTER);
+    oled_Display.clear();
+    oled_Display.writeLine(0, "Failed to", ALIGN_CENTER);
+    oled_Display.writeLine(1, "connect to",  ALIGN_CENTER);
+    oled_Display.writeLine(2, "WiFi",  		ALIGN_CENTER);
 
 #endif
       return false;
@@ -185,11 +185,11 @@ void handleConfigPost(AsyncWebServerRequest *request) {
   }
   request->send(200, "text/plain", "Done. Controller will restart");
 #if defined (INCLUDE_OLED_DISPLAY)
-  oled_Display.Clear();
-  oled_Display.WriteLine(0, "WiFi", ALIGN_CENTER);
-  oled_Display.WriteLine(1, "configuration",  ALIGN_CENTER);
-  oled_Display.WriteLine(2, "stored",  		ALIGN_CENTER);
-  oled_Display.WriteLine(3, "Restarting...",  ALIGN_CENTER);
+  oled_Display.clear();
+  oled_Display.writeLine(0, "WiFi", ALIGN_CENTER);
+  oled_Display.writeLine(1, "configuration",  ALIGN_CENTER);
+  oled_Display.writeLine(2, "stored",  		ALIGN_CENTER);
+  oled_Display.writeLine(3, "Restarting...",  ALIGN_CENTER);
 #endif
   delay(3000);
   ESP.restart();
@@ -206,11 +206,11 @@ bool configureNetwork(bool forceConfigure, NETWORK_CONFIG *networkConfig) {
   if(!file){
     DEBUG_PRINT("No webpages file found\n");
 #if defined (INCLUDE_OLED_DISPLAY)
-    oled_Display.Clear();
-    oled_Display.WriteLine(0, "No webpages", ALIGN_CENTER);
-    oled_Display.WriteLine(1, "found",  ALIGN_CENTER);
-    oled_Display.WriteLine(2, "Install by",  		ALIGN_CENTER);
-    oled_Display.WriteLine(3, "PlatformIO",  		ALIGN_CENTER);
+    oled_Display.clear();
+    oled_Display.writeLine(0, "No webpages", ALIGN_CENTER);
+    oled_Display.writeLine(1, "found",  ALIGN_CENTER);
+    oled_Display.writeLine(2, "Install by",  		ALIGN_CENTER);
+    oled_Display.writeLine(3, "PlatformIO",  		ALIGN_CENTER);
 #endif
     while(true){};
   }
@@ -244,12 +244,12 @@ bool configureNetwork(bool forceConfigure, NETWORK_CONFIG *networkConfig) {
 
 #if defined (INCLUDE_OLED_DISPLAY)
     char text_buffer[32];
-    oled_Display.Clear();
-    oled_Display.WriteLine(0, "Connect to AP:", ALIGN_CENTER);
+    oled_Display.clear();
+    oled_Display.writeLine(0, "Connect to AP:", ALIGN_CENTER);
     snprintf(text_buffer, sizeof(text_buffer), "%s", ap_name);
-    oled_Display.WriteLine(1, text_buffer,  ALIGN_CENTER);
+    oled_Display.writeLine(1, text_buffer,  ALIGN_CENTER);
     snprintf(text_buffer, sizeof(text_buffer), "IP: %s", IP.toString().c_str());
-    oled_Display.WriteLine(2, text_buffer,  ALIGN_CENTER);
+    oled_Display.writeLine(2, text_buffer,  ALIGN_CENTER);
 #endif
 
     // Web Server Root URL - serve static files first

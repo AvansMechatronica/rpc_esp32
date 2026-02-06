@@ -399,6 +399,219 @@ class RPCClient:
         """
         result, msg, _ = self._send_command("pulseTick", {"channel": channel})
         return result, msg
+
+    # ADC Functions
+    def adcReadRaw(self, channel: int, averageCount: int = 1) -> Tuple[int, str, Optional[int]]:
+        """
+        Read raw ADC value
+
+        Args:
+            channel: ADC channel number
+            averageCount: Number of samples to average (default 1)
+
+        Returns:
+            (result_code, message, raw_value) tuple
+        """
+        result, msg, data = self._send_command("adcReadRaw", {
+            "channel": channel,
+            "averageCount": averageCount
+        })
+        value = data.get('raw') if (result == RPC_OK and data) else None
+        return result, msg, value
+
+    def adcReadVoltage(self, channel: int, averageCount: int = 1) -> Tuple[int, str, Optional[float]]:
+        """
+        Read ADC voltage
+
+        Args:
+            channel: ADC channel number
+            averageCount: Number of samples to average (default 1)
+
+        Returns:
+            (result_code, message, voltage) tuple
+        """
+        result, msg, data = self._send_command("adcReadVoltage", {
+            "channel": channel,
+            "averageCount": averageCount
+        })
+        value = data.get('voltage') if (result == RPC_OK and data) else None
+        return result, msg, value
+
+    def isButtonPressed(self, analogButton: int) -> Tuple[int, str, Optional[bool]]:
+        """
+        Check if an analog button is pressed
+
+        Args:
+            analogButton: Analog button index
+
+        Returns:
+            (result_code, message, pressed) tuple
+        """
+        result, msg, data = self._send_command("isButtonPressed", {"analogButton": analogButton})
+        pressed = data.get('pressed') if (result == RPC_OK and data) else None
+        return result, msg, pressed
+
+    # DIO Functions
+    def dioGetInput(self) -> Tuple[int, str, Optional[int]]:
+        """
+        Read DIO input register
+
+        Returns:
+            (result_code, message, value) tuple
+        """
+        result, msg, data = self._send_command("dioGetInput", {})
+        value = data.get('value') if (result == RPC_OK and data) else None
+        return result, msg, value
+
+    def dioIsBitSet(self, bitNumber: int) -> Tuple[int, str, Optional[bool]]:
+        """
+        Check if a DIO bit is set
+
+        Args:
+            bitNumber: Bit index to test
+
+        Returns:
+            (result_code, message, bit_set) tuple
+        """
+        result, msg, data = self._send_command("dioIsBitSet", {"bitNumber": bitNumber})
+        bit_set = data.get('bitSet') if (result == RPC_OK and data) else None
+        return result, msg, bit_set
+
+    def dioSetOutput(self, value: int) -> Tuple[int, str]:
+        """
+        Write DIO output register
+
+        Args:
+            value: Output register value
+
+        Returns:
+            (result_code, message) tuple
+        """
+        result, msg, _ = self._send_command("dioSetOutput", {"value": value})
+        return result, msg
+
+    def dioSetBit(self, bitNumber: int) -> Tuple[int, str]:
+        """
+        Set a DIO bit
+
+        Args:
+            bitNumber: Bit index to set
+
+        Returns:
+            (result_code, message) tuple
+        """
+        result, msg, _ = self._send_command("dioSetBit", {"bitNumber": bitNumber})
+        return result, msg
+
+    def dioClearBit(self, bitNumber: int) -> Tuple[int, str]:
+        """
+        Clear a DIO bit
+
+        Args:
+            bitNumber: Bit index to clear
+
+        Returns:
+            (result_code, message) tuple
+        """
+        result, msg, _ = self._send_command("dioClearBit", {"bitNumber": bitNumber})
+        return result, msg
+
+    def dioToggleBit(self, bitNumber: int) -> Tuple[int, str]:
+        """
+        Toggle a DIO bit
+
+        Args:
+            bitNumber: Bit index to toggle
+
+        Returns:
+            (result_code, message) tuple
+        """
+        result, msg, _ = self._send_command("dioToggleBit", {"bitNumber": bitNumber})
+        return result, msg
+
+    # QC Counter Functions
+    def qcEnableCounter(self, channel: int) -> Tuple[int, str]:
+        """
+        Enable QC counter channel
+
+        Args:
+            channel: Counter channel number
+
+        Returns:
+            (result_code, message) tuple
+        """
+        result, msg, _ = self._send_command("qcEnableCounter", {"channel": channel})
+        return result, msg
+
+    def qcDisableCounter(self, channel: int) -> Tuple[int, str]:
+        """
+        Disable QC counter channel
+
+        Args:
+            channel: Counter channel number
+
+        Returns:
+            (result_code, message) tuple
+        """
+        result, msg, _ = self._send_command("qcDisableCounter", {"channel": channel})
+        return result, msg
+
+    def qcClearCountRegister(self, channel: int) -> Tuple[int, str]:
+        """
+        Clear QC counter register
+
+        Args:
+            channel: Counter channel number
+
+        Returns:
+            (result_code, message) tuple
+        """
+        result, msg, _ = self._send_command("qcClearCountRegister", {"channel": channel})
+        return result, msg
+
+    def qcReadCountRegister(self, channel: int) -> Tuple[int, str, Optional[int]]:
+        """
+        Read QC counter register
+
+        Args:
+            channel: Counter channel number
+
+        Returns:
+            (result_code, message, count) tuple
+        """
+        result, msg, data = self._send_command("qcReadCountRegister", {"channel": channel})
+        count = data.get('count') if (result == RPC_OK and data) else None
+        return result, msg, count
+
+    # OLED Functions
+    def oledClear(self) -> Tuple[int, str]:
+        """
+        Clear OLED display
+
+        Returns:
+            (result_code, message) tuple
+        """
+        result, msg, _ = self._send_command("oledClear", {})
+        return result, msg
+
+    def oledWriteLine(self, line: int, text: str, align: int) -> Tuple[int, str]:
+        """
+        Write a line on the OLED display
+
+        Args:
+            line: Line index
+            text: Text to render
+            align: Alignment value
+
+        Returns:
+            (result_code, message) tuple
+        """
+        result, msg, _ = self._send_command("oledWriteLine", {
+            "line": line,
+            "text": text,
+            "align": align
+        })
+        return result, msg
     
     # DAC Functions
     def dacSetVoltage(self, channel: int, voltage: float) -> Tuple[int, str]:

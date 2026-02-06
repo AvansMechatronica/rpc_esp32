@@ -134,14 +134,47 @@ class PulseTab:
 
     def setup_pulse_tab(self):
         frame = self.frame
+
+        canvas = Canvas(frame, highlightthickness=0)
+        scrollbar = ttk.Scrollbar(frame, orient=VERTICAL, command=canvas.yview)
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        scrollbar.pack(side=RIGHT, fill=Y)
+        canvas.pack(side=LEFT, fill=BOTH, expand=True)
+
+        scroll_frame = ttk.Frame(canvas)
+        canvas_window = canvas.create_window((0, 0), window=scroll_frame, anchor="nw")
+
+        def _on_frame_configure(event):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+
+        def _on_canvas_configure(event):
+            canvas.itemconfigure(canvas_window, width=event.width)
+
+        scroll_frame.bind("<Configure>", _on_frame_configure)
+        canvas.bind("<Configure>", _on_canvas_configure)
+
+        def _on_mousewheel(event):
+            if event.delta:
+                canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+        canvas.bind_all("<MouseWheel>", _on_mousewheel)
+
+        frame = scroll_frame
         # pulseBegin
-        ttk.Label(frame, text="Initialize Pulse Channel").pack(anchor=W, padx=10, pady=5)
+        ttk.Label(frame, text="Initialize Pulse Channel", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
         begin_frame = ttk.Frame(frame)
         begin_frame.pack(fill=X, padx=10, pady=5)
 
         ttk.Label(begin_frame, text="Channel (0-3):").pack(side=LEFT, padx=5)
         self.pulse_channel_var = StringVar(value="0")
-        ttk.Entry(begin_frame, textvariable=self.pulse_channel_var, width=5).pack(side=LEFT, padx=5)
+        ttk.Combobox(
+            begin_frame,
+            textvariable=self.pulse_channel_var,
+            values=("0", "1", "2", "3"),
+            width=5,
+            state="readonly",
+        ).pack(side=LEFT, padx=5)
 
         ttk.Label(begin_frame, text="Pin:").pack(side=LEFT, padx=5)
         self.pulse_pin_var = StringVar(value="25")
@@ -150,14 +183,22 @@ class PulseTab:
         ttk.Button(begin_frame, text="Begin", 
                command=self.execute_pulseBegin).pack(side=LEFT, padx=5)
 
+        ttk.Separator(frame, orient=HORIZONTAL).pack(fill=X, padx=10, pady=10)
+
         # Single pulse
-        ttk.Label(frame, text="Single Pulse (blocking)").pack(anchor=W, padx=10, pady=5)
+        ttk.Label(frame, text="Single Pulse (blocking)", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
         pulse_frame = ttk.Frame(frame)
         pulse_frame.pack(fill=X, padx=10, pady=5)
 
         ttk.Label(pulse_frame, text="Channel:").pack(side=LEFT, padx=5)
         self.pulse_single_channel_var = StringVar(value="0")
-        ttk.Entry(pulse_frame, textvariable=self.pulse_single_channel_var, width=5).pack(side=LEFT, padx=5)
+        ttk.Combobox(
+            pulse_frame,
+            textvariable=self.pulse_single_channel_var,
+            values=("0", "1", "2", "3"),
+            width=5,
+            state="readonly",
+        ).pack(side=LEFT, padx=5)
 
         ttk.Label(pulse_frame, text="Duration (ms):").pack(side=LEFT, padx=5)
         self.pulse_duration_var = StringVar(value="100")
@@ -166,14 +207,22 @@ class PulseTab:
         ttk.Button(pulse_frame, text="Pulse", 
                command=self.execute_pulse).pack(side=LEFT, padx=5)
 
+        ttk.Separator(frame, orient=HORIZONTAL).pack(fill=X, padx=10, pady=10)
+
         # Single async pulse
-        ttk.Label(frame, text="Single Async Pulse (non-blocking)").pack(anchor=W, padx=10, pady=5)
+        ttk.Label(frame, text="Single Async Pulse (non-blocking)", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
         async_pulse_frame = ttk.Frame(frame)
         async_pulse_frame.pack(fill=X, padx=10, pady=5)
 
         ttk.Label(async_pulse_frame, text="Channel:").pack(side=LEFT, padx=5)
         self.pulse_async_single_channel_var = StringVar(value="0")
-        ttk.Entry(async_pulse_frame, textvariable=self.pulse_async_single_channel_var, width=5).pack(side=LEFT, padx=5)
+        ttk.Combobox(
+            async_pulse_frame,
+            textvariable=self.pulse_async_single_channel_var,
+            values=("0", "1", "2", "3"),
+            width=5,
+            state="readonly",
+        ).pack(side=LEFT, padx=5)
 
         ttk.Label(async_pulse_frame, text="Duration (ms):").pack(side=LEFT, padx=5)
         self.pulse_async_single_duration_var = StringVar(value="150")
@@ -182,14 +231,22 @@ class PulseTab:
         ttk.Button(async_pulse_frame, text="Pulse Async", 
                command=self.execute_pulseAsync).pack(side=LEFT, padx=5)
 
+        ttk.Separator(frame, orient=HORIZONTAL).pack(fill=X, padx=10, pady=10)
+
         # Multiple pulses (blocking)
-        ttk.Label(frame, text="Multiple Pulses (blocking)").pack(anchor=W, padx=10, pady=5)
+        ttk.Label(frame, text="Multiple Pulses (blocking)", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
         multi_frame = ttk.Frame(frame)
         multi_frame.pack(fill=X, padx=10, pady=5)
 
         ttk.Label(multi_frame, text="Channel:").pack(side=LEFT, padx=5)
         self.pulse_multi_channel_var = StringVar(value="0")
-        ttk.Entry(multi_frame, textvariable=self.pulse_multi_channel_var, width=5).pack(side=LEFT, padx=5)
+        ttk.Combobox(
+            multi_frame,
+            textvariable=self.pulse_multi_channel_var,
+            values=("0", "1", "2", "3"),
+            width=5,
+            state="readonly",
+        ).pack(side=LEFT, padx=5)
 
         ttk.Label(multi_frame, text="Pulse (ms):").pack(side=LEFT, padx=5)
         self.pulse_width_var = StringVar(value="50")
@@ -206,14 +263,22 @@ class PulseTab:
         ttk.Button(multi_frame, text="Generate", 
                command=self.execute_generatePulses).pack(side=LEFT, padx=5)
 
+        ttk.Separator(frame, orient=HORIZONTAL).pack(fill=X, padx=10, pady=10)
+
         # Async pulses
-        ttk.Label(frame, text="Async Pulses (non-blocking)").pack(anchor=W, padx=10, pady=5)
+        ttk.Label(frame, text="Async Pulses (non-blocking)", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
         async_frame = ttk.Frame(frame)
         async_frame.pack(fill=X, padx=10, pady=5)
 
         ttk.Label(async_frame, text="Channel:").pack(side=LEFT, padx=5)
         self.pulse_async_channel_var = StringVar(value="0")
-        ttk.Entry(async_frame, textvariable=self.pulse_async_channel_var, width=5).pack(side=LEFT, padx=5)
+        ttk.Combobox(
+            async_frame,
+            textvariable=self.pulse_async_channel_var,
+            values=("0", "1", "2", "3"),
+            width=5,
+            state="readonly",
+        ).pack(side=LEFT, padx=5)
 
         ttk.Label(async_frame, text="Pulse (ms):").pack(side=LEFT, padx=5)
         self.async_pulse_width_var = StringVar(value="100")
@@ -230,8 +295,10 @@ class PulseTab:
         ttk.Button(async_frame, text="Start Async", 
                command=self.execute_generatePulsesAsync).pack(side=LEFT, padx=5)
 
+        ttk.Separator(frame, orient=HORIZONTAL).pack(fill=X, padx=10, pady=10)
+
         # Pulse control
-        ttk.Label(frame, text="Pulse Control").pack(anchor=W, padx=10, pady=5)
+        ttk.Label(frame, text="Pulse Control", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
         control_frame = ttk.Frame(frame)
         control_frame.pack(fill=X, padx=10, pady=5)
 
@@ -239,7 +306,13 @@ class PulseTab:
         row1.pack(fill=X, padx=5, pady=5)
         ttk.Label(row1, text="Channel:").pack(side=LEFT, padx=5)
         self.pulse_control_channel_var = StringVar(value="0")
-        ttk.Entry(row1, textvariable=self.pulse_control_channel_var, width=5).pack(side=LEFT, padx=5)
+        ttk.Combobox(
+            row1,
+            textvariable=self.pulse_control_channel_var,
+            values=("0", "1", "2", "3"),
+            width=5,
+            state="readonly",
+        ).pack(side=LEFT, padx=5)
         ttk.Button(row1, text="Check Status", 
                    command=self.execute_isPulsing).pack(side=LEFT, padx=5)
         self.pulse_status_label = ttk.Label(row1, text="Status: -")

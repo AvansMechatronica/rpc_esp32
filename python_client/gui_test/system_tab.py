@@ -17,7 +17,7 @@ class SystemTab:
     def setup_system_tab(self):
         frame = self.frame
         # delay
-        ttk.Label(frame, text="delay (ms)").pack(anchor=W, padx=10, pady=5)
+        ttk.Label(frame, text="delay (ms)", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
         delay_frame = ttk.Frame(frame)
         delay_frame.pack(fill=X, padx=10, pady=5)
 
@@ -28,8 +28,10 @@ class SystemTab:
         ttk.Button(delay_frame, text="delay", 
                    command=self.execute_delay).pack(side=LEFT, padx=5)
 
+        ttk.Separator(frame, orient=HORIZONTAL).pack(fill=X, padx=10, pady=10)
+
         # getMillis
-        ttk.Label(frame, text="System Information").pack(anchor=W, padx=10, pady=5)
+        ttk.Label(frame, text="System Information", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
         info_frame = ttk.Frame(frame)
         info_frame.pack(fill=X, padx=10, pady=5)
 

@@ -54,11 +54,11 @@ void toggle_usb_wifi_mode(){
     if (!result) {
         DEBUG_PRINT("No file system install with platformIO\n");
 #if defined (INCLUDE_OLED_DISPLAY)
-        oled_Display.Clear();
-        oled_Display.WriteLine(0, "No filesystem", ALIGN_CENTER);
-        oled_Display.WriteLine(1, "found",  ALIGN_CENTER);
-        oled_Display.WriteLine(2, "Install",  		ALIGN_CENTER);
-        oled_Display.WriteLine(3, "Through PlatformIO",  		ALIGN_CENTER);
+        oled_Display.clear();
+        oled_Display.writeLine(0, "No filesystem", ALIGN_CENTER);
+        oled_Display.writeLine(1, "found",  ALIGN_CENTER);
+        oled_Display.writeLine(2, "Install",  		ALIGN_CENTER);
+        oled_Display.writeLine(3, "Through PlatformIO",  		ALIGN_CENTER);
         delay(2000);
 #endif
     }
@@ -67,11 +67,11 @@ void toggle_usb_wifi_mode(){
         DEBUG_PRINT("Switching to USB mode\n");
         writeFile(LittleFS, "/comm_mode.txt", "USB");
 #if defined (INCLUDE_OLED_DISPLAY)
-        oled_Display.Clear();
-        oled_Display.WriteLine(0, "Communication", ALIGN_CENTER);
-        oled_Display.WriteLine(1, "mode",  ALIGN_CENTER);
-        oled_Display.WriteLine(2, "changed to",  ALIGN_CENTER);
-        oled_Display.WriteLine(3, "USB",  		ALIGN_CENTER);
+        oled_Display.clear();
+        oled_Display.writeLine(0, "Communication", ALIGN_CENTER);
+        oled_Display.writeLine(1, "mode",  ALIGN_CENTER);
+        oled_Display.writeLine(2, "changed to",  ALIGN_CENTER);
+        oled_Display.writeLine(3, "USB",  		ALIGN_CENTER);
         delay(2000);
 #endif    
     }
@@ -79,11 +79,11 @@ void toggle_usb_wifi_mode(){
         DEBUG_PRINT("Switching to WiFi mode\n");
         writeFile(LittleFS, "/comm_mode.txt", "WIFI");
 #if defined (INCLUDE_OLED_DISPLAY)
-        oled_Display.Clear();
-        oled_Display.WriteLine(0, "Communication", ALIGN_CENTER);
-        oled_Display.WriteLine(1, "mode",  ALIGN_CENTER);
-        oled_Display.WriteLine(2, "changed to",  ALIGN_CENTER);
-        oled_Display.WriteLine(3, "WIFI",  		ALIGN_CENTER);
+        oled_Display.clear();
+        oled_Display.writeLine(0, "Communication", ALIGN_CENTER);
+        oled_Display.writeLine(1, "mode",  ALIGN_CENTER);
+        oled_Display.writeLine(2, "changed to",  ALIGN_CENTER);
+        oled_Display.writeLine(3, "WIFI",  		ALIGN_CENTER);
         delay(2000);
 #endif    
     }

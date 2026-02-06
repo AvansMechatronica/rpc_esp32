@@ -2,6 +2,7 @@
 from tkinter import *
 from tkinter import ttk, messagebox
 
+
 class OLEDRPCTab:
 	def __init__(self, notebook, parent):
 		self.frame = ttk.Frame(notebook)
@@ -10,36 +11,57 @@ class OLEDRPCTab:
 		self.setup_tab()
 
 	def setup_tab(self):
-		# OLED Clear Button
-		clear_btn = ttk.Button(self.frame, text="Clear OLED", command=self.clear_oled)
-		clear_btn.grid(row=0, column=0, padx=10, pady=10, sticky=W)
+		frame = self.frame
 
-		# Write Line Section
-		ttk.Label(self.frame, text="Line (0-3):").grid(row=1, column=0, sticky=E, padx=5)
+		# OLED Clear
+		ttk.Label(frame, text="oledClear", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
+		clear_frame = ttk.Frame(frame)
+		clear_frame.pack(fill=X, padx=10, pady=5)
+		clear_btn = ttk.Button(clear_frame, text="Clear OLED", command=self.clear_oled)
+		clear_btn.pack(side=LEFT, padx=5)
+
+		ttk.Separator(frame, orient=HORIZONTAL).pack(fill=X, padx=10, pady=10)
+
+		# Write Line
+		ttk.Label(frame, text="oledWriteLine", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
+		write_frame = ttk.Frame(frame)
+		write_frame.pack(fill=X, padx=10, pady=5)
+
+		ttk.Label(write_frame, text="Line (0-3):").pack(side=LEFT, padx=5)
 		self.line_var = StringVar(value="0")
-		line_entry = ttk.Entry(self.frame, textvariable=self.line_var, width=5)
-		line_entry.grid(row=1, column=1, sticky=W)
+		ttk.Combobox(
+			write_frame,
+			textvariable=self.line_var,
+			values=("0", "1", "2", "3"),
+			width=5,
+			state="readonly",
+		).pack(side=LEFT, padx=5)
 
-		ttk.Label(self.frame, text="Text:").grid(row=1, column=2, sticky=E, padx=5)
+		ttk.Label(write_frame, text="Text:").pack(side=LEFT, padx=5)
 		self.text_var = StringVar()
-		text_entry = ttk.Entry(self.frame, textvariable=self.text_var, width=30)
-		text_entry.grid(row=1, column=3, sticky=W)
+		ttk.Entry(write_frame, textvariable=self.text_var, width=30).pack(side=LEFT, padx=5)
 
-		ttk.Label(self.frame, text="Align:").grid(row=1, column=4, sticky=E, padx=5)
+		ttk.Label(write_frame, text="Align:").pack(side=LEFT, padx=5)
 		self.align_var = StringVar(value="0")
-		align_combo = ttk.Combobox(self.frame, textvariable=self.align_var, values=["0 (Left)", "1 (Right)", "2 (Center)"], width=10, state="readonly")
-		align_combo.grid(row=1, column=5, sticky=W)
+		align_combo = ttk.Combobox(
+			write_frame,
+			textvariable=self.align_var,
+			values=["0 (Left)", "1 (Right)", "2 (Center)"],
+			width=10,
+			state="readonly",
+		)
+		align_combo.pack(side=LEFT, padx=5)
 		align_combo.current(0)
 
-		write_btn = ttk.Button(self.frame, text="Write Line", command=self.write_line)
-		write_btn.grid(row=1, column=6, padx=10, sticky=W)
+		write_btn = ttk.Button(write_frame, text="Write Line", command=self.write_line)
+		write_btn.pack(side=LEFT, padx=5)
 
 	def clear_oled(self):
 		client = self.parent.client
 		if not client or not client.is_connected():
 			messagebox.showwarning("Not Connected", "Please connect to ESP32 first")
 			return
-		result, msg = client._send_command("oledClear")[:2]
+		result, msg = client.oledClear()
 		self.parent.output_message(f"oledClear() -> Code: {result}, {msg}")
 
 	def write_line(self):
@@ -54,6 +76,5 @@ class OLEDRPCTab:
 		except Exception:
 			messagebox.showerror("Error", "Invalid input values")
 			return
-		params = {"line": line, "text": text, "align": align}
-		result, msg = client._send_command("oledWriteLine", params)[:2]
+		result, msg = client.oledWriteLine(line, text, align)
 		self.parent.output_message(f"oledWriteLine(line={line}, text='{text}', align={align}) -> Code: {result}, {msg}")

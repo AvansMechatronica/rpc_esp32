@@ -45,7 +45,7 @@ class QCTab:
         channel = self._get_channel()
         if channel is None:
             return
-        result, msg, _ = client.call_raw("qcEnableCounter", {"channel": channel})
+        result, msg = client.qcEnableCounter(channel)
         self.parent.output_message(f"qcEnableCounter({channel}) -> Code: {result}, {msg}")
 
     def execute_qcDisableCounter(self):
@@ -55,7 +55,7 @@ class QCTab:
         channel = self._get_channel()
         if channel is None:
             return
-        result, msg, _ = client.call_raw("qcDisableCounter", {"channel": channel})
+        result, msg = client.qcDisableCounter(channel)
         self.parent.output_message(f"qcDisableCounter({channel}) -> Code: {result}, {msg}")
 
     def execute_qcClearCountRegister(self):
@@ -65,7 +65,7 @@ class QCTab:
         channel = self._get_channel()
         if channel is None:
             return
-        result, msg, _ = client.call_raw("qcClearCountRegister", {"channel": channel})
+        result, msg = client.qcClearCountRegister(channel)
         self.parent.output_message(f"qcClearCountRegister({channel}) -> Code: {result}, {msg}")
         if result == 0:
             self.qc_count_var.set("0")
@@ -77,8 +77,7 @@ class QCTab:
         channel = self._get_channel()
         if channel is None:
             return
-        result, msg, data = client.call_raw("qcReadCountRegister", {"channel": channel})
-        count = self._extract_value(data, preferred_keys=["count", "value"])
+        result, msg, count = client.qcReadCountRegister(channel)
         if result == 0 and count is not None:
             self.qc_count_var.set(str(count))
         else:
@@ -90,7 +89,7 @@ class QCTab:
     def setup_qc_tab(self):
         frame = self.frame
 
-        ttk.Label(frame, text="Quadrature Counter (QC7366)").pack(anchor=W, padx=10, pady=5)
+        ttk.Label(frame, text="Quadrature Counter (QC7366)", font=("Arial", 10, "bold")).pack(anchor=W, padx=10, pady=10)
 
         channel_frame = ttk.Frame(frame)
         channel_frame.pack(fill=X, padx=10, pady=5)
@@ -117,6 +116,8 @@ class QCTab:
         ttk.Button(control_frame, text="Clear Count", command=self.execute_qcClearCountRegister).pack(
             side=LEFT, padx=5
         )
+
+        ttk.Separator(frame, orient=HORIZONTAL).pack(fill=X, padx=10, pady=10)
 
         read_frame = ttk.Frame(frame)
         read_frame.pack(fill=X, padx=10, pady=5)

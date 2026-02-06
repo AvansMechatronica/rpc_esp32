@@ -22,7 +22,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // void spi_Init(void)
 
-void spi::Init(void)
+void spi::init(void)
 {
 	if (g_IsSPIInitialised == false)	// prevents multiple inits
 	{
@@ -31,7 +31,7 @@ void spi::Init(void)
 		pinMode(SPI_SEL_0, OUTPUT);
 
         // deselects all SPI devices:
-        DeselectDevice();
+        deselectDevice();
 
         // same as in constructor
         Settings._clock    = SPI_DEFAULT_SPEED;
@@ -46,58 +46,58 @@ void spi::Init(void)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// void spi::BeginTransaction(SPISettings settings)
+// void spi::beginTransaction(SPISettings settings)
 
-void spi::BeginTransaction(SPISettings settings)
+void spi::beginTransaction(SPISettings settings)
 {
     vspi.beginTransaction(settings);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// void spi::EndTransaction(void)
+// void spi::endTransaction(void)
 
-void spi::EndTransaction(void)
+void spi::endTransaction(void)
 {
     vspi.endTransaction();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// void spi::WriteByte(const uint8_t data)
+// void spi::writeByte(const uint8_t data)
 
-void spi::WriteByte(const uint8_t data)
+void spi::writeByte(const uint8_t data)
 {
 	vspi.write(data);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// void spi::WriteWord(const uint16_t data)
+// void spi::writeWord(const uint16_t data)
 
-void spi::WriteWord(const uint16_t data)
+void spi::writeWord(const uint16_t data)
 {
 	vspi.write16(data);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// void spi::ReadByte(uint8_t *byteData)
+// void spi::readByte(uint8_t *byteData)
 
-void spi::ReadByte(uint8_t *byteData)
+void spi::readByte(uint8_t *byteData)
 {
 	*byteData = vspi.transfer(0);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// void spi::ReadWord(uint16_t *wordData)
+// void spi::readWord(uint16_t *wordData)
 
-void spi::ReadWord(uint8_t *wordData)
+void spi::readWord(uint16_t *wordData)
 {
 	*wordData = vspi.transfer16(0);
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// uint8_t spi::TransferByte(uint8_t byteToSend)
+// uint8_t spi::transferByte(uint8_t byteToSend)
 
-uint8_t spi::TransferByte(uint8_t byteToSend)
+uint8_t spi::transferByte(uint8_t byteToSend)
 {
 	uint8_t rcvByte = vspi.transfer(byteToSend);
  
@@ -105,9 +105,9 @@ uint8_t spi::TransferByte(uint8_t byteToSend)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// uint16_t spi::TransferByte(uint8_t byteToSend)
+// uint16_t spi::transferWord(uint16_t wordToSend)
 
-uint16_t spi::TransferWord(uint16_t wordToSend)
+uint16_t spi::transferWord(uint16_t wordToSend)
 {
 	uint16_t rcvWord = vspi.transfer16(wordToSend);
  
@@ -115,9 +115,9 @@ uint16_t spi::TransferWord(uint16_t wordToSend)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// void spi::SelectDevice(uint8_t spiDeviceNumber)
+// void spi::selectDevice(uint8_t spiDeviceNumber)
 
-void spi::SelectDevice(uint8_t spiDeviceNumber)
+void spi::selectDevice(uint8_t spiDeviceNumber)
 {
 	uint8_t gpioPinNumber = 0;
 	uint8_t bitValue = LOW;
@@ -139,9 +139,9 @@ void spi::SelectDevice(uint8_t spiDeviceNumber)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// void spi::DeselectDevice(void)
+// void spi::deselectDevice(void)
 
-void spi::DeselectDevice(void)
+void spi::deselectDevice(void)
 {
-	SelectDevice(SPI_DEVICE_UNUSED);
+	selectDevice(SPI_DEVICE_UNUSED);
 }

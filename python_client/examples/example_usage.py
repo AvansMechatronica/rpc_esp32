@@ -99,6 +99,22 @@ def main():
         print_result("analogRead(39)", result, msg, value)
         
         print()
+
+        # ===== Optional ADC 3208 Tests =====
+        print("=" * 50)
+        print("ADC 3208 Operations (Optional)")
+        print("=" * 50)
+
+        result, msg, raw = client.adcReadRaw(0, averageCount=4)
+        print_result("adcReadRaw(0, avg=4)", result, msg, raw)
+
+        result, msg, voltage = client.adcReadVoltage(0, averageCount=4)
+        print_result("adcReadVoltage(0, avg=4)", result, msg, voltage)
+
+        result, msg, pressed = client.isButtonPressed(0)
+        print_result("isButtonPressed(0)", result, msg, pressed)
+
+        print()
         
         # ===== System Information =====
         print("=" * 50)
@@ -179,6 +195,63 @@ def main():
         result, msg = client.stopPulse(0)
         print_result("stopPulse(0)", result, msg)
         
+        print()
+
+        # ===== Optional DIO Tests =====
+        print("=" * 50)
+        print("DIO Operations (Optional)")
+        print("=" * 50)
+
+        result, msg, value = client.dioGetInput()
+        print_result("dioGetInput()", result, msg, value)
+
+        result, msg, bit_set = client.dioIsBitSet(0)
+        print_result("dioIsBitSet(0)", result, msg, bit_set)
+
+        result, msg = client.dioSetOutput(0)
+        print_result("dioSetOutput(0)", result, msg)
+
+        result, msg = client.dioSetBit(0)
+        print_result("dioSetBit(0)", result, msg)
+
+        result, msg = client.dioClearBit(0)
+        print_result("dioClearBit(0)", result, msg)
+
+        result, msg = client.dioToggleBit(0)
+        print_result("dioToggleBit(0)", result, msg)
+
+        print()
+
+        # ===== Optional QC Counter Tests =====
+        print("=" * 50)
+        print("QC Counter Operations (Optional)")
+        print("=" * 50)
+
+        result, msg = client.qcEnableCounter(0)
+        print_result("qcEnableCounter(0)", result, msg)
+
+        result, msg, count = client.qcReadCountRegister(0)
+        print_result("qcReadCountRegister(0)", result, msg, count)
+
+        result, msg = client.qcClearCountRegister(0)
+        print_result("qcClearCountRegister(0)", result, msg)
+
+        result, msg = client.qcDisableCounter(0)
+        print_result("qcDisableCounter(0)", result, msg)
+
+        print()
+
+        # ===== Optional OLED Tests =====
+        print("=" * 50)
+        print("OLED Operations (Optional)")
+        print("=" * 50)
+
+        result, msg = client.oledClear()
+        print_result("oledClear()", result, msg)
+
+        result, msg = client.oledWriteLine(0, "Hello", 0)
+        print_result("oledWriteLine(0, 'Hello', 0)", result, msg)
+
         print()
         
         # ===== Raw Command Test =====

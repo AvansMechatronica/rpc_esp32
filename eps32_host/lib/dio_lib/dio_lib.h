@@ -28,17 +28,17 @@
 
 class dio{
 public:
-    void Init(void);
-    uint8_t GetInput(void);
-    bool IsBitSet(uint8_t bitNumber);
-    void SetOutput(uint8_t value);
-    void SetBit(uint8_t bitNumber);
-    void ClearBit(uint8_t bitNumber);
-    void ToggleBit(uint8_t bitNumber);
+    void init(void);
+    uint8_t getInput(void);
+    bool isBitSet(uint8_t bitNumber);
+    void setOutput(uint8_t value);
+    void setBit(uint8_t bitNumber);
+    void clearBit(uint8_t bitNumber);
+    void toggleBit(uint8_t bitNumber);
 
-    int16_t GetGPIONumberInput(uint8_t inputBitNumber);
+    int16_t getGPIONumberInput(uint8_t inputBitNumber);
 private:
-    bool IsValidBitNumber(uint8_t bitNumber);
+    bool isValidBitNumber(uint8_t bitNumber);
     const uint8_t InputPins[N_INPUT_BITS] =
     {
         GPIO_NUM_36,	// LSB, bit 0

@@ -33,7 +33,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // bool oled_Init(void)
 
-bool oledDisplay::Init(void)
+bool oledDisplay::init(void)
 {
 	bool result = false;
 	
@@ -53,16 +53,16 @@ bool oledDisplay::Init(void)
 ///////////////////////////////////////////////////////////////////////////////
 // void oled_Clear(void)
 
-void oledDisplay::Clear(void)
+void oledDisplay::clear(void)
 {
 	display->clear();
 	display->display();
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// oled_WriteLine(uint8_t row, const char *message, uint8_t align)
+// oled_writeLine(uint8_t row, const char *message, uint8_t align)
 
-void oledDisplay::WriteLine(uint8_t line, const char *message, uint8_t align)
+void oledDisplay::writeLine(uint8_t line, const char *message, uint8_t align)
 {
 	uint8_t startCol = 0;
 	

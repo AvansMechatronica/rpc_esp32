@@ -27,7 +27,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // void dac4922::Init(void)
 
-void dac4922::Init(spi *spi_bus)
+void dac4922::init(spi *spi_bus)
 {
 	this->spi_bus = spi_bus;
 	// init the DAC chips the first time by writing any value - use zero volts
@@ -35,7 +35,7 @@ void dac4922::Init(spi *spi_bus)
 	
 	for (uint8_t channel = 0; channel < N_DAC_CHANNELS; channel++)
 	{
-		dac4922::SetOutputVoltage(channel, outputVoltage);
+		setOutputVoltage(channel, outputVoltage);
 	}
 }
 
@@ -43,26 +43,26 @@ void dac4922::Init(spi *spi_bus)
 ///////////////////////////////////////////////////////////////////////////////
 // void dac4922::SelectSPIDevice(uint8_t dacChannel)
 
-void dac4922::SelectSPIDevice(uint8_t dacChannel)
+void dac4922::selectSPIDevice(uint8_t dacChannel)
 {
 	if (dacChannel < N_DAC_CHANNELS)
 	{
 		if ((dacChannel == 0) || (dacChannel == 1))
 		{
-			spi_bus->SelectDevice(SPI_DEVICE_DAC01);
+			spi_bus->selectDevice(SPI_DEVICE_DAC01);
 		}
 		else if ((dacChannel == 2) || (dacChannel == 3))
 		{
-			spi_bus->SelectDevice(SPI_DEVICE_DAC23);
+			spi_bus->selectDevice(SPI_DEVICE_DAC23);
 		}
 	}
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// void dac4922::Write(uint8_t dacChannel, uint16_t dacValue)
+// void dac4922::write(uint8_t dacChannel, uint16_t dacValue)
 
-void dac4922::Write(uint8_t dacChannel, uint16_t dacValue)
+void dac4922::write(uint8_t dacChannel, uint16_t dacValue)
 {
 	uint16_t dacCommand = 0;
 
@@ -76,13 +76,13 @@ void dac4922::Write(uint8_t dacChannel, uint16_t dacValue)
 			dacCommand = dacCommand | DAC_SELECT_B;
 		}
 
-		spi_bus->BeginTransaction(DACSPISettings);
-		dac4922::SelectSPIDevice(dacChannel);
+		spi_bus->beginTransaction(DACSPISettings);
+		dac4922::selectSPIDevice(dacChannel);
 
-		spi_bus->WriteWord(dacCommand);
+		spi_bus->writeWord(dacCommand);
 
-		spi_bus->DeselectDevice(); // DEselect DAC channel: cause CSDAC* to go high!!
-		spi_bus->EndTransaction();
+		spi_bus->deselectDevice(); // DEselect DAC channel: cause CSDAC* to go high!!
+		spi_bus->endTransaction();
 	}
 }
 
@@ -91,7 +91,7 @@ void dac4922::Write(uint8_t dacChannel, uint16_t dacValue)
 //
 // Vout = -10 + 8*Vdac
 
-void dac4922::SetOutputVoltage(uint8_t dacChannel, float outputVoltage)
+void dac4922::setOutputVoltage(uint8_t dacChannel, float outputVoltage)
 {
 	float dacValue = 0.0;
 	
@@ -102,18 +102,18 @@ void dac4922::SetOutputVoltage(uint8_t dacChannel, float outputVoltage)
 
 	// SerialPrintf("DAC value channel %d = %d\n", dacChannel, (uint16_t)(dacValue));
 
-	dac4922::Write(dacChannel, (uint16_t)dacValue);
+	write(dacChannel, (uint16_t)dacValue);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // void dac4922::SetOutputVoltageAll(float outputVoltage)
 
-void dac4922::SetOutputVoltageAll(float outputVoltage)
+void dac4922::setOutputVoltageAll(float outputVoltage)
 {
 	uint8_t channel = 0;
 
 	for (channel = 0; channel <= DAC_MAX_CHANNEL; channel++)
 	{
-		dac4922::SetOutputVoltage(channel, outputVoltage);
+		setOutputVoltage(channel, outputVoltage);
 	}
 }
