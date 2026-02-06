@@ -28,6 +28,7 @@ from system_tab import SystemTab
 from pwm_tab import PWMTab
 from pulse_tab import PulseTab
 from oled_tab import OLEDRPCTab
+from qc_tab import QCTab
 from gui_test.dac_tab import DACTab
 from gui_test.adc_tab import ADCTab
 from gui_test.dio_tab import DIOTab
@@ -112,6 +113,7 @@ class RPCTestGUI:
         self.dac_tab = DACTab(notebook, self)
         self.adc_tab = ADCTab(notebook, self)
         self.dio_tab = DIOTab(notebook, self)
+        self.qc_tab = QCTab(notebook, self)
         # ...existing code...
 
     def get_serial_ports(self):

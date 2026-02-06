@@ -8,7 +8,7 @@
 #include "oled_lib.h"
 #endif
 
-#if defined INCLUDE_DAC_4922_LIB || defined INCLUDE_ADC_3208_LIB
+#if defined INCLUDE_DAC_4922_LIB || defined INCLUDE_ADC_3208_LIB || defined INCLUDE_QC_7366_LIB
 #include "spi_lib.h"
 spi spi_bus;
 #endif
@@ -18,7 +18,7 @@ spi spi_bus;
 dac4922 dac;
 #endif
 
-#if INCLUDE_ADC_3208_LIB
+#if defined INCLUDE_ADC_3208_LIB
 #include "adc_3208_lib.h"
 adc8208 adc;
 #endif
@@ -26,6 +26,11 @@ adc8208 adc;
 #if defined INCLUDE_DIO_LIB
 #include "dio_lib.h"
 dio digital_io;
+#endif
+
+#if defined INCLUDE_QC_7366_LIB
+#include "qc_7366_lib.h"
+qc7366 qc;
 #endif
 
 RpcServer rpc_server;
@@ -75,6 +80,10 @@ void setup() {
   digital_io.Init();
 #endif
 
+#if defined INCLUDE_QC_7366_LIB
+  qc.init(&spi_bus);
+#endif
+
 #if RPC_SERIAL_LOGS
   Serial.println("\n\nESP32 RPC Server Starting...");
 #endif
@@ -109,7 +118,12 @@ void setup() {
 #if defined WIFI_CONFIGURE_SERVER
     NETWORK_CONFIG network_config;
 
+#if defined INCLUDE_DAC_4922_LIB
     bool force_network_configure = adc.IsButtonPressed(1);  // Check if button 1 is pressed to force network configuration mode
+#else
+    bool force_network_configure = false;  // No ADC button available, do not force
+#endif
+
     if (!configureNetwork(force_network_configure, &network_config)) {
     #if RPC_SERIAL_LOGS
       Serial.println("Failed to configure network");

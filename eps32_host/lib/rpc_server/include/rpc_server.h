@@ -81,6 +81,14 @@ private:
   int rpc_dioSetBit(JsonObject params);
   int rpc_dioClearBit(JsonObject params);
   int rpc_dioToggleBit(JsonObject params);
+
+#if defined INCLUDE_QC_7366_LIB
+  // QC7366 library functions
+  int rpc_qcEnableCounter(JsonObject params);
+  int rpc_qcDisableCounter(JsonObject params);
+  int rpc_qcClearCountRegister(JsonObject params);
+  int rpc_qcReadCountRegister(JsonObject params);
+#endif
   
 #if defined INCLUDE_OLED_DISPLAY
   // OLED library functions

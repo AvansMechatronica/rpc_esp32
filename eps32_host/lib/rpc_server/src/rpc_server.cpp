@@ -13,6 +13,10 @@ extern adc8208 adc;
 #include "dio_lib.h"
 extern dio digital_io;
 #endif
+#if defined INCLUDE_QC_7366_LIB
+#include "qc_7366_lib.h"
+extern qc7366 qc;
+#endif
 #include "rpc_server.h"
 
 RpcServer::RpcServer() {
@@ -209,6 +213,16 @@ int RpcServer::execute_command(const char* method, JsonObject params) {
     return rpc_dioClearBit(params);
   } else if (strcmp(method, "dioToggleBit") == 0) {
     return rpc_dioToggleBit(params);
+#endif
+#if defined INCLUDE_QC_7366_LIB
+  } else if (strcmp(method, "qcEnableCounter") == 0) {
+    return rpc_qcEnableCounter(params);
+  } else if (strcmp(method, "qcDisableCounter") == 0) {
+    return rpc_qcDisableCounter(params);
+  } else if (strcmp(method, "qcClearCountRegister") == 0) {
+    return rpc_qcClearCountRegister(params);
+  } else if (strcmp(method, "qcReadCountRegister") == 0) {
+    return rpc_qcReadCountRegister(params);
 #endif
 #if defined INCLUDE_OLED_DISPLAY
   } else if (strcmp(method, "oledClear") == 0) {
@@ -543,6 +557,69 @@ int RpcServer::rpc_getRemainingPulses(JsonObject params) {
   
   return RPC_OK;
 }
+
+#if defined INCLUDE_QC_7366_LIB
+int RpcServer::rpc_qcEnableCounter(JsonObject params) {
+  if (!params.containsKey("channel")) {
+    return RPC_ERROR_INVALID_PARAMS;
+  }
+
+  uint8_t channel = params["channel"];
+
+  if (channel > QC_MAX_CHANNEL) {
+    return RPC_ERROR_INVALID_PARAMS;
+  }
+
+  qc.enableCounter(channel);
+  return RPC_OK;
+}
+
+int RpcServer::rpc_qcDisableCounter(JsonObject params) {
+  if (!params.containsKey("channel")) {
+    return RPC_ERROR_INVALID_PARAMS;
+  }
+
+  uint8_t channel = params["channel"];
+
+  if (channel > QC_MAX_CHANNEL) {
+    return RPC_ERROR_INVALID_PARAMS;
+  }
+
+  qc.disableCounter(channel);
+  return RPC_OK;
+}
+
+int RpcServer::rpc_qcClearCountRegister(JsonObject params) {
+  if (!params.containsKey("channel")) {
+    return RPC_ERROR_INVALID_PARAMS;
+  }
+
+  uint8_t channel = params["channel"];
+
+  if (channel > QC_MAX_CHANNEL) {
+    return RPC_ERROR_INVALID_PARAMS;
+  }
+
+  qc.clearCountRegister(channel);
+  return RPC_OK;
+}
+
+int RpcServer::rpc_qcReadCountRegister(JsonObject params) {
+  if (!params.containsKey("channel")) {
+    return RPC_ERROR_INVALID_PARAMS;
+  }
+
+  uint8_t channel = params["channel"];
+
+  if (channel > QC_MAX_CHANNEL) {
+    return RPC_ERROR_INVALID_PARAMS;
+  }
+
+  int32_t count = qc.readCountRegister(channel);
+  response_data["count"] = count;
+  return RPC_OK;
+}
+#endif
 
 // OLED RPC functions (must be outside of any function body)
 #if defined INCLUDE_OLED_DISPLAY
