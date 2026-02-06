@@ -1,237 +1,101 @@
-# ESP32 RPC Host/Client Application
+# ESP32 RPC Python Client
 
-Een volledig uitbreidbaar Remote Procedure Call (RPC) systeem voor ESP32, waarmee alle Arduino-functies van je ESP32 via Python kunnen worden aangeroepen.
+EN: Python client and GUI for controlling an ESP32 over RPC (USB serial or WiFi). This README focuses on Python usage; the ESP32 firmware must already be flashed with the RPC server.
 
-## Architectuur
+NL: Python client en GUI om een ESP32 via RPC aan te sturen (USB serial of WiFi). Deze README focust op Python; de ESP32 firmware met RPC server moet al geflasht zijn.
 
-```
-esp32_host/          - ESP32 firmware (C++ met Arduino)
-├── src/main.cpp     - RPC server entry point
-├── include/         - Header files
-│   ├── rpc_server.h - RPC server implementatie
-│   └── config.h     - Configuratie constanten
-└── lib/             - Implementatie bestanden
+## Features / Functionaliteit
+- EN: Typed Python API with clear result codes; GUI test app; optional modules (ADC 3208, DAC 4922, DIO, QC7366, OLED, pulse library).
+- NL: Type-safe Python API met duidelijke result codes; GUI test app; optionele modules (ADC 3208, DAC 4922, DIO, QC7366, OLED, pulse library).
 
-python_client/       - Python client bibliotheek
-├── rpc_client.py    - RPC client klasse
-├── transport.py     - USB/WiFi transport layer
-├── config.py        - Configuratie en result codes
-├── gui_test.py      - GUI testprogramma
-└── requirements.txt - Python dependencies
-```
+## Requirements / Vereisten
+- EN: Python 3.9+; ESP32 running the RPC firmware; USB serial driver if needed.
+- NL: Python 3.9+; ESP32 met RPC firmware; USB serial driver indien nodig.
 
-## Features
-
-### ESP32 Firmware
-- **Dual-mode communicatie**: USB (serial) en WiFi TCP socket
-- **JSON-gebaseerd RPC protocol** voor duidelijke communicatie
-- **Result codes** voor elke operatie
-- **Uitbreidbaar systeem**: Makkelijk nieuwe functies toevoegen
-
-### Ondersteunde Arduino Functions
-- **GPIO**: `pinMode()`, `digitalWrite()`, `digitalRead()`
-- **Analog**: `analogWrite()`, `analogRead()`
-- **PWM**: `ledcSetup()`, `ledcWrite()`
-- **System**: `delay()`, `millis()`, free memory, chip ID
-- **Optionele libs**: ADC 3208 (raw/voltage/button), DIO, QC7366 counter, OLED, DAC
-
-### Python Client Library
-- **Transport abstraction**: Eenvoudig switch tussen USB en WiFi
-- **Type-safe API**: Alle functies retourneren (result_code, message, data)
-- **Async-ready**: Ontworpen voor toekomstige async extensies
-
-### GUI Test Program
-- **Volledig georganiseerde interface** met tabbladen per categorie
-- **Real-time output**: Zie alle RPC calls en responses
-- **Connection management**: Verbinding beheren vanuit GUI
-- **Raw command support**: Test custom RPC functies
-
-## Installatie
-
-### ESP32 Firmware
-1. PlatformIO gebruiken:
-```bash
-cd eps32_host
-pio run -e esp32doit-devkit-v1  # Build
-pio run -e esp32doit-devkit-v1 -t upload  # Upload
-pio run -e esp32doit-devkit-v1 -t monitor  # Monitor
-```
-
-### Python Client
-1. Installeer dependencies:
+## Install / Installatie
 ```bash
 cd python_client
 pip install -r requirements.txt
 ```
 
-2. Configureer verbinding in `config.py`:
+## Configure Connection / Verbinding Configureren
+Edit [python_client/library/config.py](python_client/library/config.py) and set your transport:
+
+USB example:
 ```python
 CONFIG = {
-    'comm_mode': COMM_USB,  # COMM_WIFI voor WiFi
-    'usb_port': '/dev/ttyUSB0',  # Pas aan voor je systeem
-    'usb_baudrate': 115200,
-    'wifi_host': '192.168.1.100',
-    'wifi_port': 5000,
+    "comm_mode": COMM_USB,
+    "usb_port": "COM3",  # Windows example
+    "usb_baudrate": 115200,
 }
 ```
 
-## Gebruik
-
-### Via GUI Test Program
-```bash
-python gui_test.py
+WiFi example:
+```python
+CONFIG = {
+    "comm_mode": COMM_WIFI,
+    "wifi_host": "192.168.1.100",
+    "wifi_port": 5000,
+}
 ```
 
-### Via Python Script
+## Quick Start / Snel Starten
 ```python
-from rpc_client import RPCClient
-from config import COMM_USB
+from python_client.library.rpc_client import RPCClient
+from python_client.library.config import COMM_USB, RPC_OK
 
-# Maak client aan
 client = RPCClient(comm_mode=COMM_USB)
-
-# Verbind
-success, message = client.connect()
-if success:
-    # Zet GPIO pin 13 naar OUTPUT
+ok, msg = client.connect()
+if ok:
     result, msg = client.pinMode(13, 1)
-    if result == 0:  # RPC_OK
-        print("Succes!")
-    
-    # Schrijf HIGH naar pin
     result, msg = client.digitalWrite(13, 1)
-    
-    # Lees analoge waarde
     result, msg, value = client.analogRead(36)
-    print(f"Analog value: {value}")
-    
+    if result == RPC_OK:
+        print("ADC:", value)
     client.disconnect()
 ```
 
-## RPC Protocol
-
-### Request Format
-```json
-{
-  "method": "digitalWrite",
-  "params": {
-    "pin": 13,
-    "value": 1
-  }
-}
+## GUI Test App / GUI Test App
+```bash
+python python_client/gui_test/gui_test.py
 ```
 
-### Response Format
-```json
-{
-  "result": 0,
-  "message": "OK",
-  "data": {
-    "value": 123
-  }
-}
+## API Quick Reference / API Sneloverzicht
+- GPIO: `pinMode`, `digitalWrite`, `digitalRead`
+- Analog: `analogWrite`, `analogRead`
+- PWM: `ledcSetup`, `ledcWrite`
+- System: `delay`, `getMillis`, `getFreeMem`, `getChipID`
+- Pulse: `pulseBegin`, `pulse`, `pulseAsync`, `isPulsing`, `generatePulses`, `generatePulsesAsync`, `getRemainingPulses`, `stopPulse`
+- ADC 3208: `adcReadRaw`, `adcReadVoltage`, `isButtonPressed`
+- DAC 4922: `dacSetVoltage`, `dacSetVoltageAll`
+- DIO: `dioGetInput`, `dioIsBitSet`, `dioSetOutput`, `dioSetBit`, `dioClearBit`, `dioToggleBit`
+- QC7366: `qcEnableCounter`, `qcDisableCounter`, `qcClearCountRegister`, `qcReadCountRegister`
+- OLED: `oledClear`, `oledWriteLine`
+
+EN: Optional APIs require matching firmware features enabled.
+NL: Optionele APIs vereisen bijpassende firmware features.
+
+## Project Structure / Projectstructuur
+```
+rpc_esp32/
+├── eps32_host/                  # ESP32 firmware (RPC server)
+├── python_client/               # Python client + GUI
+│   ├── library/                 # Core client library
+│   ├── gui_test/                # GUI tabs
+│   ├── examples/                # Example scripts
+│   └── documentation/           # Debug docs
+├── QUICKSTART.md                # Extended quick start
+└── README.md                    # This file
 ```
 
-### Result Codes
-- `0`: RPC_OK - Succes
-- `1`: RPC_ERROR_INVALID_COMMAND - Onbekende command
-- `2`: RPC_ERROR_INVALID_PARAMS - Ontbrekende/ongeldige parameters
-- `3`: RPC_ERROR_TIMEOUT - Geen respons
-- `4`: RPC_ERROR_EXECUTION - Uitvoeringsfout
-- `5`: RPC_ERROR_NOT_SUPPORTED - Niet ondersteund
+## Troubleshooting / Problemen
+- EN: "Not connected" -> verify `client.connect()` and port settings in [python_client/library/config.py](python_client/library/config.py).
+- EN: "No response" -> check firmware is running and USB baud rate.
+- NL: "Not connected" -> controleer `client.connect()` en poort in [python_client/library/config.py](python_client/library/config.py).
+- NL: "No response" -> controleer firmware en USB baudrate.
 
-## Nieuwe RPC Functies Toevoegen
+## More Docs / Meer docs
+- [QUICKSTART.md](QUICKSTART.md)
 
-### 1. In ESP32 Firmware (rpc_server.h)
-```cpp
-// Voeg method declaration toe
-int rpc_myFunction(JsonObject params);
-```
-
-### 2. In rpc_server.cpp
-```cpp
-// Implementatie
-int RpcServer::rpc_myFunction(JsonObject params) {
-  if (!params.containsKey("myParam")) {
-    return RPC_ERROR_INVALID_PARAMS;
-  }
-  
-  int value = params["myParam"];
-  // ... doe iets ...
-  
-  return RPC_OK;
-}
-
-// Voeg toe aan execute_command
-} else if (strcmp(method, "myFunction") == 0) {
-  return rpc_myFunction(params);
-}
-```
-
-### 3. In Python Client (rpc_client.py)
-```python
-def myFunction(self, myParam: int) -> Tuple[int, str]:
-    """My function description"""
-    result, msg, _ = self._send_command("myFunction", {"myParam": myParam})
-    return result, msg
-```
-
-## USB/WiFi Configuratie
-
-### USB Mode (Default)
-- Geen extra configuratie nodig
-- Baud rate: 115200
-- Cross-platform: Linux, macOS, Windows
-
-### WiFi Mode
-1. Wijzig in `config.h` (ESP32):
-```cpp
-#define CONFIG_COMM_MODE COMM_WIFI
-#define CONFIG_WIFI_SSID "YOUR_SSID"
-#define CONFIG_WIFI_PASSWORD "YOUR_PASSWORD"
-```
-
-2. Upload firmware
-
-3. Wijzig in Python `config.py`:
-```python
-CONFIG = {
-    'comm_mode': COMM_WIFI,
-    'wifi_host': 'ESP32_IP',
-    'wifi_port': 5000,
-}
-```
-
-
-## [2026-01-24] Nieuw: USB verbonden, maar pinMode(2, 1) geeft geen response
-
-- Symptoom: USB verbinding is OK, maar pinMode(2, 1) geeft "Code: 3, No response from device".
-- Zie ESP32_BUG_FIX.md voor uitgebreide stappen en firmware/client checks.
-
-## Troubleshooting
-
-### USB Verbinding Mislukt
-- Controleer USB-poort: `ls /dev/tty*` (Linux/Mac)
-- Installeer CH340 driver voor sommige boards
-- Test met: `pio run -e esp32doit-devkit-v1 -t monitor`
-
-### WiFi Verbinding Mislukt
-- Controleer SSID en wachtwoord in `config.h`
-- Zet debug aan: `CONFIG['debug'] = True`
-- Controleer IP-adres in serial monitor
-
-### "Not connected" Error
-- Zorg dat `client.connect()` met True terugkeert
-- Check debug output voor foutmeldingen
-
-## Voorbeelden
-
-Zie `python_client/gui_test.py` voor volledige voorbeelden van:
-- GPIO operations
-- System monitoring
-- PWM control
-- Raw RPC calls
-
-## Licentie
-
+## License / Licentie
 MIT

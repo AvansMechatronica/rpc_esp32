@@ -5,20 +5,29 @@
 ```
 rpc_esp32/
 ├── eps32_host/                  # ESP32 Firmware
+│   ├── platformio.ini          # Build configuration
 │   ├── src/main.cpp            # Server entry point
-│   ├── include/
-│   │   ├── rpc_server.h        # RPC server header
-│   │   └── config.h            # Configuration
-│   ├── lib/rpc_server.cpp      # Server implementation
-│   └── platformio.ini          # Build configuration
+│   ├── include/                # Headers
+│   └── lib/                    # Libraries
+│       ├── rpc_server/         # RPC server implementation
+│       ├── adc_lib/            # ADC 3208 support
+│       ├── dac_lib/            # DAC 4922 support
+│       ├── dio_lib/            # DIO expander support
+│       ├── oled_lib/           # OLED support
+│       ├── pulse_lib/          # Pulse library
+│       ├── qc_lib/             # QC7366 counter support
+│       ├── spi_lib/            # SPI utilities
+│       └── WifiConfigureSupport/ # WiFi config helpers
 │
 ├── python_client/              # Python Client
-│   ├── rpc_client.py           # Main RPC client class
-│   ├── transport.py            # USB/WiFi transport layer
-│   ├── config.py               # Configuration & result codes
-│   ├── gui_test.py             # GUI test application
-│   ├── example_usage.py        # Basic example script
-│   ├── advanced_example.py     # Advanced sensor monitoring
+│   ├── library/                # Core client library
+│   │   ├── rpc_client.py       # Main RPC client class
+│   │   ├── transport.py        # USB/WiFi transport layer
+│   │   └── config.py           # Configuration & result codes
+│   ├── gui_test/               # GUI test application
+│   ├── examples/               # Example scripts
+│   ├── documentation/          # Debug docs
+│   ├── portaal_robot/          # Portal GUI app
 │   ├── __init__.py             # Package init
 │   └── requirements.txt        # Python dependencies
 │
