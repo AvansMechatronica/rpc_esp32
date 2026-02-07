@@ -146,59 +146,33 @@
 
 ## File Descriptions
 
-### ESP32 Firmware
+For the complete file index, see [FILE_REFERENCE.md](FILE_REFERENCE.md).
 
-**`main.cpp`**
-- Entry point: `setup()` and `loop()` functions
-- Initializes RPC server
-- Handles WiFi connection if enabled
-- Implements serial communication loop
+Key entry points:
 
-**`rpc_server.h`**
-- Abstract RPC server class definition
-- Method declarations for all supported RPC functions
-- Private helper methods for request parsing and response building
+- [eps32_host/src/main.cpp](eps32_host/src/main.cpp) - Firmware entry point and main loop.
+- [eps32_host/lib/rpc_server/src/rpc_server.cpp](eps32_host/lib/rpc_server/src/rpc_server.cpp) - RPC request dispatch and handlers.
+- [python_client/library/rpc_client.py](python_client/library/rpc_client.py) - Python RPC client interface.
+- [python_client/library/transport.py](python_client/library/transport.py) - USB/WiFi transport implementations.
 
-**`rpc_server.cpp`**
-- Complete implementation of all RPC handlers
-- `execute_command()`: Dispatcher that routes to handler methods
-- GPIO handlers: `rpc_pinMode()`, `rpc_digitalWrite()`, etc.
-- System handlers: `rpc_delay()`, `rpc_getMillis()`, etc.
-- PWM handlers: `rpc_ledcSetup()`, `rpc_ledcWrite()`
-
-**`config.h`**
-- Communication mode selection (USB or WiFi)
-- Baud rate and port configurations
-- WiFi SSID and password
-- Result code definitions
-
-### Python Client
-
-**`rpc_client.py`**
-- Main `RPCClient` class
-- Public methods for each RPC function
-- `_send_command()`: Low-level RPC call implementation
-- Return format: `(result_code, message, data_dict)`
-
-**`transport.py`**
-- Abstract `Transport` base class
-- `SerialTransport`: USB/serial implementation using PySerial
-- `WiFiTransport`: TCP socket implementation
-- `TransportFactory`: Creates appropriate transport instance
-
-**`config.py`**
-- Mode constants: `COMM_USB`, `COMM_WIFI`
-- Result code constants: `RPC_OK`, `RPC_ERROR_*`
-- Global `CONFIG` dictionary
-- Result message mapping
-
-**`gui_test.py`**
-- Tkinter-based GUI application
-- Organized tabs for different function categories
-- Real-time output display
-- Connection management UI
+Boot-time mode selection and WiFi configure mode are documented in [QUICKSTART.md](QUICKSTART.md).
 
 ## RPC Method Reference
+
+## API Quick Reference
+
+- GPIO: `pinMode`, `digitalWrite`, `digitalRead`
+- Analog: `analogWrite`, `analogRead`
+- PWM: `ledcSetup`, `ledcWrite`
+- System: `delay`, `getMillis`, `getFreeMem`, `getChipID`
+- Pulse: `pulseBegin`, `pulse`, `pulseAsync`, `isPulsing`, `generatePulses`, `generatePulsesAsync`, `getRemainingPulses`, `stopPulse`
+- ADC 3208: `adcReadRaw`, `adcReadVoltage`, `isButtonPressed`
+- DAC 4922: `dacSetVoltage`, `dacSetVoltageAll`
+- DIO: `dioGetInput`, `dioIsBitSet`, `dioSetOutput`, `dioSetBit`, `dioClearBit`, `dioToggleBit`
+- QC7366: `qcEnableCounter`, `qcDisableCounter`, `qcClearCountRegister`, `qcReadCountRegister`
+- OLED: `oledClear`, `oledWriteLine`
+
+Optional APIs require matching firmware features enabled.
 
 ### GPIO Methods
 
@@ -352,54 +326,6 @@ assert result == RPC_OK
 print(f"Result: {msg}")
 ```
 
-## Debugging
-
-### Enable Debug Output
-
-**Python Client:**
-```python
-from config import CONFIG
-CONFIG['debug'] = True  # See all send/receive
-
-client = RPCClient()
-client.connect()
-# All messages will be printed
-```
-
-**ESP32 Firmware:**
-- Monitor serial output: `pio run -e esp32doit-devkit-v1 -t monitor`
-- Check device connection with `Serial.println()` calls
-
-
-### [2026-01-24] Nieuw: USB verbonden, maar pinMode(2, 1) geeft geen response
-
-- Symptoom: USB verbinding is OK, maar pinMode(2, 1) geeft "Code: 3, No response from device".
-- Zie ESP32_BUG_FIX.md voor uitgebreide stappen en firmware/client checks.
-
-### Common Issues
-
-1. **USB Port Permission Denied**
-   ```bash
-   sudo usermod -a -G dialout $USER
-   # Restart shell
-   ```
-
-2. **Module Not Found Errors**
-   ```bash
-   pip install -r requirements.txt
-   # Or individual: pip install pyserial
-   ```
-
-3. **Connection Timeout**
-   - Check baud rate matches (115200)
-   - Try different USB cable
-   - Check device is powered
-
-4. **Invalid JSON Responses**
-   - Serial garbage: check baud rate
-   - Partial messages: check buffer size
-   - Enable debug mode to inspect
-
 ## Performance Tuning
 
 ### Reduce Latency
@@ -416,6 +342,8 @@ client.connect()
 - Always check return codes
 - Implement timeout handling
 - Test on target hardware
+
+For setup, troubleshooting, and debug steps, see [QUICKSTART.md](QUICKSTART.md).
 
 ---
 

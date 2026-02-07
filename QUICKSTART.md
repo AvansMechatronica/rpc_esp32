@@ -2,38 +2,7 @@
 
 ## Projectstructuur
 
-```
-rpc_esp32/
-├── eps32_host/                  # ESP32 Firmware
-│   ├── platformio.ini          # Build configuration
-│   ├── src/main.cpp            # Server entry point
-│   ├── include/                # Headers
-│   └── lib/                    # Libraries
-│       ├── rpc_server/         # RPC server implementation
-│       ├── adc_lib/            # ADC 3208 support
-│       ├── dac_lib/            # DAC 4922 support
-│       ├── dio_lib/            # DIO expander support
-│       ├── oled_lib/           # OLED support
-│       ├── pulse_lib/          # Pulse library
-│       ├── qc_lib/             # QC7366 counter support
-│       ├── spi_lib/            # SPI utilities
-│       └── WifiConfigureSupport/ # WiFi config helpers
-│
-├── python_client/              # Python Client
-│   ├── library/                # Core client library
-│   │   ├── rpc_client.py       # Main RPC client class
-│   │   ├── transport.py        # USB/WiFi transport layer
-│   │   └── config.py           # Configuration & result codes
-│   ├── gui_test/               # GUI test application
-│   ├── examples/               # Example scripts
-│   ├── documentation/          # Debug docs
-│   ├── portaal_robot/          # Portal GUI app
-│   ├── __init__.py             # Package init
-│   └── requirements.txt        # Python dependencies
-│
-├── README.md                   # Full documentation
-└── QUICKSTART.md              # This file
-```
+Zie [FILE_REFERENCE.md](FILE_REFERENCE.md) voor de volledige bestandsstructuur.
 
 ## Installation (3 Schritte)
 
@@ -60,12 +29,25 @@ CONFIG = {
 }
 ```
 
+### USB/WiFi mode kiezen tijdens boot
+
+Je kunt de communicatie-mode ook kiezen tijdens het opstarten van de ESP32:
+
+- Houd knop 0 ingedrukt tijdens boot om de mode te selecteren.
+- Laat los na boot om de geselecteerde mode te gebruiken.
+
+### WiFi configure mode tijdens boot
+
+Als de ESP32 in WiFi mode staat:
+
+- Houd knop 1 ingedrukt tijdens boot om WiFi configure mode te openen.
+
 ## Snel Testen
 
 ### GUI Test (Aanbevolen)
 ```bash
 cd python_client
-python gui_test.py
+python nodeMCU_gui.py
 ```
 - Klik "Connect"
 - Test GPIO, System, PWM functies
@@ -159,41 +141,6 @@ result, msg = client.qcDisableCounter(0)
 result, msg = client.oledClear()
 result, msg = client.oledWriteLine(0, "Hello", 0)
 ```
-
-## Nieuwe Functies Toevoegen
-
-### 3 Stappen om een nieuwe RPC function toe te voegen:
-
-**1. Header (include/rpc_server.h)**
-```cpp
-int rpc_myNewFunction(JsonObject params);
-```
-
-**2. Implementatie (lib/rpc_server.cpp)**
-```cpp
-int RpcServer::rpc_myNewFunction(JsonObject params) {
-  if (!params.containsKey("value")) {
-    return RPC_ERROR_INVALID_PARAMS;
-  }
-  int val = params["value"];
-  // ... do something ...
-  return RPC_OK;
-}
-
-// In execute_command():
-} else if (strcmp(method, "myNewFunction") == 0) {
-  return rpc_myNewFunction(params);
-```
-
-**3. Python Client (rpc_client.py)**
-```python
-def myNewFunction(self, value: int) -> Tuple[int, str]:
-    """My function description"""
-    result, msg, _ = self._send_command("myNewFunction", {"value": value})
-    return result, msg
-```
-
-
 ## [2026-01-24] Nieuw: USB verbonden, maar pinMode(2, 1) geeft geen response
 
 - Symptoom: USB verbinding is OK, maar pinMode(2, 1) geeft "Code: 3, No response from device".
@@ -208,42 +155,9 @@ def myNewFunction(self, value: int) -> Tuple[int, str]:
 | WiFi verbinding faalt | Controleer SSID in `config.h` |
 | Permission denied | `sudo usermod -a -G dialout $USER` |
 
-## Communicatie Protocol
+## Meer details
 
-**Request (USB/WiFi):**
-```json
-{"method":"digitalWrite","params":{"pin":13,"value":1}}
-```
-
-**Response:**
-```json
-{"result":0,"message":"OK","data":{}}
-```
-
-**Result Codes:**
-- 0: RPC_OK
-- 1: RPC_ERROR_INVALID_COMMAND
-- 2: RPC_ERROR_INVALID_PARAMS
-- 3: RPC_ERROR_TIMEOUT
-- 4: RPC_ERROR_EXECUTION
-- 5: RPC_ERROR_NOT_SUPPORTED
-
-## Sterke Punten van dit Systeem
-
-✅ **Uitbreidbaar**: Makkelijk nieuwe functies toevoegen  
-✅ **Dual-mode**: USB en WiFi ondersteuning  
-✅ **Result codes**: Alle operations geven feedback  
-✅ **Type-safe**: Python type hints  
-✅ **GUI + CLI**: Test tools inbegrepen  
-✅ **Well-documented**: Voorbeelden en docs  
-✅ **JSON protocol**: Duidelijk en debug-friendly  
-
-## Volgende Stappen
-
-1. **Test alle GPIO pins** met de GUI test app
-2. **Voeg I2C/SPI** handlers toe naar behoefte
-3. **Maak custom sensoren** via RPC functies
-4. **Deploy WiFi** als hoofdcommunicatie kanaal
+- Protocol, result codes en uitbreiden: [TECHNICAL_REFERENCE.md](TECHNICAL_REFERENCE.md)
 
 ---
 Veel plezier met je ESP32 RPC systeem! 🚀

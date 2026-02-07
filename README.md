@@ -39,63 +39,31 @@ CONFIG = {
 }
 ```
 
-## Quick Start / Snel Starten
-```python
-from python_client.library.rpc_client import RPCClient
-from python_client.library.config import COMM_USB, RPC_OK
+For boot-time mode selection and WiFi configure mode, see [QUICKSTART.md](QUICKSTART.md).
 
-client = RPCClient(comm_mode=COMM_USB)
-ok, msg = client.connect()
-if ok:
-    result, msg = client.pinMode(13, 1)
-    result, msg = client.digitalWrite(13, 1)
-    result, msg, value = client.analogRead(36)
-    if result == RPC_OK:
-        print("ADC:", value)
-    client.disconnect()
-```
+## Quick Start / Snel Starten
+
+See [QUICKSTART.md](QUICKSTART.md) for step-by-step setup and example usage.
 
 ## GUI Test App / GUI Test App
 ```bash
-python python_client/gui_test/gui_test.py
+python python_client/nodeMCU_gui/nodeMCU_gui.py
 ```
 
 ## API Quick Reference / API Sneloverzicht
-- GPIO: `pinMode`, `digitalWrite`, `digitalRead`
-- Analog: `analogWrite`, `analogRead`
-- PWM: `ledcSetup`, `ledcWrite`
-- System: `delay`, `getMillis`, `getFreeMem`, `getChipID`
-- Pulse: `pulseBegin`, `pulse`, `pulseAsync`, `isPulsing`, `generatePulses`, `generatePulsesAsync`, `getRemainingPulses`, `stopPulse`
-- ADC 3208: `adcReadRaw`, `adcReadVoltage`, `isButtonPressed`
-- DAC 4922: `dacSetVoltage`, `dacSetVoltageAll`
-- DIO: `dioGetInput`, `dioIsBitSet`, `dioSetOutput`, `dioSetBit`, `dioClearBit`, `dioToggleBit`
-- QC7366: `qcEnableCounter`, `qcDisableCounter`, `qcClearCountRegister`, `qcReadCountRegister`
-- OLED: `oledClear`, `oledWriteLine`
 
-EN: Optional APIs require matching firmware features enabled.
-NL: Optionele APIs vereisen bijpassende firmware features.
+See [TECHNICAL_REFERENCE.md](TECHNICAL_REFERENCE.md) for the API quick reference.
 
 ## Project Structure / Projectstructuur
-```
-rpc_esp32/
-├── eps32_host/                  # ESP32 firmware (RPC server)
-├── python_client/               # Python client + GUI
-│   ├── library/                 # Core client library
-│   ├── gui_test/                # GUI tabs
-│   ├── examples/                # Example scripts
-│   └── documentation/           # Debug docs
-├── QUICKSTART.md                # Extended quick start
-└── README.md                    # This file
-```
+
+See [FILE_REFERENCE.md](FILE_REFERENCE.md) for the full file and folder index.
 
 ## Troubleshooting / Problemen
-- EN: "Not connected" -> verify `client.connect()` and port settings in [python_client/library/config.py](python_client/library/config.py).
-- EN: "No response" -> check firmware is running and USB baud rate.
-- NL: "Not connected" -> controleer `client.connect()` en poort in [python_client/library/config.py](python_client/library/config.py).
-- NL: "No response" -> controleer firmware en USB baudrate.
+
+See [QUICKSTART.md](QUICKSTART.md) for troubleshooting and common fixes.
 
 ## More Docs / Meer docs
 - [QUICKSTART.md](QUICKSTART.md)
 
 ## License / Licentie
-MIT
+[License CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)

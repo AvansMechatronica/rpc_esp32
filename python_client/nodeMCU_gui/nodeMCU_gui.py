@@ -1,6 +1,6 @@
 
 """
-ESP32 RPC GUI Test Application
+ESP32 NodeMCU GUI Application
 Provides interactive GUI for testing RPC functions
 """
 
@@ -29,9 +29,9 @@ from pwm_tab import PWMTab
 from pulse_tab import PulseTab
 from oled_tab import OLEDRPCTab
 from qc_tab import QCTab
-from gui_test.dac_tab import DACTab
-from gui_test.adc_tab import ADCTab
-from gui_test.dio_tab import DIOTab
+from nodeMCU_gui.dac_tab import DACTab
+from nodeMCU_gui.adc_tab import ADCTab
+from nodeMCU_gui.dio_tab import DIOTab
 
 
 class RPCTestGUI:
@@ -39,8 +39,8 @@ class RPCTestGUI:
     
     def __init__(self, root):
         self.root = root
-        self.root.title("ESP32 RPC Test Client")
-        self.root.geometry("1000x700")
+        self.root.title("ESP32 NodeMCU Client")
+        self.root.geometry("600x700")
         
         self.client = None
         self.comm_mode = COMM_USB
