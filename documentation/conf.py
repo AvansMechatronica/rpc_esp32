@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'Avans: NodeMCU RPC System'
-copyright = 'Avans ATIx: Gerard Harkema/Raoul Smeets'
+copyright = 'Avans ATIx: Gerard Harkema and Raoul Smeets'
 author = 'Gerard Harkema'
 release = '1.0'
 
