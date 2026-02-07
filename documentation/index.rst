@@ -24,7 +24,7 @@ In deze handleiding wordt exact beschreven hoe benodigde software en gereedschap
    documentation/QUICKSTART.md
    documentation/TECHNICAL_REFERENCE.md
    documentation/FILE_REFERENCE.md
-   documentation/IMPLEMENTATION_GUIDE.md
+   documentation/IMPLEMENTATION_SUMMARY.md
 
 Deze handleiding is ontwikkeld door:
 
