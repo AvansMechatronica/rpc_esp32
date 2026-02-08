@@ -1,0 +1,227 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="nl" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Implementation Summary - rpc_esp32 &mdash; Avans: ESP32 NodeMCU RPC Library 1.0 documentatie</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=70dd46bb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/translations.js?v=e4d38c6a"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Zoeken" href="../search.html" />
+    <link rel="next" title="File Reference - rpc_esp32" href="FILE_REFERENCE.html" />
+    <link rel="prev" title="ESP32 RPC Python Client" href="README.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Avans: ESP32 NodeMCU RPC Library
+              <img src="../_static/avans-hogeschool-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Zoek in documentatie" aria-label="Zoek in documentatie" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigatiemenu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="samenvatting.html">Samenvatting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Voorbereiding.html">Voorbereidingen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="QUICKSTART.html">Quick Start Guide - ESP32 RPC System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="README.html">ESP32 RPC Python Client</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Implementation Summary - rpc_esp32</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-this-project-delivers">What this project delivers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#high-level-architecture">High-level architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#project-structure-current">Project structure (current)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#firmware-components">Firmware components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-components">Python components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rpc-method-coverage-overview">RPC method coverage (overview)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#communication-protocol">Communication protocol</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-extend">How to extend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#where-to-look-next">Where to look next</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="FILE_REFERENCE.html">File Reference - rpc_esp32</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TECHNICAL_REFERENCE.html">Technical Reference - ESP32 RPC System</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Navigatiemenu voor mobiel" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Avans: ESP32 NodeMCU RPC Library</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Paginanavigatie">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Implementation Summary - rpc_esp32</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/documentation/IMPLEMENTATION_SUMMARY.md.txt" rel="nofollow"> Bekijk paginabron</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="implementation-summary-rpc-esp32">
+<h1>Implementation Summary - rpc_esp32<a class="headerlink" href="#implementation-summary-rpc-esp32" title="Link to this heading"></a></h1>
+<p>Status: complete and in active use.</p>
+<section id="what-this-project-delivers">
+<h2>What this project delivers<a class="headerlink" href="#what-this-project-delivers" title="Link to this heading"></a></h2>
+<p>An ESP32 RPC system that exposes firmware functions over USB serial or WiFi, plus a Python client library, GUI tools, and example scripts for testing and integration.</p>
+</section>
+<section id="high-level-architecture">
+<h2>High-level architecture<a class="headerlink" href="#high-level-architecture" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>ESP32 firmware runs an RPC server that parses JSON requests and returns JSON responses.</p></li>
+<li><p>Python client provides typed methods for RPC calls and handles transport over USB or WiFi.</p></li>
+<li><p>Optional hardware libraries (ADC, DAC, DIO, OLED, pulse, QC) are included in the firmware tree.</p></li>
+<li><p>GUI tools provide interactive testing and diagnostics.</p></li>
+</ul>
+</section>
+<section id="project-structure-current">
+<h2>Project structure (current)<a class="headerlink" href="#project-structure-current" title="Link to this heading"></a></h2>
+<p>See &lt;project_dir&gt;/FILE_REFERENCE.md for the full file and folder index.</p>
+</section>
+<section id="firmware-components">
+<h2>Firmware components<a class="headerlink" href="#firmware-components" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>RPC server library: &lt;project_dir&gt;/eps32_host/lib/rpc_server</p>
+<ul>
+<li><p>Server interface and implementation in &lt;project_dir&gt;/eps32_host/lib/rpc_server/include/rpc_server.h and &lt;project_dir&gt;/eps32_host/lib/rpc_server/src/rpc_server.cpp.</p></li>
+<li><p>Configuration in &lt;project_dir&gt;/eps32_host/lib/rpc_server/include/rpc_config.h.</p></li>
+</ul>
+</li>
+<li><p>Shared helpers: &lt;project_dir&gt;/eps32_host/lib/config.h, &lt;project_dir&gt;/eps32_host/lib/bits.h.</p></li>
+<li><p>Optional device libraries:</p>
+<ul>
+<li><p>ADC 3208: &lt;project_dir&gt;/eps32_host/lib/adc_lib</p></li>
+<li><p>DAC 4922: &lt;project_dir&gt;/eps32_host/lib/dac_lib</p></li>
+<li><p>Digital IO expander: &lt;project_dir&gt;/eps32_host/lib/dio_lib</p></li>
+<li><p>OLED: &lt;project_dir&gt;/eps32_host/lib/oled_lib</p></li>
+<li><p>Pulse tools: &lt;project_dir&gt;/eps32_host/lib/pulse_lib</p></li>
+<li><p>QC7366 counter: &lt;project_dir&gt;/eps32_host/lib/qc_lib</p></li>
+<li><p>SPI utilities: &lt;project_dir&gt;/eps32_host/lib/spi_lib</p></li>
+<li><p>USB/WiFi switch: &lt;project_dir&gt;/eps32_host/lib/usb_wifi_switch</p></li>
+<li><p>WiFi config helpers: &lt;project_dir&gt;/eps32_host/lib/WifiConfigureSupport</p></li>
+</ul>
+</li>
+<li><p>Web UI assets (for WiFi config): &lt;project_dir&gt;/eps32_host/data</p></li>
+</ul>
+</section>
+<section id="python-components">
+<h2>Python components<a class="headerlink" href="#python-components" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Core client library (transport + RPC calls): &lt;project_dir&gt;/python_client/library</p>
+<ul>
+<li><p>RPC client: &lt;project_dir&gt;/python_client/library/rpc_client.py</p></li>
+<li><p>Transport layer: &lt;project_dir&gt;/python_client/library/transport.py</p></li>
+<li><p>Configuration and constants: &lt;project_dir&gt;/python_client/library/config.py</p></li>
+<li><p>Debug helpers: &lt;project_dir&gt;/python_client/library/debug_utility.py</p></li>
+</ul>
+</li>
+<li><p>GUI test application: &lt;project_dir&gt;/python_client/nodeMCU_gui/nodeMCU_gui.py</p></li>
+<li><p>Example scripts: &lt;project_dir&gt;/python_client/examples</p></li>
+<li><p>Debug docs: &lt;project_dir&gt;/python_client/documentation</p></li>
+<li><p>Portal GUI: &lt;project_dir&gt;/python_client/portaal_robot</p></li>
+</ul>
+</section>
+<section id="rpc-method-coverage-overview">
+<h2>RPC method coverage (overview)<a class="headerlink" href="#rpc-method-coverage-overview" title="Link to this heading"></a></h2>
+<p>The Python client exposes methods that map to firmware handlers for:</p>
+<ul class="simple">
+<li><p>GPIO: <code class="docutils literal notranslate"><span class="pre">pinMode</span></code>, <code class="docutils literal notranslate"><span class="pre">digitalWrite</span></code>, <code class="docutils literal notranslate"><span class="pre">digitalRead</span></code>, <code class="docutils literal notranslate"><span class="pre">analogWrite</span></code>, <code class="docutils literal notranslate"><span class="pre">analogRead</span></code></p></li>
+<li><p>System: <code class="docutils literal notranslate"><span class="pre">delay</span></code>, <code class="docutils literal notranslate"><span class="pre">getMillis</span></code>, <code class="docutils literal notranslate"><span class="pre">getFreeMem</span></code>, <code class="docutils literal notranslate"><span class="pre">getChipID</span></code></p></li>
+<li><p>PWM: <code class="docutils literal notranslate"><span class="pre">ledcSetup</span></code>, <code class="docutils literal notranslate"><span class="pre">ledcWrite</span></code></p></li>
+<li><p>Optional modules: ADC 3208, DAC 4922, DIO, QC7366, OLED, pulse control</p></li>
+<li><p>Generic: <code class="docutils literal notranslate"><span class="pre">call_raw</span></code> for custom RPCs</p></li>
+</ul>
+</section>
+<section id="communication-protocol">
+<h2>Communication protocol<a class="headerlink" href="#communication-protocol" title="Link to this heading"></a></h2>
+<p>Protocol details and examples are documented in &lt;project_dir&gt;/TECHNICAL_REFERENCE.md.</p>
+</section>
+<section id="how-to-extend">
+<h2>How to extend<a class="headerlink" href="#how-to-extend" title="Link to this heading"></a></h2>
+<p>Add a new RPC method by editing:</p>
+<ol class="arabic simple">
+<li><p>Firmware interface and implementation in the RPC server library.</p></li>
+<li><p>Dispatcher registration in the RPC server implementation.</p></li>
+<li><p>A Python wrapper in &lt;project_dir&gt;/python_client/library/rpc_client.py.</p></li>
+</ol>
+</section>
+<section id="where-to-look-next">
+<h2>Where to look next<a class="headerlink" href="#where-to-look-next" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Entry points: &lt;project_dir&gt;/eps32_host/src/main.cpp and &lt;project_dir&gt;/python_client/library/rpc_client.py</p></li>
+<li><p>Protocol details: &lt;project_dir&gt;/TECHNICAL_REFERENCE.md</p></li>
+<li><p>Quick start: &lt;project_dir&gt;/QUICKSTART.md</p></li>
+<li><p>File index: &lt;project_dir&gt;/FILE_REFERENCE.md</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Voettekst">
+        <a href="README.html" class="btn btn-neutral float-left" title="ESP32 RPC Python Client" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Vorige</a>
+        <a href="FILE_REFERENCE.html" class="btn btn-neutral float-right" title="File Reference - rpc_esp32" accesskey="n" rel="next">Volgende <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Avans ATIx: Gerard Harkema &amp; Raoul Smeets.</p>
+  </div>
+
+  Gebouwd met <a href="https://www.sphinx-doc.org/">Sphinx</a> met een
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thema</a>
+    geleverd door <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

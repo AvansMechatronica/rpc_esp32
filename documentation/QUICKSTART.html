@@ -1,0 +1,335 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="nl" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick Start Guide - ESP32 RPC System &mdash; Avans: ESP32 NodeMCU RPC Library 1.0 documentatie</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=70dd46bb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/translations.js?v=e4d38c6a"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Zoeken" href="../search.html" />
+    <link rel="next" title="ESP32 RPC Python Client" href="README.html" />
+    <link rel="prev" title="Voorbereidingen" href="Voorbereiding.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Avans: ESP32 NodeMCU RPC Library
+              <img src="../_static/avans-hogeschool-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Zoek in documentatie" aria-label="Zoek in documentatie" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigatiemenu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="samenvatting.html">Samenvatting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Voorbereiding.html">Voorbereidingen</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick Start Guide - ESP32 RPC System</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#projectstructuur">Projectstructuur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-3-schritte">Installation (3 Schritte)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#esp32-firmware-uploaden">1. ESP32 Firmware Uploaden</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#python-dependencies">2. Python Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#verbinding-configureren">3. Verbinding Configureren</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#usb-wifi-mode-kiezen-tijdens-boot">USB/WiFi mode kiezen tijdens boot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#wifi-configure-mode-tijdens-boot">WiFi configure mode tijdens boot</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#snel-testen">Snel Testen</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gui-test-aanbevolen">GUI Test (Aanbevolen)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#via-python-script">Via Python Script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#advanced-monitoring">Advanced Monitoring</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#basis-voorbeelden">Basis Voorbeelden</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#eenvoudige-gpio">Eenvoudige GPIO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#analog-lezen">Analog Lezen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#systeem-info">Systeem Info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pwm-led-dimmen">PWM/LED Dimmen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#optionele-libraries-adc-3208-dio-qc-oled">Optionele Libraries (ADC 3208, DIO, QC, OLED)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#meer-details">Meer details</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="README.html">ESP32 RPC Python Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="IMPLEMENTATION_SUMMARY.html">Implementation Summary - rpc_esp32</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FILE_REFERENCE.html">File Reference - rpc_esp32</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TECHNICAL_REFERENCE.html">Technical Reference - ESP32 RPC System</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Navigatiemenu voor mobiel" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Avans: ESP32 NodeMCU RPC Library</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Paginanavigatie">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Quick Start Guide - ESP32 RPC System</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/documentation/QUICKSTART.md.txt" rel="nofollow"> Bekijk paginabron</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="quick-start-guide-esp32-rpc-system">
+<h1>Quick Start Guide - ESP32 RPC System<a class="headerlink" href="#quick-start-guide-esp32-rpc-system" title="Link to this heading"></a></h1>
+<section id="projectstructuur">
+<h2>Projectstructuur<a class="headerlink" href="#projectstructuur" title="Link to this heading"></a></h2>
+<p>Zie &lt;project_dir&gt;/FILE_REFERENCE.md voor de volledige bestandsstructuur.</p>
+</section>
+<section id="installation-3-schritte">
+<h2>Installation (3 Schritte)<a class="headerlink" href="#installation-3-schritte" title="Link to this heading"></a></h2>
+<section id="esp32-firmware-uploaden">
+<h3>1. ESP32 Firmware Uploaden<a class="headerlink" href="#esp32-firmware-uploaden" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>eps32_host
+pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>esp32doit-devkit-v1<span class="w"> </span>-t<span class="w"> </span>upload
+pio<span class="w"> </span>run<span class="w"> </span>-e<span class="w"> </span>esp32doit-devkit-v1<span class="w"> </span>-t<span class="w"> </span>monitor<span class="w">  </span><span class="c1"># Controleer output</span>
+</pre></div>
+</div>
+</section>
+<section id="python-dependencies">
+<h3>2. Python Dependencies<a class="headerlink" href="#python-dependencies" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>python_client
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+</section>
+<section id="verbinding-configureren">
+<h3>3. Verbinding Configureren<a class="headerlink" href="#verbinding-configureren" title="Link to this heading"></a></h3>
+<section id="usb-wifi-mode-kiezen-tijdens-boot">
+<h4>USB/WiFi mode kiezen tijdens boot<a class="headerlink" href="#usb-wifi-mode-kiezen-tijdens-boot" title="Link to this heading"></a></h4>
+<p>Je kunt de communicatie-mode ook kiezen tijdens het opstarten van de ESP32-NodeMCU:</p>
+<ul class="simple">
+<li><p>Houd knop 0 ingedrukt tijdens boot om de mode te selecteren.</p></li>
+<li><p>Laat los na boot om de geselecteerde mode te gebruiken.</p></li>
+</ul>
+</section>
+<section id="wifi-configure-mode-tijdens-boot">
+<h4>WiFi configure mode tijdens boot<a class="headerlink" href="#wifi-configure-mode-tijdens-boot" title="Link to this heading"></a></h4>
+<p>Als de ESP32 in WiFi mode staat:</p>
+<ul class="simple">
+<li><p>Houd knop 1 ingedrukt tijdens boot om WiFi configure mode te openen.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="snel-testen">
+<h2>Snel Testen<a class="headerlink" href="#snel-testen" title="Link to this heading"></a></h2>
+<section id="gui-test-aanbevolen">
+<h3>GUI Test (Aanbevolen)<a class="headerlink" href="#gui-test-aanbevolen" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>python_client/nodeMCU_gui
+python<span class="w"> </span>nodeMCU_gui.py
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Klik “Connect”</p></li>
+<li><p>Test GPIO, System, PWM functies</p></li>
+<li><p>Zie responses in output</p></li>
+</ul>
+</section>
+<section id="via-python-script">
+<h3>Via Python Script<a class="headerlink" href="#via-python-script" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>python_client/examples
+python<span class="w"> </span>example_usage.py
+</pre></div>
+</div>
+</section>
+<section id="advanced-monitoring">
+<h3>Advanced Monitoring<a class="headerlink" href="#advanced-monitoring" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>python_client/examples
+python<span class="w"> </span>advanced_example.py
+</pre></div>
+</div>
+</section>
+</section>
+<section id="basis-voorbeelden">
+<h2>Basis Voorbeelden<a class="headerlink" href="#basis-voorbeelden" title="Link to this heading"></a></h2>
+<section id="eenvoudige-gpio">
+<h3>Eenvoudige GPIO<a class="headerlink" href="#eenvoudige-gpio" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rpc_client</span> <span class="kn">import</span> <span class="n">RPCClient</span>
+<span class="kn">from</span> <span class="nn">config</span> <span class="kn">import</span> <span class="n">COMM_USB</span><span class="p">,</span> <span class="n">RPC_OK</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">RPCClient</span><span class="p">(</span><span class="n">comm_mode</span><span class="o">=</span><span class="n">COMM_USB</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+
+<span class="c1"># Pin 13 als OUTPUT</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">pinMode</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># HIGH schrijven</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">digitalWrite</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Lezen</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">digitalRead</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span>
+
+<span class="n">client</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="analog-lezen">
+<h3>Analog Lezen<a class="headerlink" href="#analog-lezen" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ADC pin lezen</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">analogRead</span><span class="p">(</span><span class="mi">36</span><span class="p">)</span>  <span class="c1"># 0-4095</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ADC: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="systeem-info">
+<h3>Systeem Info<a class="headerlink" href="#systeem-info" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Milliseconds</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">ms</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">getMillis</span><span class="p">()</span>
+
+<span class="c1"># Vrij geheugen</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">mem</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">getFreeMem</span><span class="p">()</span>
+
+<span class="c1"># Chip ID</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="nb">id</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">getChipID</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="pwm-led-dimmen">
+<h3>PWM/LED Dimmen<a class="headerlink" href="#pwm-led-dimmen" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Setup PWM: channel 0, 5kHz, 8-bit (0-255)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">ledcSetup</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+
+<span class="c1"># Helderheid instellen</span>
+<span class="k">for</span> <span class="n">brightness</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">192</span><span class="p">,</span> <span class="mi">255</span><span class="p">]:</span>
+    <span class="n">client</span><span class="o">.</span><span class="n">ledcWrite</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">brightness</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="optionele-libraries-adc-3208-dio-qc-oled">
+<h3>Optionele Libraries (ADC 3208, DIO, QC, OLED)<a class="headerlink" href="#optionele-libraries-adc-3208-dio-qc-oled" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ADC 3208</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">raw</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">adcReadRaw</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">averageCount</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">voltage</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">adcReadVoltage</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">averageCount</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">pressed</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">isButtonPressed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># DIO</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">dioGetInput</span><span class="p">()</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">bit_set</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">dioIsBitSet</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">dioSetOutput</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">dioSetBit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">dioClearBit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">dioToggleBit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># QC7366 counter</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">qcEnableCounter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">count</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">qcReadCountRegister</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">qcClearCountRegister</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">qcDisableCounter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># OLED</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">oledClear</span><span class="p">()</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">oledWriteLine</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Problem</p></th>
+<th class="head"><p>Solution</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>USB verbinding faalt</p></td>
+<td><p>Controleer poort: <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">/dev/tty*</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>“No response” error</p></td>
+<td><p>Zet <code class="docutils literal notranslate"><span class="pre">CONFIG['debug']</span> <span class="pre">=</span> <span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>WiFi verbinding faalt</p></td>
+<td><p>Controleer SSID in <code class="docutils literal notranslate"><span class="pre">config.h</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Permission denied</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">usermod</span> <span class="pre">-a</span> <span class="pre">-G</span> <span class="pre">dialout</span> <span class="pre">$USER</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="meer-details">
+<h2>Meer details<a class="headerlink" href="#meer-details" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Protocol, result codes en uitbreiden: &lt;project_dir&gt;/TECHNICAL_REFERENCE.md</p></li>
+</ul>
+<hr class="docutils" />
+<p>Veel plezier met je ESP32-NodeMCU RPC systeem! 🚀</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Voettekst">
+        <a href="Voorbereiding.html" class="btn btn-neutral float-left" title="Voorbereidingen" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Vorige</a>
+        <a href="README.html" class="btn btn-neutral float-right" title="ESP32 RPC Python Client" accesskey="n" rel="next">Volgende <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Avans ATIx: Gerard Harkema &amp; Raoul Smeets.</p>
+  </div>
+
+  Gebouwd met <a href="https://www.sphinx-doc.org/">Sphinx</a> met een
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thema</a>
+    geleverd door <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

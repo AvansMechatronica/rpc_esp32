@@ -1,0 +1,211 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="nl" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ESP32 RPC Python Client &mdash; Avans: ESP32 NodeMCU RPC Library 1.0 documentatie</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=70dd46bb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/translations.js?v=e4d38c6a"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Zoeken" href="../search.html" />
+    <link rel="next" title="Implementation Summary - rpc_esp32" href="IMPLEMENTATION_SUMMARY.html" />
+    <link rel="prev" title="Quick Start Guide - ESP32 RPC System" href="QUICKSTART.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Avans: ESP32 NodeMCU RPC Library
+              <img src="../_static/avans-hogeschool-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Zoek in documentatie" aria-label="Zoek in documentatie" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigatiemenu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="samenvatting.html">Samenvatting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Voorbereiding.html">Voorbereidingen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="QUICKSTART.html">Quick Start Guide - ESP32 RPC System</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ESP32 RPC Python Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#features-functionaliteit">Features / Functionaliteit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#requirements-vereisten">Requirements / Vereisten</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-installatie">Install / Installatie</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configure-connection-verbinding-configureren">Configure Connection / Verbinding Configureren</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start-snel-starten">Quick Start / Snel Starten</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gui-test-app-gui-test-app">GUI Test App / GUI Test App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api-quick-reference-api-sneloverzicht">API Quick Reference / API Sneloverzicht</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#project-structure-projectstructuur">Project Structure / Projectstructuur</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting-problemen">Troubleshooting / Problemen</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#more-docs-meer-docs">More Docs / Meer docs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#license-licentie">License / Licentie</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="IMPLEMENTATION_SUMMARY.html">Implementation Summary - rpc_esp32</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FILE_REFERENCE.html">File Reference - rpc_esp32</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TECHNICAL_REFERENCE.html">Technical Reference - ESP32 RPC System</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Navigatiemenu voor mobiel" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Avans: ESP32 NodeMCU RPC Library</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Paginanavigatie">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ESP32 RPC Python Client</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/documentation/README.md.txt" rel="nofollow"> Bekijk paginabron</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="esp32-rpc-python-client">
+<h1>ESP32 RPC Python Client<a class="headerlink" href="#esp32-rpc-python-client" title="Link to this heading"></a></h1>
+<p>EN: Python client and GUI for controlling an ESP32 over RPC (USB serial or WiFi). This README focuses on Python usage; the ESP32 firmware must already be flashed with the RPC server.</p>
+<p>NL: Python client en GUI om een ESP32 via RPC aan te sturen (USB serial of WiFi). Deze README focust op Python; de ESP32 firmware met RPC server moet al geflasht zijn.</p>
+<section id="features-functionaliteit">
+<h2>Features / Functionaliteit<a class="headerlink" href="#features-functionaliteit" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>EN: Typed Python API with clear result codes; GUI test app; optional modules (ADC 3208, DAC 4922, DIO, QC7366, OLED, pulse library).</p></li>
+<li><p>NL: Type-safe Python API met duidelijke result codes; GUI test app; optionele modules (ADC 3208, DAC 4922, DIO, QC7366, OLED, pulse library).</p></li>
+</ul>
+</section>
+<section id="requirements-vereisten">
+<h2>Requirements / Vereisten<a class="headerlink" href="#requirements-vereisten" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>EN: Python 3.9+; ESP32 running the RPC firmware; USB serial driver if needed.</p></li>
+<li><p>NL: Python 3.9+; ESP32 met RPC firmware; USB serial driver indien nodig.</p></li>
+</ul>
+</section>
+<section id="install-installatie">
+<h2>Install / Installatie<a class="headerlink" href="#install-installatie" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>python_client
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+</section>
+<section id="configure-connection-verbinding-configureren">
+<h2>Configure Connection / Verbinding Configureren<a class="headerlink" href="#configure-connection-verbinding-configureren" title="Link to this heading"></a></h2>
+<p>Edit &lt;project_dir&gt;/python_client/library/config.py and set your transport:</p>
+<p>USB example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">CONFIG</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;comm_mode&quot;</span><span class="p">:</span> <span class="n">COMM_USB</span><span class="p">,</span>
+    <span class="s2">&quot;usb_port&quot;</span><span class="p">:</span> <span class="s2">&quot;COM3&quot;</span><span class="p">,</span>  <span class="c1"># Windows example</span>
+    <span class="s2">&quot;usb_baudrate&quot;</span><span class="p">:</span> <span class="mi">115200</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>WiFi example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">CONFIG</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;comm_mode&quot;</span><span class="p">:</span> <span class="n">COMM_WIFI</span><span class="p">,</span>
+    <span class="s2">&quot;wifi_host&quot;</span><span class="p">:</span> <span class="s2">&quot;192.168.1.100&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;wifi_port&quot;</span><span class="p">:</span> <span class="mi">5000</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>For boot-time mode selection and WiFi configure mode, see &lt;project_dir&gt;/QUICKSTART.md.</p>
+</section>
+<section id="quick-start-snel-starten">
+<h2>Quick Start / Snel Starten<a class="headerlink" href="#quick-start-snel-starten" title="Link to this heading"></a></h2>
+<p>See &lt;project_dir&gt;/QUICKSTART.md for step-by-step setup and example usage.</p>
+</section>
+<section id="gui-test-app-gui-test-app">
+<h2>GUI Test App / GUI Test App<a class="headerlink" href="#gui-test-app-gui-test-app" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>python_client/nodeMCU_gui/nodeMCU_gui.py
+</pre></div>
+</div>
+</section>
+<section id="api-quick-reference-api-sneloverzicht">
+<h2>API Quick Reference / API Sneloverzicht<a class="headerlink" href="#api-quick-reference-api-sneloverzicht" title="Link to this heading"></a></h2>
+<p>See &lt;project_dir&gt;/TECHNICAL_REFERENCE.md for the API quick reference.</p>
+</section>
+<section id="project-structure-projectstructuur">
+<h2>Project Structure / Projectstructuur<a class="headerlink" href="#project-structure-projectstructuur" title="Link to this heading"></a></h2>
+<p>See &lt;project_dir&gt;/FILE_REFERENCE.md for the full file and folder index.</p>
+</section>
+<section id="troubleshooting-problemen">
+<h2>Troubleshooting / Problemen<a class="headerlink" href="#troubleshooting-problemen" title="Link to this heading"></a></h2>
+<p>See &lt;project_dir&gt;/QUICKSTART.md for troubleshooting and common fixes.</p>
+</section>
+<section id="more-docs-meer-docs">
+<h2>More Docs / Meer docs<a class="headerlink" href="#more-docs-meer-docs" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>&lt;project_dir&gt;/QUICKSTART.md</p></li>
+</ul>
+</section>
+<section id="license-licentie">
+<h2>License / Licentie<a class="headerlink" href="#license-licentie" title="Link to this heading"></a></h2>
+<p><a class="reference external" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">License CC BY-NC-SA 4.0</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Voettekst">
+        <a href="QUICKSTART.html" class="btn btn-neutral float-left" title="Quick Start Guide - ESP32 RPC System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Vorige</a>
+        <a href="IMPLEMENTATION_SUMMARY.html" class="btn btn-neutral float-right" title="Implementation Summary - rpc_esp32" accesskey="n" rel="next">Volgende <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Avans ATIx: Gerard Harkema &amp; Raoul Smeets.</p>
+  </div>
+
+  Gebouwd met <a href="https://www.sphinx-doc.org/">Sphinx</a> met een
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thema</a>
+    geleverd door <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

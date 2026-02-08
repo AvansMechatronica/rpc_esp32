@@ -1,0 +1,574 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="nl" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Technical Reference - ESP32 RPC System &mdash; Avans: ESP32 NodeMCU RPC Library 1.0 documentatie</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=70dd46bb"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/translations.js?v=e4d38c6a"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Zoeken" href="../search.html" />
+    <link rel="prev" title="File Reference - rpc_esp32" href="FILE_REFERENCE.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Avans: ESP32 NodeMCU RPC Library
+              <img src="../_static/avans-hogeschool-logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Zoek in documentatie" aria-label="Zoek in documentatie" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigatiemenu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="samenvatting.html">Samenvatting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Voorbereiding.html">Voorbereidingen</a></li>
+<li class="toctree-l1"><a class="reference internal" href="QUICKSTART.html">Quick Start Guide - ESP32 RPC System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="README.html">ESP32 RPC Python Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="IMPLEMENTATION_SUMMARY.html">Implementation Summary - rpc_esp32</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FILE_REFERENCE.html">File Reference - rpc_esp32</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Technical Reference - ESP32 RPC System</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#architectuur-overzicht">Architectuur Overzicht</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#communication-protocol-details">Communication Protocol Details</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#json-message-format">JSON Message Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#handshake-communication-flow">Handshake &amp; Communication Flow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#file-descriptions">File Descriptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rpc-method-reference">RPC Method Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api-quick-reference">API Quick Reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gpio-methods">GPIO Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#system-methods">System Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pwm-methods">PWM Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#raw-method">Raw Method</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#data-types">Data Types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#supported-in-parameters">Supported in Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#return-values">Return Values</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#result-codes">Result Codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#esp32-pin-configuration">ESP32 Pin Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gpio-pins">GPIO Pins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adc-pins-analog-input">ADC Pins (Analog Input)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pwm-channels">PWM Channels</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-characteristics">Performance Characteristics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#extending-with-new-functions">Extending with New Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-by-step-process">Step-by-Step Process</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#performance-tuning">Performance Tuning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#reduce-latency">Reduce Latency</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reduce-power">Reduce Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#increase-reliability">Increase Reliability</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Navigatiemenu voor mobiel" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Avans: ESP32 NodeMCU RPC Library</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Paginanavigatie">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Technical Reference - ESP32 RPC System</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/documentation/TECHNICAL_REFERENCE.md.txt" rel="nofollow"> Bekijk paginabron</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="technical-reference-esp32-rpc-system">
+<h1>Technical Reference - ESP32 RPC System<a class="headerlink" href="#technical-reference-esp32-rpc-system" title="Link to this heading"></a></h1>
+<section id="architectuur-overzicht">
+<h2>Architectuur Overzicht<a class="headerlink" href="#architectuur-overzicht" title="Link to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>┌─────────────────────────────────────────────────────────────┐
+│                    Python Host Machine                       │
+├─────────────────────────────────────────────────────────────┤
+│                                                               │
+│  ┌─────────────────┐         ┌──────────────────┐           │
+│  │   GUI Test      │         │  Custom Scripts  │           │
+│  │   Application   │         │  &amp; Applications  │           │
+│  └────────┬────────┘         └────────┬─────────┘           │
+│           │                           │                      │
+│           └───────────┬───────────────┘                      │
+│                       │                                      │
+│           ┌───────────▼────────────┐                        │
+│           │  RPCClient Library     │                        │
+│           │ ┌────────────────────┐ │                        │
+│           │ │  rpc_client.py     │ │                        │
+│           │ │  - All RPC methods │ │                        │
+│           │ └────────────────────┘ │                        │
+│           │ ┌────────────────────┐ │                        │
+│           │ │  transport.py      │ │                        │
+│           │ │  - USB/WiFi layer  │ │                        │
+│           │ └────────────────────┘ │                        │
+│           └───────────┬────────────┘                        │
+│                       │                                      │
+│           ┌───────────▼────────────┐                        │
+│           │   JSON/Serial Data     │                        │
+│           │  (USB or TCP Socket)   │                        │
+│           └───────────┬────────────┘                        │
+│                       │                                      │
+└───────────────────────┼──────────────────────────────────────┘
+                        │
+          ┌─────────────▼─────────────┐
+          │   USB / WiFi Connection    │
+          └─────────────┬─────────────┘
+                        │
+┌───────────────────────▼──────────────────────────────────────┐
+│                      ESP32 Device                            │
+├────────────────────────────────────────────────────────────┤
+│                                                              │
+│  ┌────────────────────────────────────────────────────────┐ │
+│  │              RPC Server (main.cpp)                     │ │
+│  │                                                        │ │
+│  │  ┌──────────────────────────────────────────────────┐ │ │
+│  │  │  Serial/WiFi Input Buffer                       │ │ │
+│  │  │  JSON Parser (ArduinoJSON)                      │ │ │
+│  │  └──────────────────────────────────────────────────┘ │ │
+│  │                      │                                 │ │
+│  │  ┌──────────────────▼───────────────────────────────┐ │ │
+│  │  │  Command Dispatcher                             │ │ │
+│  │  │  (execute_command)                              │ │ │
+│  │  └──────────────────┬───────────────────────────────┘ │ │
+│  │                     │                                  │ │
+│  │  ┌──────────────────▼───────────────────────────────┐ │ │
+│  │  │  RPC Handler Methods                            │ │ │
+│  │  │  ┌──────────────────────────────────────────┐   │ │ │
+│  │  │  │ GPIO: pinMode, digitalWrite, digitalRead│   │ │ │
+│  │  │  │ Analog: analogRead, analogWrite         │   │ │ │
+│  │  │  │ System: delay, millis, getFreeMem       │   │ │ │
+│  │  │  │ PWM: ledcSetup, ledcWrite               │   │ │ │
+│  │  │  └──────────────────────────────────────────┘   │ │ │
+│  │  └──────────────────┬───────────────────────────────┘ │ │
+│  │                     │                                  │ │
+│  │  ┌──────────────────▼───────────────────────────────┐ │ │
+│  │  │  Arduino Framework Functions                    │ │ │
+│  │  │  (ESP32 Hardware APIs)                          │ │ │
+│  │  └──────────────────────────────────────────────────┘ │ │
+│  │                     │                                  │ │
+│  │  ┌──────────────────▼───────────────────────────────┐ │ │
+│  │  │  Response Builder &amp; Serialization               │ │ │
+│  │  │  (JSON Output)                                  │ │ │
+│  │  └──────────────────────────────────────────────────┘ │ │
+│  └────────────────────────────────────────────────────────┘ │
+│                                                              │
+│  ┌────────────────────────────────────────────────────────┐ │
+│  │           ESP32 Hardware Resources                    │ │
+│  │  ┌──────────────┬──────────────┬──────────────────┐   │ │
+│  │  │ GPIO Pins    │  ADC Pins    │  PWM Channels    │   │ │
+│  │  │ (0-39)       │  (36,37,etc) │  (0-15)          │   │ │
+│  │  └──────────────┴──────────────┴──────────────────┘   │ │
+│  └────────────────────────────────────────────────────────┘ │
+└───────────────────────────────────────────────────────────────┘
+</pre></div>
+</div>
+</section>
+<section id="communication-protocol-details">
+<h2>Communication Protocol Details<a class="headerlink" href="#communication-protocol-details" title="Link to this heading"></a></h2>
+<section id="json-message-format">
+<h3>JSON Message Format<a class="headerlink" href="#json-message-format" title="Link to this heading"></a></h3>
+<p><strong>Request Structure:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;method&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;methodName&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;params&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;param1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;value1&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;param2&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">123</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;param3&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Response Structure:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;result&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;OK&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;key1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;value1&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;key2&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">456</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="handshake-communication-flow">
+<h3>Handshake &amp; Communication Flow<a class="headerlink" href="#handshake-communication-flow" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>1. Connect (USB/WiFi)
+   └─&gt; Device opens serial port / socket connection
+       └─&gt; ESP32 waits for JSON commands
+
+2. Send Command
+   Client: {&quot;method&quot;:&quot;pinMode&quot;,&quot;params&quot;:{&quot;pin&quot;:13,&quot;mode&quot;:1}}
+   └─&gt; Serialized as JSON string + newline
+
+3. Parse on ESP32
+   └─&gt; ArduinoJSON deserializes request
+   └─&gt; Validates method exists
+   └─&gt; Validates required parameters
+
+4. Execute Handler
+   └─&gt; Handler method called with params
+   └─&gt; Result code set (0 = success, 1-5 = error)
+   └─&gt; Optional data prepared
+
+5. Send Response
+   Server: {&quot;result&quot;:0,&quot;message&quot;:&quot;OK&quot;,&quot;data&quot;:{}}
+   └─&gt; Serialized and sent back via serial/socket
+
+6. Client Processes Response
+   └─&gt; JSON deserialized
+   └─&gt; Result code, message, data extracted
+   └─&gt; Returned to Python caller
+</pre></div>
+</div>
+</section>
+</section>
+<section id="file-descriptions">
+<h2>File Descriptions<a class="headerlink" href="#file-descriptions" title="Link to this heading"></a></h2>
+<p>For the complete file index, see &lt;project_dir&gt;/FILE_REFERENCE.md.</p>
+<p>Key entry points:</p>
+<ul class="simple">
+<li><p>&lt;project_dir&gt;/eps32_host/src/main.cpp - Firmware entry point and main loop.</p></li>
+<li><p>&lt;project_dir&gt;/eps32_host/lib/rpc_server/src/rpc_server.cpp - RPC request dispatch and handlers.</p></li>
+<li><p>&lt;project_dir&gt;/python_client/library/rpc_client.py - Python RPC client interface.</p></li>
+<li><p>&lt;project_dir&gt;/python_client/library/transport.py - USB/WiFi transport implementations.</p></li>
+</ul>
+<p>Boot-time mode selection and WiFi configure mode are documented in &lt;project_dir&gt;/QUICKSTART.md.</p>
+</section>
+<section id="rpc-method-reference">
+<h2>RPC Method Reference<a class="headerlink" href="#rpc-method-reference" title="Link to this heading"></a></h2>
+</section>
+<section id="api-quick-reference">
+<h2>API Quick Reference<a class="headerlink" href="#api-quick-reference" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>GPIO: <code class="docutils literal notranslate"><span class="pre">pinMode</span></code>, <code class="docutils literal notranslate"><span class="pre">digitalWrite</span></code>, <code class="docutils literal notranslate"><span class="pre">digitalRead</span></code></p></li>
+<li><p>Analog: <code class="docutils literal notranslate"><span class="pre">analogWrite</span></code>, <code class="docutils literal notranslate"><span class="pre">analogRead</span></code></p></li>
+<li><p>PWM: <code class="docutils literal notranslate"><span class="pre">ledcSetup</span></code>, <code class="docutils literal notranslate"><span class="pre">ledcWrite</span></code></p></li>
+<li><p>System: <code class="docutils literal notranslate"><span class="pre">delay</span></code>, <code class="docutils literal notranslate"><span class="pre">getMillis</span></code>, <code class="docutils literal notranslate"><span class="pre">getFreeMem</span></code>, <code class="docutils literal notranslate"><span class="pre">getChipID</span></code></p></li>
+<li><p>Pulse: <code class="docutils literal notranslate"><span class="pre">pulseBegin</span></code>, <code class="docutils literal notranslate"><span class="pre">pulse</span></code>, <code class="docutils literal notranslate"><span class="pre">pulseAsync</span></code>, <code class="docutils literal notranslate"><span class="pre">isPulsing</span></code>, <code class="docutils literal notranslate"><span class="pre">generatePulses</span></code>, <code class="docutils literal notranslate"><span class="pre">generatePulsesAsync</span></code>, <code class="docutils literal notranslate"><span class="pre">getRemainingPulses</span></code>, <code class="docutils literal notranslate"><span class="pre">stopPulse</span></code></p></li>
+<li><p>ADC 3208: <code class="docutils literal notranslate"><span class="pre">adcReadRaw</span></code>, <code class="docutils literal notranslate"><span class="pre">adcReadVoltage</span></code>, <code class="docutils literal notranslate"><span class="pre">isButtonPressed</span></code></p></li>
+<li><p>DAC 4922: <code class="docutils literal notranslate"><span class="pre">dacSetVoltage</span></code>, <code class="docutils literal notranslate"><span class="pre">dacSetVoltageAll</span></code></p></li>
+<li><p>DIO: <code class="docutils literal notranslate"><span class="pre">dioGetInput</span></code>, <code class="docutils literal notranslate"><span class="pre">dioIsBitSet</span></code>, <code class="docutils literal notranslate"><span class="pre">dioSetOutput</span></code>, <code class="docutils literal notranslate"><span class="pre">dioSetBit</span></code>, <code class="docutils literal notranslate"><span class="pre">dioClearBit</span></code>, <code class="docutils literal notranslate"><span class="pre">dioToggleBit</span></code></p></li>
+<li><p>QC7366: <code class="docutils literal notranslate"><span class="pre">qcEnableCounter</span></code>, <code class="docutils literal notranslate"><span class="pre">qcDisableCounter</span></code>, <code class="docutils literal notranslate"><span class="pre">qcClearCountRegister</span></code>, <code class="docutils literal notranslate"><span class="pre">qcReadCountRegister</span></code></p></li>
+<li><p>OLED: <code class="docutils literal notranslate"><span class="pre">oledClear</span></code>, <code class="docutils literal notranslate"><span class="pre">oledWriteLine</span></code></p></li>
+</ul>
+<p>Optional APIs require matching firmware features enabled.</p>
+<section id="gpio-methods">
+<h3>GPIO Methods<a class="headerlink" href="#gpio-methods" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set pin mode (OUTPUT=1, INPUT=0, INPUT_PULLUP=2)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">pinMode</span><span class="p">(</span><span class="n">pin</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
+
+<span class="c1"># Write digital value (HIGH=1, LOW=0)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">pin</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
+
+<span class="c1"># Read digital value</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">digitalRead</span><span class="p">(</span><span class="n">pin</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
+
+<span class="c1"># Write PWM (0-255 for default 8-bit)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">analogWrite</span><span class="p">(</span><span class="n">pin</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
+
+<span class="c1"># Read analog value (0-4095 on ESP32)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">analogRead</span><span class="p">(</span><span class="n">pin</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="system-methods">
+<h3>System Methods<a class="headerlink" href="#system-methods" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sleep for milliseconds</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">ms</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
+
+<span class="c1"># Get uptime in milliseconds</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">millis</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">getMillis</span><span class="p">()</span>
+
+<span class="c1"># Get free heap memory in bytes</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">free_mem</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">getFreeMem</span><span class="p">()</span>
+
+<span class="c1"># Get ESP32 chip ID</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">chip_id</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">getChipID</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="pwm-methods">
+<h3>PWM Methods<a class="headerlink" href="#pwm-methods" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Setup PWM channel (channel 0-15, freq in Hz, bits 1-16)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">ledcSetup</span><span class="p">(</span><span class="n">channel</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">freq</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bits</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
+
+<span class="c1"># Write PWM duty cycle (0 to 2^bits - 1)</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">ledcWrite</span><span class="p">(</span><span class="n">channel</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">duty</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="raw-method">
+<h3>Raw Method<a class="headerlink" href="#raw-method" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Call any RPC method with custom parameters</span>
+<span class="n">result</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">call_raw</span><span class="p">(</span><span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="data-types">
+<h2>Data Types<a class="headerlink" href="#data-types" title="Link to this heading"></a></h2>
+<section id="supported-in-parameters">
+<h3>Supported in Parameters<a class="headerlink" href="#supported-in-parameters" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>int</strong> / <strong>long</strong>: All integer values</p></li>
+<li><p><strong>float</strong>: Floating-point numbers</p></li>
+<li><p><strong>bool</strong>: true/false</p></li>
+<li><p><strong>string</strong>: Text values</p></li>
+</ul>
+</section>
+<section id="return-values">
+<h3>Return Values<a class="headerlink" href="#return-values" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><strong>result</strong>: int (0-5, see result codes)</p></li>
+<li><p><strong>message</strong>: string (human-readable status)</p></li>
+<li><p><strong>data</strong>: dict (optional, contains method-specific data)</p></li>
+<li><p><strong>value</strong>: int/float (extracted from data dict)</p></li>
+</ul>
+</section>
+</section>
+<section id="result-codes">
+<h2>Result Codes<a class="headerlink" href="#result-codes" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Code</p></th>
+<th class="head"><p>Constant</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>RPC_OK</p></td>
+<td><p>Operation successful</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>RPC_ERROR_INVALID_COMMAND</p></td>
+<td><p>Method not found</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>RPC_ERROR_INVALID_PARAMS</p></td>
+<td><p>Missing/invalid parameters</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>RPC_ERROR_TIMEOUT</p></td>
+<td><p>No response from device</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>RPC_ERROR_EXECUTION</p></td>
+<td><p>Error during execution</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>RPC_ERROR_NOT_SUPPORTED</p></td>
+<td><p>Function not supported</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="esp32-pin-configuration">
+<h2>ESP32 Pin Configuration<a class="headerlink" href="#esp32-pin-configuration" title="Link to this heading"></a></h2>
+<section id="gpio-pins">
+<h3>GPIO Pins<a class="headerlink" href="#gpio-pins" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>GPIO 0-19, 21-23, 25-27, 32-39 (usable)</p></li>
+<li><p>GPIO 6-11: Flash memory (don’t use)</p></li>
+<li><p>GPIO 20, 24: Not available</p></li>
+</ul>
+</section>
+<section id="adc-pins-analog-input">
+<h3>ADC Pins (Analog Input)<a class="headerlink" href="#adc-pins-analog-input" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>ADC1: GPIO 32-39 (8 channels)</p></li>
+<li><p>ADC2: GPIO 0, 2, 4, 12-15, 25-27 (10 channels)</p></li>
+<li><p>Note: ADC2 shares pins with WiFi, use ADC1 preferably</p></li>
+</ul>
+</section>
+<section id="pwm-channels">
+<h3>PWM Channels<a class="headerlink" href="#pwm-channels" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>16 independent PWM channels (0-15)</p></li>
+<li><p>Configurable frequency and resolution</p></li>
+</ul>
+</section>
+</section>
+<section id="performance-characteristics">
+<h2>Performance Characteristics<a class="headerlink" href="#performance-characteristics" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Operation</p></th>
+<th class="head"><p>Typical Time</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>USB Command Round-trip</p></td>
+<td><p>5-20ms</p></td>
+</tr>
+<tr class="row-odd"><td><p>WiFi Command Round-trip</p></td>
+<td><p>10-50ms</p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO Digital I/O</p></td>
+<td><p>&lt;1ms</p></td>
+</tr>
+<tr class="row-odd"><td><p>ADC Read</p></td>
+<td><p>10-20ms</p></td>
+</tr>
+<tr class="row-even"><td><p>JSON Parsing (small message)</p></td>
+<td><p>&lt;2ms</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="extending-with-new-functions">
+<h2>Extending with New Functions<a class="headerlink" href="#extending-with-new-functions" title="Link to this heading"></a></h2>
+<section id="step-by-step-process">
+<h3>Step-by-Step Process<a class="headerlink" href="#step-by-step-process" title="Link to this heading"></a></h3>
+<p><strong>1. Define in Header</strong> (<code class="docutils literal notranslate"><span class="pre">rpc_server.h</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">private</span><span class="o">:</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">rpc_myFunction</span><span class="p">(</span><span class="n">JsonObject</span><span class="w"> </span><span class="n">params</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><strong>2. Implement Handler</strong> (<code class="docutils literal notranslate"><span class="pre">rpc_server.cpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">RpcServer::rpc_myFunction</span><span class="p">(</span><span class="n">JsonObject</span><span class="w"> </span><span class="n">params</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// Validate parameters</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">params</span><span class="p">.</span><span class="n">containsKey</span><span class="p">(</span><span class="s">&quot;requiredParam&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">RPC_ERROR_INVALID_PARAMS</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="c1">// Execute</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">param</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">params</span><span class="p">[</span><span class="s">&quot;requiredParam&quot;</span><span class="p">];</span>
+<span class="w">  </span><span class="c1">// ... implementation ...</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="c1">// Return result</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">RPC_OK</span><span class="p">;</span><span class="w">  </span><span class="c1">// or appropriate error code</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>3. Register in Dispatcher</strong> (in <code class="docutils literal notranslate"><span class="pre">execute_command()</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">method</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;myFunction&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">rpc_myFunction</span><span class="p">(</span><span class="n">params</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>4. Add Python Wrapper</strong> (<code class="docutils literal notranslate"><span class="pre">rpc_client.py</span></code>)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">myFunction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Description of myFunction&quot;&quot;&quot;</span>
+    <span class="n">result</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send_command</span><span class="p">(</span><span class="s2">&quot;myFunction&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;requiredParam&quot;</span><span class="p">:</span> <span class="n">param</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">,</span> <span class="n">msg</span>
+</pre></div>
+</div>
+<p><strong>5. Test with GUI or Script</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">myFunction</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">result</span> <span class="o">==</span> <span class="n">RPC_OK</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Result: </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="performance-tuning">
+<h2>Performance Tuning<a class="headerlink" href="#performance-tuning" title="Link to this heading"></a></h2>
+<section id="reduce-latency">
+<h3>Reduce Latency<a class="headerlink" href="#reduce-latency" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Use USB instead of WiFi for low-latency</p></li>
+<li><p>Batch multiple commands in sequence</p></li>
+<li><p>Use PWM instead of repeated GPIO writes</p></li>
+</ul>
+</section>
+<section id="reduce-power">
+<h3>Reduce Power<a class="headerlink" href="#reduce-power" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Use delay() to avoid busy-waiting</p></li>
+<li><p>Disable WiFi when using USB only</p></li>
+<li><p>Set appropriate PWM frequencies</p></li>
+</ul>
+</section>
+<section id="increase-reliability">
+<h3>Increase Reliability<a class="headerlink" href="#increase-reliability" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Always check return codes</p></li>
+<li><p>Implement timeout handling</p></li>
+<li><p>Test on target hardware</p></li>
+</ul>
+<p>For setup, troubleshooting, and debug steps, see &lt;project_dir&gt;/QUICKSTART.md.</p>
+<hr class="docutils" />
+<p>For more details, see README.md and QUICKSTART.md</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Voettekst">
+        <a href="FILE_REFERENCE.html" class="btn btn-neutral float-left" title="File Reference - rpc_esp32" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Vorige</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Avans ATIx: Gerard Harkema &amp; Raoul Smeets.</p>
+  </div>
+
+  Gebouwd met <a href="https://www.sphinx-doc.org/">Sphinx</a> met een
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thema</a>
+    geleverd door <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
