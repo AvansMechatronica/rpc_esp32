@@ -3,12 +3,13 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welkom bij Avans: Esp32-NodeMCU RPC System documentatie
+Welkom bij Avans: Daheng Camera Library voor Python
 ==========================================================
 
-**Avans: NodeMCU RPC System**
-Dit is een handleiding voor gebruikers die een NodeMCU RPC systeem willen gebruiken in Python.
+**Avans: Daheng Camera Library voor Python**
+Dit is een handleiding voor gebruikers die een Daheng camera software willen ontwikkelen in Python.
 In deze handleiding wordt exact beschreven hoe benodigde software en gereedschap kan worden gebruikt.
+Er wordt daarbij uitgegaan van een Windows operating systeem met daarop als Integrated Development Environmet(IDE) van pyCharm.
 
 
 .. note::
@@ -19,12 +20,11 @@ In deze handleiding wordt exact beschreven hoe benodigde software en gereedschap
    :maxdepth: 2
    :caption: Contents:
 
-   documentation/README.md
    documentation/Voorbereiding.md
-   documentation/QUICKSTART.md
-   documentation/TECHNICAL_REFERENCE.md
-   documentation/FILE_REFERENCE.md
-   documentation/IMPLEMENTATION_SUMMARY.md
+   documentation/VoorbeeldProgrammas.md
+   documentation/BibliotheekFuncties.md
+   documentation/ReferentieMateriaal.md
+
 
 Deze handleiding is ontwikkeld door:
 

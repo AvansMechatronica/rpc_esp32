@@ -6,8 +6,8 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Avans: NodeMCU RPC System'
-copyright = 'Avans ATIx: Gerard Harkema and Raoul Smeets'
+project = 'Avans: Daheng Camera Library voor Python'
+copyright = 'Avans ATIx: Gerard Harkema'
 author = 'Gerard Harkema'
 release = '1.0'
 
