@@ -20,10 +20,13 @@ Er wordt daarbij uitgegaan van een Windows operating systeem met daarop als Inte
    :maxdepth: 2
    :caption: Contents:
 
+   documentation/README.md
    documentation/Voorbereiding.md
-   documentation/VoorbeeldProgrammas.md
-   documentation/BibliotheekFuncties.md
-   documentation/ReferentieMateriaal.md
+   documentation/QUICKSTART.md
+   documentation/IMPLEMENTATION_SUMMARY.md
+   documentation/FILE_REFERENCE.md
+   documentation/TECHNICAL_REFERENCE.md
+   
 
 
 Deze handleiding is ontwikkeld door:
