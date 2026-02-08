@@ -20,7 +20,7 @@ Er wordt daarbij uitgegaan van een Windows operating systeem met daarop als Inte
    :maxdepth: 2
    :caption: Contents:
 
-   documentation/Samenvatting.md
+   documentation/samenvatting.md
    documentation/README.md
    documentation/Voorbereiding.md
    documentation/QUICKSTART.md
