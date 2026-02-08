@@ -21,7 +21,11 @@ Er wordt daarbij uitgegaan van een Windows operating systeem met daarop als Inte
    :caption: Contents:
 
    documentation/README.md
-
+   documentation/Voorbereiding.md
+   documentation/QUICKSTART.md
+   documentation/IMPLEMENTATION_SUMMARY.md
+   documentation/FILE_REFERENCE.md
+   documentation/TECHNICAL_REFERENCE.md
    
 
 
