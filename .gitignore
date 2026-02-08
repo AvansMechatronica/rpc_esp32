@@ -42,3 +42,5 @@ env/
 
 # ESP32 Build
 .pioscons
+
+_build

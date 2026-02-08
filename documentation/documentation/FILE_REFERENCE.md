@@ -1,4 +1,4 @@
-## File Reference - rpc_esp32
+# File Reference - rpc_esp32
 
 This document is a complete, current index of files and folders in the workspace. It focuses on structure and purpose.
 

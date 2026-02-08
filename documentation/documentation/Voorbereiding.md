@@ -31,9 +31,6 @@ Pak het bestand uit in een voor jou bekende map.
 :::{tab-item} GIT
 * Maak een account aan bij [Github](https://github.com/) en login op dit account.
 
-* Open de [NodeMCU RPC Library](https://github.com/AvansMechatronica/rpc_esp32) repository
-
-* Maak een Fork van de repository naar je eigen Github account door op het **Fork icoon**  te klikken:
 
 ![image](../images/fork.jpg)
 
