@@ -3,11 +3,11 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welkom bij Avans: Daheng Camera Library voor Python
+Welkom bij Avans: ESP32 NodeMCU RPC Library documentatie
 ==========================================================
 
-**Avans: Daheng Camera Library voor Python**
-Dit is een handleiding voor gebruikers die een Daheng camera software willen ontwikkelen in Python.
+**Avans: ESP32 NodeMCU RPC Library**
+Dit is een handleiding voor gebruikers die een ESP32 NodeMCU RPC Library willen gebruiken en ontwikkelen in Python.
 In deze handleiding wordt exact beschreven hoe benodigde software en gereedschap kan worden gebruikt.
 Er wordt daarbij uitgegaan van een Windows operating systeem met daarop als Integrated Development Environmet(IDE) van pyCharm.
 

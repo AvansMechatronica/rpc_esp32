@@ -63,7 +63,7 @@ PyCharm maakt gebruik van virtuele environments:
 * Je installeert libraries alleen binnen dat environment.
 
 ## Project openen
-Start het PyCharm programma en open met het programma de map van de DahengPython. 
+Start het PyCharm programma en open met het programma de map van de rpc_esp32. 
 
 ### Maken van virtueele environment
 Ga naar File-->Settings..
