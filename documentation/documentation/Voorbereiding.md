@@ -31,9 +31,6 @@ Pak het bestand uit in een voor jou bekende map.
 :::{tab-item} GIT
 * Maak een account aan bij [Github](https://github.com/) en login op dit account.
 
-
-![image](../images/fork.jpg)
-
 * Volg de instructies, maar wijzig de naam van de nieuwe repository niet. Bevestig met **Create Fork**
 
 Navigeer in een command-console(cmd) naar een voor jou bekende map. Je kunt je repository verkrijgen door het volgende commando:
@@ -47,9 +44,6 @@ Je kunt vervolgens versiebeheer doen met de volgende command-console(cmd) comman
 * git push
 >Let op: Het gebruik van GIT wordt hier niet nader uitgelegd. Je kunt deze site raadplagen [Git Tutorial](https://www.w3schools.com/git/?utm_source=chatgpt.com)
 
-:::
-::: Downloaden
-[Download link](https://github.com/AvansMechatronica/rpc_esp32/archive/refs/heads/main.zip)
 :::
 ::::
 :::::
