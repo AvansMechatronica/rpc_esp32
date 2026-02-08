@@ -19,7 +19,7 @@ pip install -r requirements.txt
 ```
 
 ## Configure Connection / Verbinding Configureren
-Edit [python_client/library/config.py](python_client/library/config.py) and set your transport:
+Edit <project_dir>/python_client/library/config.py and set your transport:
 
 USB example:
 ```python
@@ -39,11 +39,11 @@ CONFIG = {
 }
 ```
 
-For boot-time mode selection and WiFi configure mode, see [QUICKSTART.md](QUICKSTART.md).
+For boot-time mode selection and WiFi configure mode, see <project_dir>/QUICKSTART.md.
 
 ## Quick Start / Snel Starten
 
-See [QUICKSTART.md](QUICKSTART.md) for step-by-step setup and example usage.
+See <project_dir>/QUICKSTART.md for step-by-step setup and example usage.
 
 ## GUI Test App / GUI Test App
 ```bash
@@ -52,18 +52,18 @@ python python_client/nodeMCU_gui/nodeMCU_gui.py
 
 ## API Quick Reference / API Sneloverzicht
 
-See [TECHNICAL_REFERENCE.md](TECHNICAL_REFERENCE.md) for the API quick reference.
+See <project_dir>/TECHNICAL_REFERENCE.md for the API quick reference.
 
 ## Project Structure / Projectstructuur
 
-See [FILE_REFERENCE.md](FILE_REFERENCE.md) for the full file and folder index.
+See <project_dir>/FILE_REFERENCE.md for the full file and folder index.
 
 ## Troubleshooting / Problemen
 
-See [QUICKSTART.md](QUICKSTART.md) for troubleshooting and common fixes.
+See <project_dir>/QUICKSTART.md for troubleshooting and common fixes.
 
 ## More Docs / Meer docs
-- [QUICKSTART.md](QUICKSTART.md)
+- <project_dir>/QUICKSTART.md
 
 ## License / Licentie
 [License CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)

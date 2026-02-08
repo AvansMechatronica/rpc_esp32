@@ -146,16 +146,16 @@
 
 ## File Descriptions
 
-For the complete file index, see [FILE_REFERENCE.md](FILE_REFERENCE.md).
+For the complete file index, see <project_dir>/FILE_REFERENCE.md.
 
 Key entry points:
 
-- [eps32_host/src/main.cpp](eps32_host/src/main.cpp) - Firmware entry point and main loop.
-- [eps32_host/lib/rpc_server/src/rpc_server.cpp](eps32_host/lib/rpc_server/src/rpc_server.cpp) - RPC request dispatch and handlers.
-- [python_client/library/rpc_client.py](python_client/library/rpc_client.py) - Python RPC client interface.
-- [python_client/library/transport.py](python_client/library/transport.py) - USB/WiFi transport implementations.
+- <project_dir>/eps32_host/src/main.cpp - Firmware entry point and main loop.
+- <project_dir>/eps32_host/lib/rpc_server/src/rpc_server.cpp - RPC request dispatch and handlers.
+- <project_dir>/python_client/library/rpc_client.py - Python RPC client interface.
+- <project_dir>/python_client/library/transport.py - USB/WiFi transport implementations.
 
-Boot-time mode selection and WiFi configure mode are documented in [QUICKSTART.md](QUICKSTART.md).
+Boot-time mode selection and WiFi configure mode are documented in <project_dir>/QUICKSTART.md.
 
 ## RPC Method Reference
 
@@ -343,7 +343,7 @@ print(f"Result: {msg}")
 - Implement timeout handling
 - Test on target hardware
 
-For setup, troubleshooting, and debug steps, see [QUICKSTART.md](QUICKSTART.md).
+For setup, troubleshooting, and debug steps, see <project_dir>/QUICKSTART.md.
 
 ---
 

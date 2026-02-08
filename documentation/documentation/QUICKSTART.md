@@ -2,7 +2,7 @@
 
 ## Projectstructuur
 
-Zie [FILE_REFERENCE.md](FILE_REFERENCE.md) voor de volledige bestandsstructuur.
+Zie <project_dir>/FILE_REFERENCE.md voor de volledige bestandsstructuur.
 
 ## Installation (3 Schritte)
 
@@ -147,7 +147,7 @@ result, msg = client.oledWriteLine(0, "Hello", 0)
 
 ## Meer details
 
-- Protocol, result codes en uitbreiden: [TECHNICAL_REFERENCE.md](TECHNICAL_REFERENCE.md)
+- Protocol, result codes en uitbreiden: <project_dir>/TECHNICAL_REFERENCE.md
 
 ---
 Veel plezier met je ESP32-NodeMCU RPC systeem! 🚀
