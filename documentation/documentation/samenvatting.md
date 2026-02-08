@@ -1,6 +1,6 @@
 # Samenvatting
 
-Deit documentatie van de ESP32 NodeMCU RPC Library is een uitgebreide handleiding die gebruikers begeleidt bij het gebruik en de ontwikkeling van een RPC-library voor ESP32 NodeMCU-apparaten. De documentatie is gericht op gebruikers die willen leren hoe ze deze library kunnen gebruiken en ontwikkelen in Python, met een focus op Windows-besturingssystemen en de PyCharm IDE.
+De documentatie van de ESP32 NodeMCU RPC Library is een uitgebreide handleiding die gebruikers begeleidt bij het gebruik en de ontwikkeling van een RPC-library voor ESP32 NodeMCU-apparaten. De documentatie is gericht op gebruikers die willen leren hoe ze deze library kunnen gebruiken en ontwikkelen in Python, met een focus op Windows-besturingssystemen en de PyCharm IDE.
 
 ![Image](../images/nodeMCU.jpg)  
 

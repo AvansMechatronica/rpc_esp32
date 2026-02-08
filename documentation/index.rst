@@ -28,8 +28,6 @@ Er wordt daarbij uitgegaan van een Windows operating systeem met daarop als Inte
    documentation/FILE_REFERENCE.md
    documentation/TECHNICAL_REFERENCE.md
 
-   
-
 
 Deze handleiding is ontwikkeld door:
 
